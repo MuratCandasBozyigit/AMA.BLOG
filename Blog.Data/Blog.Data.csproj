@@ -11,4 +11,8 @@
     <Folder Include="Shared\Concrete\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Blog.Core\Blog.Core.csproj" />
+  </ItemGroup>
+
 </Project>
