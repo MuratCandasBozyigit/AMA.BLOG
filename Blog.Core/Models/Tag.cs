@@ -8,5 +8,10 @@ namespace Blog.Core.Models
 {
     public class Tag
     {
+       
+
+        public string Name {  get; set; }
+
+        //Slug(URL dostu etiket adı)
     }
 }
