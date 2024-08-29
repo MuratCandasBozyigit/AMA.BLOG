@@ -1,31 +1,29 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using System.Reflection;
 using Blog.Core.Models;
-using System.Drawing;
-
-namespace Blog.Data
+using Microsoft.AspNetCore.Identity;
+public class ApplicationDbContext : DbContext /*IdentityDbContext<AppUser>*/
 {
-    public class ApplicationDbContext : DbContext
+    public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options) { }
+
+    public DbSet<User> Users { get; set; }
+    public DbSet<Category> Categories { get; set; }
+    public DbSet<Tag> Tags { get; set; }
+    public DbSet<Post> Posts { get; set; }
+    public DbSet<Comment> Comments { get; set; }
+    public DbSet<AppUser> AppUser { get; set; }
+
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options) { }
+        //// ASP.NET Core Identity tablolarını devre dışı bırak
+        //modelBuilder.Ignore<IdentityRole>();
+        //modelBuilder.Ignore<IdentityUserClaim<string>>();
+        //modelBuilder.Ignore<IdentityUserLogin<string>>();
+        //modelBuilder.Ignore<IdentityUserRole<string>>();
+        //modelBuilder.Ignore<IdentityUserToken<string>>();
+        //modelBuilder.Ignore<IdentityRoleClaim<string>>();
 
-        public DbSet<User> Users { get; set; }
-        public DbSet<Category> Categories { get; set; }
-        public DbSet<Tag> Tags { get; set; }
-        public DbSet<Post> Posts { get; set; }
-        public DbSet<Comment> Comments { get; set; }
-
-
-
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
-        {
-            modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
-        }
+        base.OnModelCreating(modelBuilder);
+        modelBuilder.ApplyConfigurationsFromAssembly(typeof(ApplicationDbContext).Assembly);
     }
 }
-

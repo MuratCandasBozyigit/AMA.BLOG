@@ -1,9 +1,17 @@
-using Microsoft.EntityFrameworkCore;
-using Blog.Data;
+﻿using Blog.Data.Shared.Abstract;
+using Blog.Data.Shared.Concrete;
 using Microsoft.AspNetCore.Authentication.Cookies;
-
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using Blog.Business.Configuration;
 
 var builder = WebApplication.CreateBuilder(args);
+
+// Register repository implementations
+builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
+
+// Add HttpContextAccessor
+builder.Services.AddHttpContextAccessor();
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
@@ -12,25 +20,27 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-//// Register repository implementations
-//builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
-
-// Add HttpContextAccessor
-builder.Services.AddHttpContextAccessor();
-
 // Configure authentication
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(options =>
     {
-        options.LoginPath = "/User/Login";
-        options.LogoutPath = "/User/Login";
+        options.LoginPath = "/Account/Login";
+        options.LogoutPath = "/Account/Logout";
         options.Cookie.Name = "MuratBlogCookie";
         options.SlidingExpiration = true;
     });
 
-//// Register services with DI
-//builder.Services.BusinessDI();
-//builder.Services.RepositoryDI();
+// Configure Identity services
+builder.Services.AddIdentity<AppUser, IdentityRole>(options =>
+{
+    options.SignIn.RequireConfirmedAccount = true;
+})
+.AddEntityFrameworkStores<ApplicationDbContext>()
+.AddDefaultTokenProviders();
+
+// DI methods for Business and Repository layers
+builder.Services.BusinessDI();
+builder.Services.RepositoryDI();
 
 var app = builder.Build();
 

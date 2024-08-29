@@ -6,12 +6,12 @@ using System.Threading.Tasks;
 
 namespace Blog.Core.Models
 {
-    public class Tag
+    public class Tag:BaseModel
     {
        
 
         public string Name {  get; set; }
-
+        public int? PostId { get; set; }
         //Slug(URL dostu etiket adı)
     }
 }
