@@ -35,7 +35,7 @@ namespace Blog.Web.Controllers
         }
 
         // GET: Post/Create
-        public IActionResult Create()
+        public IActionResult Add()
         {
             return View();
         }
@@ -43,7 +43,7 @@ namespace Blog.Web.Controllers
         // POST: Post/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create(Post post)
+        public IActionResult Add(Post post)
         {
             if (ModelState.IsValid)
             {
