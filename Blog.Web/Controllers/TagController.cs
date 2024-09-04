@@ -1,19 +1,17 @@
 ﻿using Blog.Business.Absract;
 using Blog.Business.Concrete;
 using Blog.Core.Models;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Blog.Web.Controllers
 {
-   // [Authorize(Roles ="Admin")]
-    public class CategoryController : Controller
+    public class TagController : Controller
     {
-        private readonly ICategoryService _ıcategoryService;
+        private readonly ITagService tagService;
 
-        public CategoryController(ICategoryService ıcategoryService)
+        public TagController(ITagService tagService)
         {
-            _ıcategoryService = ıcategoryService;
+            this.tagService = tagService;
         }
 
         public IActionResult Index()
@@ -25,23 +23,20 @@ namespace Blog.Web.Controllers
         {
             try
             {
-                var category = _ıcategoryService.GetAll();
-                return Ok(category);
+                var tag = tagService.GetAll();
+                return Ok(tag);
             }
             catch (Exception ex)
             {
                 return StatusCode(500, $"Internal server error: {ex.Message}");
             }
         }
-        //Admin Authorize 
-
-
         [HttpPost("Add")]
-        public IActionResult Add([FromBody] Category category)
+        public IActionResult Add([FromBody] Tag tag)
         {
             try
             {
-                _ıcategoryService.Add(category);
+                tagService.Add(tag);
                 return Ok();
             }
             catch (Exception ex)
@@ -50,9 +45,9 @@ namespace Blog.Web.Controllers
             }
         }
         [HttpPost("Update/{id}")]
-        public IActionResult Update([FromBody] Category category)
+        public IActionResult Update([FromBody] Tag tag)
         {
-            if (category == null)
+            if (tag == null)
             {
                 return BadRequest();
             }
@@ -60,7 +55,7 @@ namespace Blog.Web.Controllers
             {
                 try
                 {
-                    _ıcategoryService.Update(category);
+                    tagService.Update(tag);
                     return Ok();
                 }
                 catch (Exception ex)
@@ -79,12 +74,12 @@ namespace Blog.Web.Controllers
             }
             try
             {
-                var category = _ıcategoryService.GetById(id);
-                if (category == null)
+                var tag = tagService.GetById(id);
+                if (tag == null)
                 {
                     return NotFound("Category Not Found");
                 }
-                return Ok(category);
+                return Ok(tag);
             }
             catch (Exception ex)
             {
@@ -99,15 +94,16 @@ namespace Blog.Web.Controllers
                 return BadRequest("Invalid Id Format");
             }
 
-            var category = _ıcategoryService.GetById(id);
-            if (category == null)
+            var tag = tagService.GetById(id);
+            if (tag == null)
             {
                 return NotFound("Category Not Found");
             }
 
-            _ıcategoryService.Delete(id);
+            tagService.Delete(id);
             return Ok();
         }
 
     }
+
 }
