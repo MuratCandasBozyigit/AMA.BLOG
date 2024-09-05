@@ -10,7 +10,18 @@ using System.Threading.Tasks;
 
 namespace Blog.Business.Concrete
 {
-    public class PostService(IRepository<Post> postRepo):Service<Post>(postRepo),IPostService
+    public class PostService(IRepository<Post> postRepo) : Service<Post>(postRepo), IPostService
     {
+        private readonly IRepository<Post> _repo = postRepo;
+        public ICollection<Post> GetAllPosts(Post post)
+        {
+            return _repo.GetAll(x=> x.Id == post.Id).ToList();
+           
+        }
+
+        public ICollection<Post> GetAllPostsByCategoryId(int postId)
+        {
+            return _repo.GetAll(x => x.Id == postId).ToList();//Belki tag include etmek isteyebilirim daha sonrasında...
+        }
     }
 }

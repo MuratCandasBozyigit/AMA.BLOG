@@ -1,0 +1,246 @@
+﻿@using System.Security.Claims
+@{
+    ViewData["Title"] = "Konu";
+}
+@* kategori kısmında yeni bir metod var GetALlCategories onuda ekle buradan secim yapılsın *@
+<h2>Konu</h2>
+
+<div class="col-12">
+    <!-- ============================================================== -->
+    <!-- Start right Content here -->
+    <!-- ============================================================== -->
+    <div class="main-content">
+
+        <div class="page-content">
+            <div class="container-fluid">
+
+            
+
+
+
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-body">
+
+                                <h4 class="card-title">Tinymce wysihtml5</h4>
+                                <p class="card-title-desc">
+                                    Bootstrap-wysihtml5 is a javascript
+                                    plugin that makes it easy to create simple, beautiful wysiwyg editors
+                                    with the help of wysihtml5 and Twitter Bootstrap.
+                                </p>
+
+                                <form method="post">
+                                    <textarea id="elm1" name="area"></textarea>
+                                </form>
+
+                            </div>
+                        </div>
+                    </div> <!-- end col -->
+                </div> <!-- end row -->
+
+
+            </div> <!-- container-fluid -->
+        </div>
+        <!-- End Page-content -->
+
+
+
+
+
+
+
+
+
+    <div class="modal fade" id="modal" tabindex="-1" data-bs-backdrop="static" data-bs-
+    <div class="card bg-dark text-white">
+        <div class="card-header bg-dark text-white">
+            <div class="row">
+                <div class="col-11">
+                    <box-icon name="car" color="white" size="sm" animation="tada"></box-icon> Renklerim
+                </div>
+                <div class="col-1 text-end">
+                    <a id="btnAdd" href="#" class="btn btn-outline-light">+ Yeni Renk</a>
+                </div>
+            </div>
+        </div>
+        <div class="card-body">
+            <table id="tblPosts" class="table table-hover table-striped table-bordered"></table>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $("input,textarea").val("");
+            $(".error-message").hide();
+
+            var table = $('#tblPosts').DataTable({
+                ajax: {
+                    url: '/Admin/Post/Add',
+                    dataSrc: ''
+                },
+                columns: [
+                    { data: 'title', title: 'Başlık' },
+                    { data: 'content', title: 'İçerik' },
+                    {
+                        data: null, title: 'İşlemler', render: function (data, type, row) {
+                            return `
+                            <a href="#" class="btn btn-sm btn-warning editTitle" data-id="${row.id}">Düzenle</a>
+                            <a href="#" class="btn btn-sm btn-danger deleteTitle" data-id="${row.id}">Sil</a>
+                        `;
+                        }
+                    }
+                ]
+            });
+
+
+            $('#btnAdd').click(function () {
+                $('#modalTitle').text('Yeni Başlık Ekle');
+                $('#btnSave').text('Ekle');
+                $('#modal').modal('show');
+            });
+
+            $('#tblPosts').on('click', '.editTitle', function () {
+                var id = $(this).data('id');
+                $.ajax({
+                    url: "/Admin/Post/Details/" + id,
+                    type: 'GET',
+                    success: function (res) {
+                        $('#title').val(res.title);
+                        $('#content').val(res.content);
+
+                        $('#modalTitle').text('Başlık Düzenle');
+                        $('#btnSave').text('Güncelle');
+                        $('#modal').modal('show');
+                    },
+                    error: function () {
+                        Swal.fire('Hata', 'Başlık verisi yüklenirken bir sorun oluştu.', 'error');
+                    }
+                });
+            });
+
+            $('#tblPosts').on('click', '.deleteTitle', function () {
+                var id = $(this).data('id');
+                Swal.fire({
+                    title: 'Emin misiniz?',
+                    text: "Bu başlık kalıcı olarak silinecek!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Evet, sil!'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $.ajax({
+                            type: "POST",
+                            url: "/Admin/Post/Delete/" + id,
+                            success: function () {
+                                table.ajax.reload();
+                                Swal.fire('Silindi!', 'Başlık başarıyla silindi.', 'success');
+                            },
+                            error: function () {
+                                Swal.fire('Hata', 'Başlık silinirken bir sorun oluştu.', 'error');
+                            }
+                        });
+                    }
+                });
+            });
+
+            $('#btnSave').click(function () {
+                var post = {
+                    title: $('#title').val(),
+                    content: $('#content').val()
+                };
+
+                let isValid = true;
+                if (!post.title) {
+                    $('#title-error').show();
+                    isValid = false;
+                } else {
+                    $('#title-error').hide();
+                }
+                if (!post.content) {
+                    $('#content-error').show();
+                    isValid = false;
+                } else {
+                    $('#content-error').hide();
+                }
+
+                if (!isValid) {
+                    return;
+                }
+
+                var url = $('#btnSave').text() === 'Ekle' ? '/Admin/Post/Add' : '/Admin/Post/Update';
+                var method = $('#btnSave').text() === 'Ekle' ? 'POST' : 'PUT';
+
+                $.ajax({
+                    type: method,
+                    url: url,
+                    data: JSON.stringify(post),
+                    contentType: 'application/json; charset=utf-8',
+                    success: function () {
+                        $('#modal').modal('hide');
+                        table.ajax.reload();
+                        Swal.fire('Başarılı!', 'Post başarıyla kaydedildi.', 'success');
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        Swal.fire('Hata', 'Post kaydedilirken bir sorun oluştu. Detaylar: ' + errorThrown, 'error');
+                    }
+                });
+            });
+        });
+    </script>
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    @* keyboard="false" role="dialog" aria-labelledby="modalTitleId" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-lg" role="document">
+    <div class="modal-content">
+    <div class="modal-header">
+    <h5 class="modal-title" id="modalTitle"></h5>
+    <button type="button" class="btn-close emptyValue" data-bs-dismiss="modal" aria-label="Close"></button>
+    </div>
+
+    <div class="modal-body">
+    <div class="mb-3 row">
+    <label class="form-label">Konu Başlığı:</label>
+    <input type="text" id="title" placeholder="Lütfen konu başlığı giriniz" class="form-control" required />
+    <span id="title-error" class="text-danger" style="display:none;">Alan boş bırakılamaz.</span>
+    </div>
+    <div class="mb-3 row">
+    <label class="form-label">Konu içeriği:</label>
+    <textarea rows="2" id="content" placeholder="Konu içeriğini giriniz" class="form-control" required></textarea>
+    <span id="content-error" class="text-danger" style="display:none;">Alan boş bırakılamaz.</span>
+    </div>
+
+
+
+    <div class="modal-footer">
+    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Kapat</button>
+    <button type="button" id="btnSave" class="btn btn-primary">Kaydet</button>
+    </div>
+    </div>
+    </div>
+    </div>
+    </div>
+    *@

@@ -1,47 +1,45 @@
 ﻿using Blog.Business.Absract;
-using Blog.Business.Concrete;
+
 using Blog.Core.Models;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Blog.Web.Controllers
+namespace Blog.Web.Areas.Admin.Controllers
 {
-   // [Authorize(Roles ="Admin")]
+    [Area("Admin")]
     public class CategoryController : Controller
     {
-        private readonly ICategoryService _ıcategoryService;
+        private readonly ICategoryService _categoryService;
 
-        public CategoryController(ICategoryService ıcategoryService)
+        public CategoryController(ICategoryService categoryService)
         {
-            _ıcategoryService = ıcategoryService;
+            _categoryService = categoryService;
         }
 
         public IActionResult Index()
         {
             return View();
         }
-        [HttpGet("GetAll")]
+
+        [HttpGet("Category/GetAll")]
         public IActionResult GetAll()
         {
             try
             {
-                var category = _ıcategoryService.GetAll();
-                return Ok(category);
+                var categories = _categoryService.GetAll();
+                return Ok(categories);
             }
             catch (Exception ex)
             {
                 return StatusCode(500, $"Internal server error: {ex.Message}");
             }
         }
-        //Admin Authorize 
 
-
-        [HttpPost("Add")]
+        [HttpPost("Category/Add")]
         public IActionResult Add([FromBody] Category category)
         {
             try
             {
-                _ıcategoryService.Add(category);
+                _categoryService.Add(category);
                 return Ok();
             }
             catch (Exception ex)
@@ -49,28 +47,26 @@ namespace Blog.Web.Controllers
                 return StatusCode(500, $"Internal server error: {ex.Message}");
             }
         }
-        [HttpPost("Update/{id}")]
+
+        [HttpPost("Category/Update/{id}")]
         public IActionResult Update([FromBody] Category category)
         {
             if (category == null)
             {
                 return BadRequest();
             }
-            else
+            try
             {
-                try
-                {
-                    _ıcategoryService.Update(category);
-                    return Ok();
-                }
-                catch (Exception ex)
-                {
-                    return StatusCode(500, $"Internal server error: {ex.Message}");
-                }
+                _categoryService.Update(category);
+                return Ok();
             }
-
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
         }
-        [HttpGet("GetById/{id}")]
+
+        [HttpGet("Category/GetById/{id}")]
         public IActionResult GetById(Guid id)
         {
             if (id == Guid.Empty)
@@ -79,10 +75,10 @@ namespace Blog.Web.Controllers
             }
             try
             {
-                var category = _ıcategoryService.GetById(id);
+                var category = _categoryService.GetById(id);
                 if (category == null)
                 {
-                    return NotFound("Category Not Found");
+                    return NotFound();
                 }
                 return Ok(category);
             }
@@ -91,23 +87,23 @@ namespace Blog.Web.Controllers
                 return StatusCode(500, $"Internal server error: {ex.Message}");
             }
         }
-        [HttpDelete("Delete/{id}")]
+
+        [HttpDelete("Category/Delete/{id}")]
         public IActionResult Delete(Guid id)
         {
             if (id == Guid.Empty)
             {
                 return BadRequest("Invalid Id Format");
             }
-
-            var category = _ıcategoryService.GetById(id);
-            if (category == null)
+            try
             {
-                return NotFound("Category Not Found");
+                _categoryService.Delete(id);
+                return Ok();
             }
-
-            _ıcategoryService.Delete(id);
-            return Ok();
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
         }
-
     }
 }

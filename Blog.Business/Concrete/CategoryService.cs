@@ -10,7 +10,14 @@ using System.Threading.Tasks;
 
 namespace Blog.Business.Concrete
 {
-    public class CategoryService(IRepository<Category> categoryRepo):Service<Category>(categoryRepo),ICategoryService
+    public class CategoryService(IRepository<Category> categoryRepo) : Service<Category>(categoryRepo), ICategoryService
     {
+        private readonly IRepository<Category> _repo = categoryRepo;
+      
+        public ICollection<Category> GetAllCategories(Category category)
+        {
+          return _repo.GetAll(x => x.Id == category.Id).ToList();
+        }
+
     }
 }
