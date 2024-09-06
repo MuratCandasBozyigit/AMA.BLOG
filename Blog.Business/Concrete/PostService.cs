@@ -23,5 +23,11 @@ namespace Blog.Business.Concrete
         {
             return _repo.GetAll(x => x.Id == postId).ToList();//Belki tag include etmek isteyebilirim daha sonrasında...
         }
+        public ICollection<Post> GetAllPosts()
+        {
+            return _repo.GetAll().ToList(); // Parametresiz versiyon
+        }
+
+
     }
 }

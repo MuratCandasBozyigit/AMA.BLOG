@@ -1,7 +1,10 @@
-﻿using Blog.Business.Absract;
-using Blog.Web.Models;
+﻿using Blog.Web.Models;
 using Microsoft.AspNetCore.Mvc;
+using Blog.Business.Absract;
+using Microsoft.Extensions.Logging;
+using System;
 using System.Diagnostics;
+using System.Threading.Tasks;
 
 namespace Blog.Web.Controllers
 {
@@ -9,39 +12,68 @@ namespace Blog.Web.Controllers
     {
         private readonly ILogger<HomeController> _logger;
         private readonly IPostService _postService;
-        public HomeController(ILogger<HomeController> logger, IPostService postService)
+        private readonly ICategoryService _categoryService;
+
+        public HomeController(ILogger<HomeController> logger, IPostService postService, ICategoryService categoryService)
         {
             _logger = logger;
             _postService = postService;
+            _categoryService = categoryService;
         }
 
-        public IActionResult Index()
+        // Index action
+        public async Task<IActionResult> Index()
         {
-            return View();
+            try
+            {
+                var posts =  _postService.GetAllPosts(); // Tüm postları al
+                return View(posts); // View'a gönder
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Ana sayfa yüklenirken hata oluştu.");
+                return View("Error"); // Hata sayfasını döndür
+            }
         }
 
-        public IActionResult GetAllPosts(Post post)
+        // All posts retrieval
+        public async Task<IActionResult> GetAllPosts()
         {
-            if (post == null)
+            try
             {
-                return BadRequest("Gönderi yok");
+                var posts = _postService.GetAllPosts(); // Tüm postları al
+                return Json(posts);
             }
-            else
+            catch (Exception ex)
             {
-                try
-                {
-                    var posts = _postService.GetAllPosts(post);
-                    return Json(posts);
-                }
-                catch (Exception ex)
-                {
-                    return BadRequest(ex.Message + "Ppost bulunamadı ex mesdsage");
-                }
+                _logger.LogError(ex, "Postlar yüklenirken hata oluştu.");
+                return BadRequest("Postlar yüklenemedi, lütfen tekrar deneyin.");
             }
-           
         }
 
-
+        // Post by ID retrieval
+        public async Task<IActionResult> GetById(int id)
+        {
+            if (id <= 0)
+            {
+                return BadRequest("Geçersiz konu ID.");
+            }
+            try
+            {
+                var post = _postService.GetById(id);
+                if (post == null)
+                {
+                    return NotFound("Konu bulunamadı.");
+                }
+                return Json(post);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"ID {id} ile konu yüklenirken hata oluştu.");
+                return BadRequest("Konu yüklenemedi, lütfen tekrar deneyin.");
+            }
+        }
+        // Error page
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {

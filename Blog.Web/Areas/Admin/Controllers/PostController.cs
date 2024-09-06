@@ -49,6 +49,32 @@ namespace Blog.Web.Areas.Admin.Controllers
         }
         #endregion
 
+        [ValidateAntiForgeryToken]
+        [HttpPost]
+        public IActionResult Add(Post post, IFormFile image)
+        {
+            if (image != null && image.Length > 0)
+            {
+                // Resmin ismini ve yolunu oluştur
+                var fileName = Path.GetFileName(image.FileName);
+                var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images", fileName);
+
+                // Resmi belirlenen klasöre kaydet
+                using (var stream = new FileStream(filePath, FileMode.Create))
+                {
+                    image.CopyTo(stream);
+                }
+
+                // Resmin yolunu veritabanına kaydet
+                post.ImagePath = "~/images/" + fileName; // Örnek: /images/filename.jpg
+            }
+
+            // Diğer post bilgilerini kaydet
+            _postService.Add(post);
+            return RedirectToAction("Index");
+        }
+
+
         // GET: Post/Details/5
         [HttpGet("Post/Details/{id}")]
         public IActionResult Details(int id)

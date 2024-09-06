@@ -14,61 +14,69 @@
         <div class="page-content">
             <div class="container-fluid">
 
-            
+          @*       <div class="mb-3 row">
+                    <label class="form-label">Kategori Seçimi:</label>
+                    <select id="category" class="form-control">
+                        @foreach (var category in ViewBag.Categories)
+                        {
+                            <option value="@category.Id">@category.Name</option>
+                        }
+                    </select>
+                </div>
+ *@
 
 
 
-                <div class="row">
-                    <div class="col-12">
-                        <div class="card">
-                            <div class="card-body">
-
-                                <h4 class="card-title">Tinymce wysihtml5</h4>
-                                <p class="card-title-desc">
-                                    Bootstrap-wysihtml5 is a javascript
-                                    plugin that makes it easy to create simple, beautiful wysiwyg editors
-                                    with the help of wysihtml5 and Twitter Bootstrap.
-                                </p>
-
-                                <form method="post">
-                                    <textarea id="elm1" name="area"></textarea>
-                                </form>
-
+                <div class="col-12">
+                    <div class="modal fade" id="modal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false" role="dialog" aria-labelledby="modalTitleId" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-lg" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="modalTitle"></h5>
+                                    <button type="button" class="btn-close emptyValue" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="mb-3 row">
+                                        <label class="form-label">Kategori Adı: </label>
+                                        <input type="text" id="name" placeholder="Lütfen Kategori Adı giriniz" class="form-control" required />
+                                        <span id="name-error" style="color:red; display:none;">Alan boş bırakılamaz.</span>
+                                    </div>
+                                    <div class="mb-3 row">
+                                        <label class="form-label">Kategori Açıklaması: </label>
+                                        <input type="text" id="description" placeholder="Lütfen Kategori Açıklaması giriniz" class="form-control" required />
+                                        <span id="description-error" style="color:red; display:none;">Alan boş bırakılamaz.</span>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="formFile" class="form-label">Resim seçiniz</label>
+                                        <input class="form-control" type="file" id="formFile">
+                                        <span id="ImagePath-error" style="color:red; display:none;">Alan boş bırakılamaz.</span>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary emptyValue" data-bs-dismiss="modal">Kapat</button>
+                                        <button type="button" id="btnSave" class="btn btn-primary">Kaydet</button>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                    </div> <!-- end col -->
-                </div> <!-- end row -->
+                    </div>
 
-
-            </div> <!-- container-fluid -->
-        </div>
-        <!-- End Page-content -->
-
-
-
-
-
-
-
-
-
-    <div class="modal fade" id="modal" tabindex="-1" data-bs-backdrop="static" data-bs-
-    <div class="card bg-dark text-white">
-        <div class="card-header bg-dark text-white">
-            <div class="row">
-                <div class="col-11">
-                    <box-icon name="car" color="white" size="sm" animation="tada"></box-icon> Renklerim
+                    <div class="card bg-dark text-white">
+                        <div class="card-header bg-dark text-white">
+                            <div class="row">
+                                <div class="col-11">
+                                    <box-icon name="car" color="white" size="sm" animation="tada"></box-icon> Kategorilerim
+                                </div>
+                                <div class="col-1 text-end">
+                                    <a id="btnAdd" href="#" class="btn btn-outline-light">+ Yeni Kategori</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <table id="tblCategories" class="table table-hover table-striped table-bordered"></table>
+                        </div>
+                    </div>
                 </div>
-                <div class="col-1 text-end">
-                    <a id="btnAdd" href="#" class="btn btn-outline-light">+ Yeni Renk</a>
-                </div>
-            </div>
-        </div>
-        <div class="card-body">
-            <table id="tblPosts" class="table table-hover table-striped table-bordered"></table>
-        </div>
-    </div>
-</div>
+
 
 @section Scripts {
     <script>
