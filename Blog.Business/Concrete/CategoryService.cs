@@ -19,5 +19,9 @@ namespace Blog.Business.Concrete
           return _repo.GetAll(x => x.Id == category.Id).ToList();
         }
 
+        public IEnumerable<Category> GetAllCategories()
+        {
+          return _repo.GetAll().ToList(); 
+        }
     }
 }

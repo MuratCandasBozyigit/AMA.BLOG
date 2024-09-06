@@ -42,7 +42,7 @@ body {
         overflow: hidden;
         max-height: 200px;
         background-size:contain;
-        max-width: 100%;
+        max-width:800px;
         margin-bottom: 30px
     }
 
@@ -82,13 +82,15 @@ body {
         }
 
         .single_post .footer .stats {
+            margin-left:15px;
             cursor: default;
             list-style: none;
             padding: 0;
             display: inline-block;
             float: right;
             margin: 0;
-            line-height: 35px
+            line-height: 35px;
+            text-decoration:none;
         }
 
             .single_post .footer .stats li {

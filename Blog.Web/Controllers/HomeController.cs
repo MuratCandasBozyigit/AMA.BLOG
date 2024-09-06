@@ -1,10 +1,13 @@
 ﻿using Blog.Web.Models;
 using Microsoft.AspNetCore.Mvc;
-using Blog.Business.Absract;
+
 using Microsoft.Extensions.Logging;
 using System;
+using System.Collections.Generic; // IEnumerable için gerekli
 using System.Diagnostics;
 using System.Threading.Tasks;
+using Blog.Core.Models;
+using Blog.Business.Absract;
 
 namespace Blog.Web.Controllers
 {
@@ -21,13 +24,22 @@ namespace Blog.Web.Controllers
             _categoryService = categoryService;
         }
 
-        // Index action
+
+
         public async Task<IActionResult> Index()
         {
             try
             {
-                var posts =  _postService.GetAllPosts(); // Tüm postları al
-                return View(posts); // View'a gönder
+                var posts = _postService.GetAllPosts(); // Senkron şekilde postları al
+                var categories = _categoryService.GetAllCategories(); // Senkron şekilde kategorileri al
+
+                var model = new HomeViewModel
+                {
+                    Posts = posts,
+                    Categories = categories
+                };
+
+                return View(model); // View'a model ile birlikte gönder
             }
             catch (Exception ex)
             {
@@ -36,44 +48,14 @@ namespace Blog.Web.Controllers
             }
         }
 
-        // All posts retrieval
-        public async Task<IActionResult> GetAllPosts()
+
+        public class HomeViewModel
         {
-            try
-            {
-                var posts = _postService.GetAllPosts(); // Tüm postları al
-                return Json(posts);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Postlar yüklenirken hata oluştu.");
-                return BadRequest("Postlar yüklenemedi, lütfen tekrar deneyin.");
-            }
+            public IEnumerable<Post> Posts { get; set; }
+            public IEnumerable<Category> Categories { get; set; }
         }
 
-        // Post by ID retrieval
-        public async Task<IActionResult> GetById(int id)
-        {
-            if (id <= 0)
-            {
-                return BadRequest("Geçersiz konu ID.");
-            }
-            try
-            {
-                var post = _postService.GetById(id);
-                if (post == null)
-                {
-                    return NotFound("Konu bulunamadı.");
-                }
-                return Json(post);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, $"ID {id} ile konu yüklenirken hata oluştu.");
-                return BadRequest("Konu yüklenemedi, lütfen tekrar deneyin.");
-            }
-        }
-        // Error page
+
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {
