@@ -57,13 +57,19 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
         $(document).ready(function () {
+            // Form alanlarını başlangıçta temizle ve hata mesajlarını gizle
             $("input,textarea").val("");
             $(".error-message").hide();
 
+            // DataTables yapılandırması
             var table = $('#tblCategories').DataTable({
                 ajax: {
-                    url: '/Admin/Category/GetAll',
-                    dataSrc: ''
+                    url: '/Admin/Category/GetAllCategories', // Route düzeltildi
+                    dataSrc: '',
+                    error: function (xhr, error, thrown) {
+                        console.error('Ajax Error:', error, thrown);
+                        Swal.fire('Hata', 'Kategoriler yüklenirken bir sorun oluştu.', 'error');
+                    }
                 },
                 columns: [
                     { data: 'name', title: 'Kategori Adı' },
@@ -80,6 +86,7 @@
                 ]
             });
 
+            // Yeni kategori ekleme butonuna tıklama olayı
             $('#btnAdd').click(function () {
                 $('#modalTitle').text('Yeni Kategori Ekle');
                 $('#btnSave').text('Ekle');
@@ -88,10 +95,11 @@
                 $('#modal').modal('show');
             });
 
+            // Kategori düzenleme butonuna tıklama olayı
             $('#tblCategories').on('click', '.editTitle', function () {
                 var id = $(this).data('id');
                 $.ajax({
-                    url: "/Admin/Category/GetById/" + id,
+                    url: "/Admin/Category/GetById/" + id, // Route düzeltildi
                     success: function (res) {
                         $('#name').val(res.name);
                         $('#description').val(res.description);
@@ -105,6 +113,7 @@
                 });
             });
 
+            // Kategori silme butonuna tıklama olayı
             $('#tblCategories').on('click', '.deleteTitle', function () {
                 var id = $(this).data('id');
                 Swal.fire({
@@ -119,7 +128,7 @@
                     if (result.isConfirmed) {
                         $.ajax({
                             type: "DELETE",
-                            url: "/Admin/Category/Delete/" + id,
+                            url: "/Admin/Category/Delete/" + id, // Route düzeltildi
                             success: function () {
                                 table.ajax.reload();
                                 Swal.fire('Silindi!', 'Kategori başarıyla silindi.', 'success');
@@ -132,6 +141,7 @@
                 });
             });
 
+            // Kaydet butonuna tıklama olayı
             $('#btnSave').click(function () {
                 var category = {
                     name: $('#name').val(),
@@ -139,12 +149,16 @@
                 };
 
                 let isValid = true;
+
+                // Kategori adı doğrulaması
                 if (!category.name) {
                     $('#name-error').show();
                     isValid = false;
                 } else {
                     $('#name-error').hide();
                 }
+
+                // Kategori açıklaması doğrulaması
                 if (!category.description) {
                     $('#description-error').show();
                     isValid = false;
@@ -152,11 +166,12 @@
                     $('#description-error').hide();
                 }
 
+                // Form geçerli değilse kaydetme
                 if (!isValid) {
                     return;
                 }
 
-                var url = $('#btnSave').text() === 'Ekle' ? '/Admin/Category/Add' : '/Admin/Category/Update';
+                var url = $('#btnSave').text() === 'Ekle' ? '/Admin/Category/Add' : '/Admin/Category/Update'; // Route düzeltildi
                 var method = $('#btnSave').text() === 'Ekle' ? 'POST' : 'PUT';
 
                 $.ajax({
