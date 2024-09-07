@@ -1,6 +1,6 @@
 ﻿@using System.Security.Claims
 @{
-    ViewData["Title"] = "Kategori";
+    ViewData["Title"] = "Admin Kategori Ekleme";
 }
 
 <h2>Kategori</h2>
@@ -20,11 +20,17 @@
                         <span id="name-error" style="color:red; display:none;">Alan boş bırakılamaz.</span>
                     </div>
                     <div class="mb-3 row">
+                        <label class="form-label">Slug: </label>
+                        <input type="text" id="slug" placeholder="Lütfen Slug giriniz" class="form-control" required />
+                        <span id="slug-error" style="color:red; display:none;">Alan boş bırakılamaz.</span>
+
+                    </div>
+                    <div class="mb-3 row">
                         <label class="form-label">Kategori Açıklaması: </label>
                         <input type="text" id="description" placeholder="Lütfen Kategori Açıklaması giriniz" class="form-control" required />
                         <span id="description-error" style="color:red; display:none;">Alan boş bırakılamaz.</span>
                     </div>
-
+                  
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary emptyValue" data-bs-dismiss="modal">Kapat</button>
                         <button type="button" id="btnSave" class="btn btn-primary">Kaydet</button>
@@ -73,6 +79,8 @@
                 },
                 columns: [
                     { data: 'name', title: 'Kategori Adı' },
+                    { data: 'slug', title: 'Slug ' },
+                    { data: 'description', title: 'Kategori Açıklaması' },
                     {
                         data: null,
                         title: 'İşlemler',
@@ -92,6 +100,7 @@
                 $('#btnSave').text('Ekle');
                 $('#name').val('');
                 $('#description').val('');
+                $('#slug').val('');
                 $('#modal').modal('show');
             });
 
@@ -102,6 +111,7 @@
                     url: "/Admin/Category/GetById/" + id, // Route düzeltildi
                     success: function (res) {
                         $('#name').val(res.name);
+                        $('#slug').val(res.slug);
                         $('#description').val(res.description);
                         $('#modalTitle').text('Kategori Düzenle');
                         $('#btnSave').text('Güncelle');
@@ -140,11 +150,11 @@
                     }
                 });
             });
-
-            // Kaydet butonuna tıklama olayı
             $('#btnSave').click(function () {
                 var category = {
+                    id: $('#category-id').val(), // ID'yi de gönder
                     name: $('#name').val(),
+                    slug: $('#slug').val(),
                     description: $('#description').val()
                 };
 
@@ -156,6 +166,14 @@
                     isValid = false;
                 } else {
                     $('#name-error').hide();
+                }
+
+                // Slug Name Doğrulaması
+                if (!category.slug) {
+                    $('#slug-error').show();
+                    isValid = false;
+                } else {
+                    $('#slug-error').hide();
                 }
 
                 // Kategori açıklaması doğrulaması
@@ -170,8 +188,7 @@
                 if (!isValid) {
                     return;
                 }
-
-                var url = $('#btnSave').text() === 'Ekle' ? '/Admin/Category/Add' : '/Admin/Category/Update'; // Route düzeltildi
+                var url = $('#btnSave').text() === 'Ekle' ? '/Admin/Category/Add' : '/Admin/Category/Update';
                 var method = $('#btnSave').text() === 'Ekle' ? 'POST' : 'PUT';
 
                 $.ajax({
@@ -189,6 +206,7 @@
                     }
                 });
             });
+
         });
     </script>
 }

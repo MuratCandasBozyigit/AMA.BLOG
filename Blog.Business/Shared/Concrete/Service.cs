@@ -27,10 +27,11 @@ namespace Blog.Business.Shared.Concrete
             return _repository.Delete(id);
         }
 
-        public bool Delete(Guid guid)
+        public virtual bool Delete(Guid guid)
         {
             return _repository.Delete(guid);
         }
+
 
         public List<T> GetAll()
         {
@@ -57,9 +58,11 @@ namespace Blog.Business.Shared.Concrete
             return _repository.GetFirstOrDefault(expression);
         }
 
-        public T Update(T entity)
+        // Update işlemi
+        public virtual T Update(T entity)
         {
             return _repository.Update(entity);
         }
+
     }
 }

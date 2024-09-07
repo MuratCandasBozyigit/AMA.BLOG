@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Blog.Core.Models;
-
+using System.IO;
+using System;
 using Blog.Business.Absract;
 
 namespace Blog.Web.Areas.Admin.Controllers
@@ -11,156 +12,113 @@ namespace Blog.Web.Areas.Admin.Controllers
         private readonly IPostService _postService;
         private readonly ICategoryService _categoryService;
         private readonly ITagService _tagService;
+
         public PostController(IPostService postService, ICategoryService categoryService)
         {
             _postService = postService;
             _categoryService = categoryService;
         }
 
-
-        [HttpGet("Post/Index")]
+        // GET: Post/Index
+        [HttpGet]
         public IActionResult Index()
         {
+            var posts = _postService.GetAll();
+            var categories = _categoryService.GetAll();
+
+            // Modeli oluştur
+            var viewModel = new HomeViewModel
+            {
+                Posts = posts,
+                Categories = categories
+            };
+
+            // View'e modeli gönder
+            return View(viewModel);
+        }
+
+
+        public class HomeViewModel
+        {
+            public IEnumerable<Post> Posts { get; set; }
+            public IEnumerable<Category> Categories { get; set; }
+        }
+
+
+
+        #region POST_CRUD
+        [HttpGet("GetAll")]
+        public IActionResult GetAll()
+        {
+          _postService.GetAll();
+            return Ok();
+        }
+
+        [HttpGet]
+        public IActionResult Create()
+        {
             return View();
-
         }
-        #region OTHER_CRUDS
-
-        public IActionResult GetAllCategories(Category category)
-        {
-            if (category == null)
-            {
-                BadRequest("Kategori bulunamadı");
-                return View();
-            }
-            else
-            {
-                try
-                {
-                    var cat = _categoryService.GetAllCategories(category);
-                    return Json(category);
-                }
-                catch (Exception ex)
-                {
-                    return BadRequest("İlgili kategori bulunamadı");
-                }
-
-            }
-        }
-        #endregion
-
-        [ValidateAntiForgeryToken]
         [HttpPost]
-        public IActionResult Add(Post post, IFormFile image)
+        [ValidateAntiForgeryToken]
+        public IActionResult Create(Post post, IFormFile image)
         {
-            if (image != null && image.Length > 0)
+            if (ModelState.IsValid)
             {
-                // Resmin ismini ve yolunu oluştur
-                var fileName = Path.GetFileName(image.FileName);
-                var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images", fileName);
-
-                // Resmi belirlenen klasöre kaydet
-                using (var stream = new FileStream(filePath, FileMode.Create))
+                if (image != null && image.Length > 0)
                 {
-                    image.CopyTo(stream);
+                    var fileName = Path.GetFileName(image.FileName);
+                    var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images", fileName);
+
+                    using (var stream = new FileStream(filePath, FileMode.Create))
+                    {
+                        image.CopyTo(stream);
+                    }
+
+                    post.ImagePath = "~/images/" + fileName;
                 }
 
-                // Resmin yolunu veritabanına kaydet
-                post.ImagePath = "~/images/" + fileName; // Örnek: /images/filename.jpg
+                _postService.Add(post);
+                return RedirectToAction("Index");
             }
 
-            // Diğer post bilgilerini kaydet
-            _postService.Add(post);
-            return RedirectToAction("Index");
-        }
-
-
-        // GET: Post/Details/5
-        [HttpGet("Post/Details/{id}")]
-        public IActionResult Details(int id)
-        {
-            var post = _postService.GetById(id);
-            if (post == null)
-            {
-                return NotFound();
-            }
             return View(post);
         }
 
-        public IActionResult GetAll()
+        [HttpGet]
+        public IActionResult Edit()
         {
-            var posts = _postService.GetAll();
-            return View(posts);
+            return View();
         }
-
-
-
-        //  [ValidateAntiForgeryToken]
-        [HttpPost("Add")]
-        public IActionResult Add([FromBody] Post post)
+        [HttpPost]
+        public IActionResult Edit([FromBody] Post post)
         {
             if (post == null)
             {
-                return BadRequest("Post cannot be null");
+                return BadRequest("Post nesnesi null.");
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest("Post model doğrulama hatası.");
             }
 
             try
             {
-                _postService.Add(post); // Veritabanına ekleme işlemi
-                return Ok();
+                // Eğer 'GetAll' metodunun doğru bir kullanımı değilse, uygun metodu çağırmalısınız.
+                var posts = _postService.GetAll(); // Eğer 'post' ile filtreleme yapılacaksa uygun metodu çağırmalısınız
+                return Ok(posts);
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex); // Replace with proper logging
-                return StatusCode(500, $"Internal server error: {ex.Message}");
+                // Özel hata mesajları veya loglama
+                return StatusCode(500, $"Sunucu hatası: {ex.Message}");
             }
         }
 
 
 
-        // GET: Post/Update/5
-        [HttpGet("Post/Update/{id}")]
-        public IActionResult Update(int id)
-        {
-            var post = _postService.GetById(id);
-            if (post == null)
-            {
-                return NotFound();
-            }
-            return View(post);
-        }
+        #endregion
 
-        // POST: Post/Update/5
-        [HttpPost("Post/Update/{id}")]
-        [ValidateAntiForgeryToken]
-        public IActionResult Update(int id, Post post)
-        {
-            if (id != post.Id)
-            {
-                return NotFound();
-            }
-
-            if (ModelState.IsValid)
-            {
-                _postService.Update(post);
-                return RedirectToAction(nameof(Index));
-            }
-            return View(post);
-        }
-
-        // POST: Post/Delete/5
-        [HttpPost("Post/Delete/{id}")]
-        [ValidateAntiForgeryToken]
-        public IActionResult DeleteConfirmed(int id)
-        {
-            var post = _postService.GetById(id);
-            if (post == null)
-            {
-                return NotFound();
-            }
-
-            _postService.Delete(id);
-            return RedirectToAction(nameof(Index));
-        }
     }
 }

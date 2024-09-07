@@ -25,9 +25,11 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
     .AddCookie(options =>
     {
         options.LoginPath = "/Account/Login";
-        options.LogoutPath = "/Account/Logout";
+        options.LogoutPath = "/Account/Login";
+        options.AccessDeniedPath = "/Account/Login";
         options.Cookie.Name = "MuratBlogCookie";
         options.SlidingExpiration = true;
+
     });
 
 // Configure Identity services

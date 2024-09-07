@@ -1,60 +1,51 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Blog.Web.Models;
 using System.Threading.Tasks;
+using System.Security.Claims;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication;
 
 public class AccountController : Controller
 {
     private readonly IAccountService _accountService;
+    //Ekstradan servis eklememek için appdbcontedxten halledicem
+    private readonly ApplicationDbContext _context;
 
     public AccountController(IAccountService accountService)
     {
         _accountService = accountService;
     }
 
-    [HttpGet]
-    public IActionResult Register() => View();
-
-    [HttpPost]
-    public async Task<IActionResult> Register(RegisterViewModel model)
+    public IActionResult Index()
     {
-        if (ModelState.IsValid)
-        {
-            var result = await _accountService.RegisterUserAsync(model);
-            if (result.Succeeded)
-            {
-                await _accountService.LoginUserAsync(new LoginViewModel { Email = model.Email, Password = model.Password });
-                return RedirectToAction("Index", "Home");
-            }
-            foreach (var error in result.Errors)
-            {
-                ModelState.AddModelError("", error.Description);
-            }
-        }
-        return View(model);
-    }
-
-    [HttpGet]
-    public IActionResult Login() => View();
-
-    [HttpPost]
-    public async Task<IActionResult> Login(LoginViewModel model)
-    {
-        if (ModelState.IsValid)
-        {
-            var result = await _accountService.LoginUserAsync(model);
-            if (result.Succeeded)
-            {
-                return RedirectToAction("Index", "Home");
-            }
-            ModelState.AddModelError("", "Invalid login attempt.");
-        }
-        return View(model);
+        return View();
     }
 
     [HttpPost]
-    public async Task<IActionResult> Logout()
+    public async Task<IActionResult> Login(AppUser user)
     {
-        await _accountService.LogoutUserAsync();
-        return RedirectToAction("Index", "Home");
+        AppUser appUser = _context.AppUser.FirstOrDefault(u => u.Id == user.Id && u.UserName == user.UserName);
+        if (appUser == null)
+        {
+            return Content("Error");
+        }
+        else
+        {
+            List<Claim> claims = new List<Claim>();
+            claims.Add(new Claim(ClaimTypes.NameIdentifier, appUser.Id.ToString()));
+            claims.Add(new Claim(ClaimTypes.GivenName, appUser.UserName));
+            claims.Add(new Claim(ClaimTypes.Role, appUser.IsAdmin ? "Admin" : "User"));
+
+            ClaimsIdentity identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+
+            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+
+            await HttpContext.SignInAsync(new ClaimsPrincipal(identity), new AuthenticationProperties
+            {
+                IsPersistent = true
+            });
+            return RedirectToAction("Index", "Home");
+        }
+
     }
 }

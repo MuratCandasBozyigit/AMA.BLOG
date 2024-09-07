@@ -1,4 +1,5 @@
 ﻿using Blog.Business.Absract;
+using Blog.Business.Concrete;
 using Blog.Core.Models;
 using Microsoft.AspNetCore.Mvc;
 
@@ -43,26 +44,12 @@ namespace Blog.Web.Areas.Admin.Controllers
         {
             try
             {
-                _categoryService.Add(category);
-                return Ok();
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, $"Internal server error: {ex.Message}");
-            }
-        }
+                if (category == null)
+                {
+                    return BadRequest("Category cannot be null");
+                }
 
-        // PUT: Admin/Category/Update
-        [HttpPut("Update")]
-        public IActionResult Update([FromBody] Category category)
-        {
-            if (category == null)
-            {
-                return BadRequest();
-            }
-            try
-            {
-                _categoryService.Update(category);
+                _categoryService.Add(category);
                 return Ok();
             }
             catch (Exception ex)
@@ -94,17 +81,18 @@ namespace Blog.Web.Areas.Admin.Controllers
             }
         }
 
-        // DELETE: Admin/Category/Delete/{id}
-        [HttpDelete("Delete/{id}")]
-        public IActionResult Delete(Guid id)
+
+        [HttpPut("Update")]
+        public IActionResult Update([FromBody] Category category)
         {
-            if (id == Guid.Empty)
+            if (category == null || category.Id == 0)
             {
-                return BadRequest("Invalid Id Format");
+                return BadRequest("Invalid category data.");
             }
+
             try
             {
-                _categoryService.Delete(id);
+                _categoryService.Update(category);
                 return Ok();
             }
             catch (Exception ex)
@@ -112,5 +100,27 @@ namespace Blog.Web.Areas.Admin.Controllers
                 return StatusCode(500, $"Internal server error: {ex.Message}");
             }
         }
+
+
+        //// DELETE: Admin/Category/Delete/{id}
+        //[HttpDelete("Delete")]
+        //public IActionResult Delete([FromQuery] Guid id)
+        //{
+        //    if (id == Guid.Empty)
+        //    {
+        //        return BadRequest("Invalid ID format.");
+        //    }
+
+        //    var color = _categoryService.GetFirstOrDefault(i => i.GuidId == id);
+        //    if (color == null)
+        //    {
+        //        return NotFound("Color not found.");
+        //    }
+
+        //    _categoryService.Delete(color.Id);
+        //    return Ok(color);
+        //}-
+
+
     }
 }

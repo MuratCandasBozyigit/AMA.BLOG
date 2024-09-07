@@ -1,0 +1,93 @@
+﻿@model Blog.Core.Models.Post
+
+<h2>Yeni Post Oluştur</h2>
+
+<form asp-action="Create" method="post" enctype="multipart/form-data">
+    <div class="mb-3">
+        <label for="Title" class="form-label">Başlık</label>
+        <input type="text" class="form-control" id="title" name="Title" value="@Model?.Title" required />
+        <span id="title-error" style="color:red; display:none;">Alan boş bırakılamaz.</span>
+    </div>
+
+    <div class="mb-3">
+        <label for="Content" class="form-label">İçerik</label>
+        <textarea class="form-control" id="content" name="Content" rows="3" required>@Model?.Content</textarea>
+        <span id="content-error" style="color:red; display:none;">Alan boş bırakılamaz.</span>
+    </div>
+
+    <div class="mb-3">
+        <label for="Image" class="form-label">Resim</label>
+        <input type="file" class="form-control" id="image" name="Image" />
+        <span id="image-error" style="color:red; display:none;">Alan boş bırakılamaz.</span>
+    </div>
+
+    <button type="submit" id="btnSave" class="btn btn-primary">Kaydet</button>
+</form>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $('#btnSave').click(function (event) {
+                event.preventDefault(); // Formun varsayılan gönderimini engelle
+
+                var post = {
+                    title: $('#title').val(),
+                    content: $('#content').val(),
+                    image: $('#image').val()
+                };
+
+                let isValid = true;
+
+                // Başlık doğrulaması
+                if (!post.title) {
+                    $('#title-error').show();
+                    isValid = false;
+                } else {
+                    $('#title-error').hide();
+                }
+
+                // İçerik doğrulaması
+                if (!post.content) {
+                    $('#content-error').show();
+                    isValid = false;
+                } else {
+                    $('#content-error').hide();
+                }
+
+                // Resim doğrulaması
+                if (!post.image) {
+                    $('#image-error').show();
+                    isValid = false;
+                } else {
+                    $('#image-error').hide();
+                }
+
+                // Form geçerli değilse işlemi durdur
+                if (!isValid) {
+                    return;
+                }
+
+                // AJAX ile form verilerini gönder
+                var formData = new FormData();
+                formData.append('Title', post.title);
+                formData.append('Content', post.content);
+                formData.append('Image', $('#image')[0].files[0]);
+
+                $.ajax({
+                    type: 'POST',
+                    url: '/Admin/Post/Create',
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    success: function (response) {
+                        Swal.fire('Başarılı!', 'Post başarıyla kaydedildi.', 'success');
+                        // Burada yönlendirme yapılabilir
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        Swal.fire('Hata', 'Post kaydedilirken bir sorun oluştu: ' + errorThrown, 'error');
+                    }
+                });
+            });
+        });
+    </script>
+}
