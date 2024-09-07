@@ -11,9 +11,10 @@ public class AccountController : Controller
     //Ekstradan servis eklememek için appdbcontedxten halledicem
     private readonly ApplicationDbContext _context;
 
-    public AccountController(IAccountService accountService)
+    public AccountController(IAccountService accountService, ApplicationDbContext context)
     {
         _accountService = accountService;
+        _context = context;
     }
 
     public IActionResult Index()
@@ -47,5 +48,24 @@ public class AccountController : Controller
             return RedirectToAction("Index", "Home");
         }
 
+    }
+
+
+    //Burayı düzenle eve gitmek için erkenden kalktım ardından ViewPageleri ayarla 8 eylülde logini yapmak zorundasın kg 
+    [HttpPost]
+    public IActionResult Register(AppUser appUser)
+    {
+        if (appUser == null)
+        {
+            var appUserAdd = _accountService.Add(appUser);
+            return Json(appUserAdd);
+        }
+        else
+        {
+            return RedirectToAction("Login", "Account");
+
+            //return BadRequestResult("Bu bilgilerle bir hesap mevcut", RedirectToAction("Login", "Account"));
+          
+        }
     }
 }
