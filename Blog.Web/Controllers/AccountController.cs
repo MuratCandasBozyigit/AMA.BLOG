@@ -4,68 +4,75 @@ using System.Threading.Tasks;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication;
+using Blog.Core.Models;
+using Blog.Business.Absract;
 
-public class AccountController : Controller
+
+namespace Blog.Web.Controllers
 {
-    private readonly IAccountService _accountService;
-    //Ekstradan servis eklememek için appdbcontedxten halledicem
-    private readonly ApplicationDbContext _context;
-
-    public AccountController(IAccountService accountService, ApplicationDbContext context)
+    public class AccountController : Controller
     {
-        _accountService = accountService;
-        _context = context;
-    }
+        private readonly IAccountService _accountService;
+        private readonly IAppUserService _appUserService;
+        //Ekstradan servis eklememek için appdbcontedxten halledicem
+        private readonly ApplicationDbContext _context;
 
-    public IActionResult Index()
-    {
-        return View();
-    }
-
-    [HttpPost]
-    public async Task<IActionResult> Login(AppUser user)
-    {
-        AppUser appUser = _context.AppUser.FirstOrDefault(u => u.Id == user.Id && u.UserName == user.UserName);
-        if (appUser == null)
+        public AccountController(IAccountService accountService, ApplicationDbContext context, IAppUserService appUserService)
         {
-            return Content("Error");
+            _accountService = accountService;
+            _context = context;
+            _appUserService = appUserService;
         }
-        else
+
+        public IActionResult Index()
         {
-            List<Claim> claims = new List<Claim>();
-            claims.Add(new Claim(ClaimTypes.NameIdentifier, appUser.Id.ToString()));
-            claims.Add(new Claim(ClaimTypes.GivenName, appUser.UserName));
-            claims.Add(new Claim(ClaimTypes.Role, appUser.IsAdmin ? "Admin" : "User"));
+            return View();
+        }
+        [HttpPost]
+        public async Task<IActionResult> Login(AppUser user)
+        {
+            if (user == null)
+            {
+                return BadRequest("User cannot be null");
+            }
+
+            AppUser appUser = _context.AppUser.FirstOrDefault(u => u.Id == user.Id && u.UserName == user.UserName);
+            if (appUser == null)
+            {
+                return Unauthorized(); // Daha uygun HTTP yanıtı
+            }
+
+            List<Claim> claims = new List<Claim>
+    {
+        new Claim(ClaimTypes.NameIdentifier, appUser.Id.ToString()),
+        new Claim(ClaimTypes.GivenName, appUser.UserName),
+        new Claim(ClaimTypes.Role, appUser.IsAdmin ? "Admin" : "User")
+    };
 
             ClaimsIdentity identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
 
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-
             await HttpContext.SignInAsync(new ClaimsPrincipal(identity), new AuthenticationProperties
             {
                 IsPersistent = true
             });
+
             return RedirectToAction("Index", "Home");
         }
 
-    }
-
-
-    //Burayı düzenle eve gitmek için erkenden kalktım ardından ViewPageleri ayarla 8 eylülde logini yapmak zorundasın kg 
-    [HttpPost]
-    public IActionResult Register(AppUser appUser)
-    {
-        if (appUser == null)
+        [HttpPost]
+        public IActionResult Register(AppUser appUser)
         {
-            var appUserAdd = _accountService.Add(appUser);
-            return Json(appUserAdd);
+            if (appUser == null)
+            {
+                var userApp = _appUserService.Add(appUser);
+                return Ok(appUser);
+            }
+            else
+            {
+                return BadRequest();
+            }
         }
-        else
-        {
-            return RedirectToAction("Login", "Account");
 
-            //return BadRequestResult("Bu bilgilerle bir hesap mevcut", RedirectToAction("Login", "Account"));
-          
-        }
     }
 }

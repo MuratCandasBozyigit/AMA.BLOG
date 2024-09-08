@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Blog.Core.Models;
-using Blog.Web.Models;
+
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Blog.Business.Absract;

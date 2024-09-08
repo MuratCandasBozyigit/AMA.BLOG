@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Blog.Business.Configuration;
+using Blog.Core.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -32,13 +33,7 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
 
     });
 
-// Configure Identity services
-builder.Services.AddIdentity<AppUser, IdentityRole>(options =>
-{
-    options.SignIn.RequireConfirmedAccount = true;
-})
-.AddEntityFrameworkStores<ApplicationDbContext>()
-.AddDefaultTokenProviders();
+
 
 // DI methods for Business and Repository layers
 builder.Services.BusinessDI();

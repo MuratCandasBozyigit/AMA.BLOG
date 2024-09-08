@@ -3,6 +3,7 @@ using Blog.Core.Models;
 using System.IO;
 using System;
 using Blog.Business.Absract;
+using Blog.Business.Concrete;
 
 namespace Blog.Web.Areas.Admin.Controllers
 {
@@ -13,10 +14,11 @@ namespace Blog.Web.Areas.Admin.Controllers
         private readonly ICategoryService _categoryService;
         private readonly ITagService _tagService;
 
-        public PostController(IPostService postService, ICategoryService categoryService)
+        public PostController(IPostService postService, ICategoryService categoryService, ITagService tagService)
         {
             _postService = postService;
             _categoryService = categoryService;
+            _tagService = tagService;
         }
 
         // GET: Post/Index
@@ -57,11 +59,18 @@ namespace Blog.Web.Areas.Admin.Controllers
         [HttpGet]
         public IActionResult Create()
         {
-            return View();
+            var categories = _categoryService.GetAll(); // Kategorileri al
+            var viewModel = new HomeViewModel
+            {
+                Categories = categories
+            };
+
+            return View(viewModel);
         }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create(Post post, IFormFile image)
+        public IActionResult Create([FromForm] Post post, IFormFile image)
         {
             if (ModelState.IsValid)
             {
@@ -79,11 +88,13 @@ namespace Blog.Web.Areas.Admin.Controllers
                 }
 
                 _postService.Add(post);
-                return RedirectToAction("Index");
+                return Json(new { success = true, message = "Post başarıyla kaydedildi." });
             }
 
-            return View(post);
+            return Json(new { success = false, message = "Post kaydedilirken bir hata oluştu." });
         }
+
+      
 
         [HttpGet]
         public IActionResult Edit()
@@ -122,3 +133,35 @@ namespace Blog.Web.Areas.Admin.Controllers
 
     }
 }
+
+
+
+
+
+
+
+
+
+//public IActionResult Create(Post post, IFormFile image)
+//{
+//    if (ModelState.IsValid)
+//    {
+//        if (image != null && image.Length > 0)
+//        {
+//            var fileName = Path.GetFileName(image.FileName);
+//            var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images", fileName);
+
+//            using (var stream = new FileStream(filePath, FileMode.Create))
+//            {
+//                image.CopyTo(stream);
+//            }
+
+//            post.ImagePath = "~/images/" + fileName;
+//        }
+
+//        _postService.Add(post);
+//        return RedirectToAction("Index");
+//    }
+
+//    return View(post);
+//}

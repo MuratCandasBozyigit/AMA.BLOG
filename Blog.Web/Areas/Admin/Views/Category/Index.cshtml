@@ -30,7 +30,7 @@
                         <input type="text" id="description" placeholder="Lütfen Kategori Açıklaması giriniz" class="form-control" required />
                         <span id="description-error" style="color:red; display:none;">Alan boş bırakılamaz.</span>
                     </div>
-                  
+
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary emptyValue" data-bs-dismiss="modal">Kapat</button>
                         <button type="button" id="btnSave" class="btn btn-primary">Kaydet</button>
@@ -86,9 +86,9 @@
                         title: 'İşlemler',
                         render: function (data, type, row) {
                             return `
-                                        <a href="#" class="btn btn-sm btn-warning editTitle" data-id="${row.id}">Düzenle</a>
-                                        <a href="#" class="btn btn-sm btn-danger deleteTitle" data-id="${row.id}">Sil</a>
-                                    `;
+                                                <a href="#" class="btn btn-sm btn-warning editTitle" data-id="${row.id}">Düzenle</a>
+                                                <a href="#" class="btn btn-sm btn-danger deleteTitle" data-id="${row.id}">Sil</a>
+                                            `;
                         }
                     }
                 ]

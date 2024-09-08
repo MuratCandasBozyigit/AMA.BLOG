@@ -16,6 +16,6 @@ namespace Blog.Core.Models
 
 
         public int AppUserId { get; set; }
-        public virtual AppUser AppUsers { get; set; }
+        public virtual AppUser AppUser { get; set; }
     }
 }
