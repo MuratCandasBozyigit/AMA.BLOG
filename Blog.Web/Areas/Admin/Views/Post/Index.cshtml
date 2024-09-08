@@ -1,0 +1,32 @@
+﻿@model Blog.Web.Areas.Admin.Controllers.PostController.HomeViewModel
+<h2>Posts</h2>
+
+<a href="Post/Create">Yeni Post Oluştur</a>
+
+<ul>
+    @foreach (var post in Model.Posts)
+    {
+        <li>@post.Title</li>
+        <li>@post.Summary</li>
+        <li>@post.Content</li>
+    }
+</ul>
+
+<h2>Categories</h2>
+<ul>
+    @foreach (var category in Model.Categories)
+    {
+        <li>@category.Name</li>
+    }
+</ul>
+
+
+@section Scripts{
+    <script>
+
+    </script>
+}
+
+@section Css {
+    <link rel="stylesheet" href="~/css/postIndexHomePage.css" asp-append-version="true" />
+}

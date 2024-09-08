@@ -10,5 +10,10 @@ namespace Blog.Business.Absract
 {
     public interface IPostService:IService<Post>
     {
+     
+        ICollection<Post> GetAllPosts();
+        ICollection<Post> GetAllPosts(Post post);
+        ICollection<Post> GetAllPostsByCategoryId(int postId);
+      
     }
 }

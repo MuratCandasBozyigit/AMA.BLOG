@@ -3,8 +3,9 @@ using Blog.Business.Concrete;
 using Blog.Core.Models;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Blog.Web.Controllers
+namespace Blog.Web.Areas.Admin.Controllers
 {
+    [Area("Admin")]
     public class TagController : Controller
     {
         private readonly ITagService tagService;

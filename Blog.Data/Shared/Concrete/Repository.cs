@@ -50,18 +50,20 @@ namespace Blog.Data.Shared.Concrete
         public bool Delete(int id)
         {
             T entity = _dbSet.Find(id);
-            if (entity == null)
-                return false;
-
+            entity.IsActive = false;
             entity.IsDeleted = true;
+
+           
+            entity.DateDeleted = DateTime.Now;
             Update(entity);
             return true;
         }
 
         public bool Delete(Guid guid)
         {
-            T entity = _dbSet.FirstOrDefault(x => x.GuidId == guid);
-            return entity != null && Delete(entity.Id);
+            T entity = _dbSet.Where(x => x.GuidId == guid).FirstOrDefault();
+            return Delete(entity.Id);
+
         }
 
         public IQueryable<T> GetAll()
@@ -97,8 +99,9 @@ namespace Blog.Data.Shared.Concrete
         public T Update(T entity)
         {
             _dbSet.Update(entity);
-            Save();
+            Save(); // Değişiklikleri kaydet
             return entity;
         }
+
     }
 }

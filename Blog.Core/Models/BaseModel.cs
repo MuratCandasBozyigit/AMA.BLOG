@@ -11,11 +11,13 @@ namespace Blog.Core.Models
     {
 
         public int Id { get; set; }
-        public Guid GuidId { get; set; }
-        public DateTime DateCreated { get; set; }
-        public DateTime DateUpdated { get; set; }
-        public bool IsActive { get; set; }
-        public bool IsDeleted { get; set; }
-       
+        public Guid GuidId { get; set; } = Guid.NewGuid();
+        public DateTime DateCreated { get; set; } = DateTime.Now;
+        public DateTime DateUpdated { get; set; } = DateTime.Now;
+        public DateTime? DateDeleted { get; set; } = DateTime.Now;
+        public bool IsActive { get; set; } = true;
+        public bool IsDeleted { get; set; } = false;
+
+
     }
 }

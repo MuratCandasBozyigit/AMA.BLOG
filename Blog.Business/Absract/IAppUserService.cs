@@ -1,13 +1,14 @@
-﻿using Blog.Core.Models;
-using Microsoft.AspNetCore.Identity;
+﻿using Blog.Business.Shared.Absract;
+using Blog.Core.Models;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
-using Blog.Core.Models; 
 
-public interface IAppUserService
+namespace Blog.Business.Absract
 {
-    Task<AppUser> GetUserByIdAsync(string userId);
-    Task<AppUser> GetUserByEmailAsync(string email);
-    Task<IdentityResult> CreateUserAsync(AppUser user, string password);
-    Task<SignInResult> SignInUserAsync(string email, string password, bool rememberMe);
-    Task SignOutUserAsync();
+    public interface IAppUserService:IService<AppUser>
+    {
+    }
 }

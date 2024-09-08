@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System.Collections.Generic;
 
 namespace Blog.Core.Models
 {
@@ -6,7 +6,13 @@ namespace Blog.Core.Models
     {
         public string Name { get; set; }
         public string Description { get; set; }
-        public int? ParentCategoryId { get; set; }  // ParentCategoryId opsiyonel olabilir, bu yüzden nullable yapıldı.
-        public string Slug { get; set; }  // Slug, URL dostu kategori adı olarak eklendi.
+        public string Slug { get; set; }
+        public int? ParentCategoryId { get; set; }
+
+        //public int AppUserId { get; set; }
+        //public virtual AppUser AppUser { get; set; }
+
+        // Kategoriye ait postlar
+        //public virtual ICollection<Post> Posts { get; set; }
     }
 }
