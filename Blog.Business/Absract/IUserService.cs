@@ -5,7 +5,7 @@ using Blog.Models.Dtos;
 
 namespace Blog.Business.Absract
 {
-    internal interface IUserService : IService<AppUser>
+    public interface IUserService : IService<AppUser>
     {
         Task<LoginDTO> Login(LoginDTO appUser);
         bool ProfilePictureAdd(string pictureBase64);
