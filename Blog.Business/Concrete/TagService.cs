@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Blog.Business.Concrete
 {
-    public class TagService(IRepository<Tag>tagRepo):Service<Tag>(tagRepo),ITagService
+    public class TagService(IRepository<Tag> tagRepo) : Service<Tag>(tagRepo), ITagService
     {
     }
 }

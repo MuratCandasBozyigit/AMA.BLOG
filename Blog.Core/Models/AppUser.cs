@@ -8,12 +8,10 @@ public class AppUser : BaseModel
     //Passwordu Hash Yap gizilee
     public string Password { get; set; }
     public string Email { get; set; } 
-  
     public DateTime CreatedDate { get; set; } = DateTime.Now;
-
-    public string? ProfilePictureUrl { get; set; }
-
+    public string? ProfilePicture { get; set; }
     public bool IsAdmin { get; set; }
+    public string ApplicationForm { get; set; }
 }
 
 //Gereksiz zaten hesap acılmadan okunulabilinyor ?D

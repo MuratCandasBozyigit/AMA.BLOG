@@ -10,14 +10,15 @@ namespace Blog.Business.Shared.Absract
 {
     public interface IService<T> where T : BaseModel
     {
-        List<T> GetAll();
-        List<T> GetAll(Expression<Func<T, bool>> predicate);
+        ICollection<T> GetAll();
         T GetById(int id);
-        T GetById(Guid id);
+        T GetByGuid(Guid guid);
         T Add(T entity);
         T Update(T entity);
         bool Delete(int id);
-        bool Delete(Guid id);
-        T GetFirstOrDefault(Expression<Func<T, bool>> predicate);
+        bool Delete(Guid guid);
+        T GetFirstOrDefault(Expression<Func<T, bool>> expression);
+
+        ICollection<T> GetAll(Expression<Func<T, bool>> expression);
     }
 }

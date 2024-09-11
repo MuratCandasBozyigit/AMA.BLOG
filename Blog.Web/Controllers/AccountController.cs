@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication;
 using Blog.Core.Models;
 using Blog.Business.Absract;
+using Microsoft.AspNetCore.Authorization;
 
 
 namespace Blog.Web.Controllers
@@ -28,37 +29,39 @@ namespace Blog.Web.Controllers
         {
             return View();
         }
-        [HttpPost]
-        public async Task<IActionResult> Login(AppUser user)
-        {
-            if (user == null)
-            {
-                return BadRequest("User cannot be null");
-            }
 
-            AppUser appUser = _context.AppUser.FirstOrDefault(u => u.Id == user.Id && u.UserName == user.UserName);
-            if (appUser == null)
-            {
-                return Unauthorized(); // Daha uygun HTTP yanıtı
-            }
+    //    [AllowAnonymous]
+    //    [HttpPost]
+    //    public async Task<IActionResult> Login(AppUser user)
+    //    {
+    //        if (user == null)
+    //        {
+    //            return BadRequest("User cannot be null");
+    //        }
 
-            List<Claim> claims = new List<Claim>
-    {
-        new Claim(ClaimTypes.NameIdentifier, appUser.Id.ToString()),
-        new Claim(ClaimTypes.GivenName, appUser.UserName),
-        new Claim(ClaimTypes.Role, appUser.IsAdmin ? "Admin" : "User")
-    };
+    //        AppUser appUser = _context.AppUser.FirstOrDefault(u => u.Id == user.Id && u.UserName == user.UserName);
+    //        if (appUser == null)
+    //        {
+    //            return Unauthorized(); // Daha uygun HTTP yanıtı
+    //        }
 
-            ClaimsIdentity identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+    //        List<Claim> claims = new List<Claim>
+    //{
+    //    new Claim(ClaimTypes.NameIdentifier, appUser.Id.ToString()),
+    //    new Claim(ClaimTypes.GivenName, appUser.UserName),
+    //    new Claim(ClaimTypes.Role, appUser.IsAdmin ? "Admin" : "User")
+    //};
 
-            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-            await HttpContext.SignInAsync(new ClaimsPrincipal(identity), new AuthenticationProperties
-            {
-                IsPersistent = true
-            });
+    //        ClaimsIdentity identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
 
-            return RedirectToAction("Index", "Home");
-        }
+    //        await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+    //        await HttpContext.SignInAsync(new ClaimsPrincipal(identity), new AuthenticationProperties
+    //        {
+    //            IsPersistent = true
+    //        });
+
+    //        return RedirectToAction("Index", "Home");
+    //    }
 
         [HttpPost]
         public IActionResult Register(AppUser appUser)

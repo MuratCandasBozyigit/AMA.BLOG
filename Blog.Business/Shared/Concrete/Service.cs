@@ -17,7 +17,7 @@ namespace Blog.Business.Shared.Concrete
             _repository = repository;
         }
 
-        public T Add(T entity)
+        public virtual T Add(T entity)
         {
             return _repository.Add(entity);
         }
@@ -33,22 +33,23 @@ namespace Blog.Business.Shared.Concrete
         }
 
 
-        public List<T> GetAll()
+        public virtual ICollection<T> GetAll()
         {
+            // return [.. _repository.GetAll()];
             return _repository.GetAll().ToList();
         }
 
-        public List<T> GetAll(Expression<Func<T, bool>> expression)
+        public ICollection<T> GetAll(Expression<Func<T, bool>> expression)
         {
             return _repository.GetAll(expression).ToList();
         }
 
-        public T GetById(int id)
+        public T GetByGuid(Guid guid)
         {
-            return _repository.GetById(id);
+            return _repository.GetFirstOrDefault(x => x.GuidId == guid);
         }
 
-        public T GetById(Guid id)
+        public T GetById(int id)
         {
             return _repository.GetById(id);
         }
@@ -58,11 +59,9 @@ namespace Blog.Business.Shared.Concrete
             return _repository.GetFirstOrDefault(expression);
         }
 
-        // Update işlemi
         public virtual T Update(T entity)
         {
             return _repository.Update(entity);
         }
-
     }
 }
