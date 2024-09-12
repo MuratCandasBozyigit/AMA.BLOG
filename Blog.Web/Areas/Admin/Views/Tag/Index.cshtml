@@ -1,0 +1,64 @@
+﻿@using System.Security.Claims
+@{
+    ViewData["Title"] = "Admin Etiket Ekleme";
+}
+
+
+<h2>Etiket</h2>
+
+<div class="col-12">
+    <div class="modal fade" id="modal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false" role="dialog" aria-labelledby="modalTitleId" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalTitle"></h5>
+                    <button type="button" class="btn-close emptyValue" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3 row">
+                        <label class="form-label">Kategori Adı: </label>
+                        <input type="text" id="name" placeholder="Lütfen Kategori Adı giriniz" class="form-control" required />
+                        <span id="name-error" style="color:red; display:none;">Alan boş bırakılamaz.</span>
+                    </div>
+                  
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary emptyValue" data-bs-dismiss="modal">Kapat</button>
+                        <button type="button" id="btnSave" class="btn btn-primary">Kaydet</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card bg-dark text-white">
+        <div class="card-header bg-dark text-white">
+            <div class="row">
+                <div class="col-11">
+                    <box-icon name="car" color="white" size="sm" animation="tada"></box-icon> Etiketler
+                </div>
+                <div class="col-1 text-end">
+                    <a id="btnAdd" href="#" class="btn btn-outline-light">+ Yeni Etiket</a>
+                </div>
+            </div>
+        </div>
+        <div class="card-body">
+            <table id="tblCategories" class="table table-hover table-striped table-bordered"></table>
+        </div>
+    </div>
+</div>
+
+
+
+@section Css {
+}
+
+
+@section Scripts {
+    <script>
+        $(document).ready(function{
+
+
+        });
+
+    </script>
+}
