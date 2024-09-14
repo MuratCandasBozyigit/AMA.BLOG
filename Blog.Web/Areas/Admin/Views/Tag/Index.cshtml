@@ -1,0 +1,48 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+
+}
+
+
+
+
+@section Scripts {
+    <script>
+        jQuery(document).ready(function () {
+            $("input,textarea").val("");
+            $(".error-message").val("");
+
+
+            var table = $('#tableTags').DataTable({
+                ajax: {
+                    url: '/Admin/Tag/GetAll',
+                    dataSrc: '',
+                    Error: function (xhr, error, thrown) {
+                        console.error('Ajax Error:', error, thrown);
+                        Swal.fire('Hata', 'Etiketler yüklenirken bir sorun oluştu.', 'error');
+
+                    }
+                },
+                columns:[
+                    {data:'name',title:'Etiket Adı'},
+                    { data: 'postId', title: 'PostId' },
+                    { data: 'appUserıd', title: 'AppUserId' },
+                    {data:'appUser',title:'AppUser'},
+                    {
+                        data: null,
+                        title: 'İşlemler',
+                        render: function (data, type, row) {
+                            return `
+                                                        <a href="#" class="btn btn-sm btn-warning editTitle" data-id="${row.id}">Düzenle</a>
+                                                        <a href="#" class="btn btn-sm btn-danger deleteTitle" data-id="${row.id}">Sil</a>
+                                                    `;
+                        }
+                    }
+                ]
+                
+            })
+        });
+    </script>
+}
