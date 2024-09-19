@@ -6,7 +6,8 @@ namespace Blog.Core.Models
         public string Title { get; set; }
         public string Content { get; set; }
         public string? AuthorId { get; set; }
-        public string ImagePath { get; set; }
+        //İmage pathı şimidlik nullable yaptım düzenle bunu sonrasında normal kalsın hata dondursun
+        public string? ImagePath { get; set; }
         public int? Likes { get; set; }
         public int? Comments { get; set; }
         public string Summary { get; set; }

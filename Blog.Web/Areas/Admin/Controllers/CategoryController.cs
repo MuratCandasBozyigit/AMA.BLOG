@@ -62,7 +62,7 @@ namespace Blog.Web.Areas.Admin.Controllers
         [HttpGet("GetById/{id}")]
         public IActionResult GetById(int id)
         {
-            if (id == 0) // 'id == null' olmaz, çünkü id bir integer.
+            if (id == 0)
             {
                 return BadRequest("Invalid Id Format");
             }
