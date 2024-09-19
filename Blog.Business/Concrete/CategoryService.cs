@@ -23,5 +23,7 @@ namespace Blog.Business.Concrete
         {
           return _repo.GetAll().ToList(); 
         }
+
+       
     }
 }

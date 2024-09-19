@@ -12,5 +12,6 @@ namespace Blog.Business.Absract
     {
         ICollection<Category> GetAllCategories(Category category);
         IEnumerable<Category> GetAllCategories();
+      //buraya getbyıd metodu oluştur muhtemelen Category Indexte delete ve edit b yüzden calışmyıro olmalı 
     }
 }

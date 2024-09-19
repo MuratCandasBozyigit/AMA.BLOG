@@ -58,7 +58,7 @@ namespace Blog.Web.Areas.Admin.Controllers
             }
         }
 
-        // GET: Admin/Category/GetById/{id}
+       
         [HttpGet("GetById/{id}")]
         public IActionResult GetById(int id)
         {
