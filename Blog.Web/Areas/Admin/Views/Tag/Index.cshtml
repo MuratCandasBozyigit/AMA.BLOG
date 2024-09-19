@@ -2,10 +2,55 @@
     For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 *@
 @{
-
+    ViewData["Title"] = "Admin Etiket EKleme";
 }
+<h2>Etiketler</h2>
+<div>
+    <div class="modal fade" id="modal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false" role="dialog" aria-labelledby="modalTitleId" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalTitle"></h5>
+                    <button type="button" class="btn-close emptyValue" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3 row">
+                        <label class="form-label">Etiket Adı: </label>
+                        <input type="text" id="name" placeholder="Lütfen Etiket Adı giriniz" class="form-control" required />
+                        <span id="name-error" style="color:red; display:none;">Alan boş bırakılamaz.</span>
+                    </div>
+                    <div class="mb-3 row">
+                        <label class="form-label">Etiket Açıklaması: </label>
+                        <input type="text" id="tagDescription" placeholder="Lütfen Etiket Açıklamasını giriniz" class="form-control" required />
+                        <span id="tagDescription-error" style="color:red; display:none;">Alan boş bırakılamaz.</span>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary emptyValue" data-bs-dismiss="modal">Kapat</button>
+                        <button type="button" id="btnSave" class="btn btn-primary">Kaydet</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
 
+    <div class="card bg-dark text-white">
+        <div class="card-header bg-dark text-white">
+            <div class="row">
+                <div class="col-11">
+                    <box-icon name="car" color="white" size="sm" animation="tada"></box-icon> Kategorilerim
+                </div>
+                <div class="col-1 text-end">
+                    <a id="btnAdd" href="#" class="btn btn-outline-light">+ Yeni Kategori</a>
+                </div>
+            </div>
+        </div>
+        <div class="card-body">
+            <table id="tblCategories" class="table table-hover table-striped table-bordered"></table>
+        </div>
+    </div>
+</div>
 
 
 @section Scripts {
@@ -25,24 +70,131 @@
 
                     }
                 },
-                columns:[
-                    {data:'name',title:'Etiket Adı'},
+                columns: [
+                    { data: 'name', title: 'Etiket Adı' },
                     { data: 'postId', title: 'PostId' },
                     { data: 'appUserıd', title: 'AppUserId' },
-                    {data:'appUser',title:'AppUser'},
+                    { data: 'appUser', title: 'AppUser' },
                     {
                         data: null,
                         title: 'İşlemler',
                         render: function (data, type, row) {
                             return `
-                                                        <a href="#" class="btn btn-sm btn-warning editTitle" data-id="${row.id}">Düzenle</a>
-                                                        <a href="#" class="btn btn-sm btn-danger deleteTitle" data-id="${row.id}">Sil</a>
-                                                    `;
+                                                                                                                        <a href="#" class="btn btn-sm btn-warning editTag" data-id="${row.id}">Düzenle</a>
+                                                                                                                                <a href="#" class="btn btn-sm btn-danger deleteTag" data-id="${row.id}">Sil</a>
+                                                                                                                    `;
                         }
                     }
                 ]
-                
-            })
+
+            });
+            $('btnAdd').click(function () {
+                $('modalTitle').text('Yeni Kategori Ekle');
+                $('btnSave').text('Ekle');
+                //$('btnName).val(''); ile isimleriboşalt
+                $('modalTitle').modal('show');
+            });
+            $('tblTags').on('click', 'editTag', function () {
+                var id = $(this).data('id');
+                $.ajax({
+                    url: "/Admin/Tags/GetById" + id,
+                    success: function (res) {
+                        //    $('#name').val(res.name);
+                        $('#modalTitle').text('Etiket Düzenle');
+                        $('#btnSave').text('Güncelle');
+                        $('#modal').modal('show');
+                    },
+                    error: function () {
+                        Swal.fire('Hata', 'Etiket verisi getirilirken bir sorun oluştu.', 'error');
+                    }
+                }
+                                                                                });
+            $('tblTags').on('click', 'deleteTag', function () {
+                var id = $(this).data('id');
+                Swal.fire({
+                    title: 'Emin misiniz?',
+                    text: 'Bu etiket verisi kalıcı olarak silinecektir!!!',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Evet, sil!'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $.ajax({
+                            type: 'DELETE',
+                            url: "/Admin/Tags/Delete/" + id,
+                            success: function () {
+                                table.ajax.reload();
+                                Swal.fire('Silindi!', 'Etiket başarıyla silindi', 'success');
+                            },
+                            error: function () {
+                                Swal.fire('Hata', 'Etiket silinirken bir sorun oluştu', 'error');
+                            }
+                        }
+                                                                        });
+            }
         });
+        });
+        });
+        $('#btnSave').click(function () {
+            var category = {
+                id: $('#tag-id').val(), // ID'yi de gönder
+               // name: $('#name').val(),
+               // slug: $('#slug').val(),
+               // description: $('#description').val()
+            };
+
+            let isValid = true;
+
+          
+            if (!category.name) {
+                $('#name-error').show();
+                isValid = false;
+            } else {
+                $('#name-error').hide();
+            }
+
+            
+            // if (!category.slug) {
+            //     $('#slug-error').show();
+            //     isValid = false;
+            // } else {
+            //     $('#slug-error').hide();
+            // }
+
+           
+            if (!category.description) {
+                $('#tagDescription-error').show();
+                isValid = false;
+            } else {
+                $('#tagDescription-error').hide();
+            }
+
+            // Form geçerli değilse kaydetme
+            if (!isValid) {
+                return;
+            }
+            var url = $('#btnSave').text() === 'Ekle' ? '/Admin/Tags/Add' : '/Admin/Tags/Update';
+            var method = $('#btnSave').text() === 'Ekle' ? 'POST' : 'PUT';
+
+            $.ajax({
+                type: method,
+                url: url,
+                data: JSON.stringify(tag),
+                contentType: 'application/json; charset=utf-8',
+                success: function (response) {
+                    $('#modal').modal('hide');
+                    table.ajax.reload();
+                    Swal.fire('Başarılı!', 'Etiket başarıyla kaydedildi.', 'success');
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    Swal.fire('Hata', 'Etiket kaydedilirken bir sorun oluştu. Detaylar: ' + errorThrown, 'error');
+                }
+            });
+        });
+
+                        });
+
     </script>
 }

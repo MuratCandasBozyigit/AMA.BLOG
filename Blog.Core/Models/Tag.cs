@@ -12,6 +12,7 @@ namespace Blog.Core.Models
 
         public string Name {  get; set; }
         public int? PostId { get; set; }
+        public string TagDescription { get; set; }
         //Slug(URL dostu etiket adı)
 
 
