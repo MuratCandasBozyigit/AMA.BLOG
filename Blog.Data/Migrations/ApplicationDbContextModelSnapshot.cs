@@ -131,13 +131,12 @@ namespace Blog.Data.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("AuthorId")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("CategoryId")
                         .HasColumnType("int");
 
-                    b.Property<int>("Comments")
+                    b.Property<int?>("Comments")
                         .HasColumnType("int");
 
                     b.Property<string>("Content")
@@ -172,7 +171,7 @@ namespace Blog.Data.Migrations
                     b.Property<bool>("IsPublished")
                         .HasColumnType("bit");
 
-                    b.Property<int>("Likes")
+                    b.Property<int?>("Likes")
                         .HasColumnType("int");
 
                     b.Property<string>("Summary")
@@ -230,8 +229,6 @@ namespace Blog.Data.Migrations
 
                     b.HasIndex("AppUserId");
 
-                    b.HasIndex("PostId");
-
                     b.ToTable("Tags");
                 });
 
@@ -280,7 +277,7 @@ namespace Blog.Data.Migrations
             modelBuilder.Entity("Blog.Core.Models.Post", b =>
                 {
                     b.HasOne("Blog.Core.Models.Category", "Category")
-                        .WithMany("Posts")
+                        .WithMany()
                         .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -296,21 +293,7 @@ namespace Blog.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Blog.Core.Models.Post", null)
-                        .WithMany("Tags")
-                        .HasForeignKey("PostId");
-
                     b.Navigation("AppUser");
-                });
-
-            modelBuilder.Entity("Blog.Core.Models.Category", b =>
-                {
-                    b.Navigation("Posts");
-                });
-
-            modelBuilder.Entity("Blog.Core.Models.Post", b =>
-                {
-                    b.Navigation("Tags");
                 });
 #pragma warning restore 612, 618
         }
