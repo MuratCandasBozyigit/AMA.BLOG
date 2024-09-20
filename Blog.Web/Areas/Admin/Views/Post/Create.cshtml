@@ -53,44 +53,26 @@
     <script>
         $(document).ready(function () {
             $('#btnSave').click(function (event) {
-                event.preventDefault(); // Formun varsayılan gönderimini engelle
+                event.preventDefault(); 
 
                 var post = {
                     title: $('#title').val(),
                     content: $('#content').val(),
                     summary: $('#summary').val(),
-                    categorySelect: $('#categorySelect').val(),
-                    categorySelect:$('#categorySelect'),
+                    categorySelect: $('#CategorySelect').val(),
                     image: $('#image')[0].files[0]
                 };
 
                 let isValid = true;
 
-                // Başlık doğrulaması
+             
                 if (!post.title) {
                     $('#title-error').show();
                     isValid = false;
                 } else {
                     $('#title-error').hide();
                 }
-                
-                // Kısa içerik doğrulaması
-                if (!post.summary) {
-                    $('#summary-error').show();
-                    isValid = false;
-                } else {
-                    $('#summary-error').hide();
-                }
 
-                // Kısa içerik doğrulaması
-                if (!post.summary) {
-                    $('#CategorySelect-error').show();
-                    isValid = false;
-                } else {
-                    $('#CategorySelect-error').hide();
-                }
-
-                // İçerik doğrulaması
                 if (!post.content) {
                     $('#content-error').show();
                     isValid = false;
@@ -98,7 +80,23 @@
                     $('#content-error').hide();
                 }
 
-                // Resim doğrulaması
+           
+                if (!post.summary) {
+                    $('#summary-error').show();
+                    isValid = false;
+                } else {
+                    $('#summary-error').hide();
+                }
+
+            
+                if (!post.categorySelect) {
+                    $('#CategorySelect-error').show();
+                    isValid = false;
+                } else {
+                    $('#CategorySelect-error').hide();
+                }
+
+              
                 if (!post.image) {
                     $('#image-error').show();
                     isValid = false;
@@ -106,17 +104,16 @@
                     $('#image-error').hide();
                 }
 
-                // Form geçerli değilse işlemi durdur
+              
                 if (!isValid) {
                     return;
                 }
 
-                // AJAX ile form verilerini gönder
                 var formData = new FormData();
                 formData.append('Title', post.title);
                 formData.append('Content', post.content);
                 formData.append('Summary', post.summary);
-                formData.append('CategorySelect', post.categorySelect);
+                formData.append('CategoryId', post.categorySelect); 
                 formData.append('Image', post.image);
 
                 $.ajax({
@@ -127,7 +124,7 @@
                     contentType: false,
                     success: function (response) {
                         Swal.fire('Başarılı!', 'Post başarıyla kaydedildi.', 'success');
-                        // Burada yönlendirme yapılabilir
+                       
                     },
                     error: function (jqXHR, textStatus, errorThrown) {
                         Swal.fire('Hata', 'Post kaydedilirken bir sorun oluştu: ' + errorThrown, 'error');
@@ -136,4 +133,5 @@
             });
         });
     </script>
+
 }
