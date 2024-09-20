@@ -1,11 +1,11 @@
 ﻿using Blog.Business.Absract;
-using Blog.Business.Concrete;
 using Blog.Core.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Blog.Web.Areas.Admin.Controllers
 {
     [Area("Admin")]
+    [Route("Admin/[controller]")]
     public class TagController : Controller
     {
         private readonly ITagService tagService;
@@ -15,23 +15,26 @@ namespace Blog.Web.Areas.Admin.Controllers
             this.tagService = tagService;
         }
 
+        [HttpGet]
         public IActionResult Index()
         {
             return View();
         }
+
         [HttpGet("GetAll")]
         public IActionResult GetAll()
         {
             try
             {
-                var tag = tagService.GetAll();
-                return Ok(tag);
+                var tags = tagService.GetAll();
+                return Ok(tags);
             }
             catch (Exception ex)
             {
                 return StatusCode(500, $"Internal server error: {ex.Message}");
             }
         }
+
         [HttpPost("Add")]
         public IActionResult Add([FromBody] Tag tag)
         {
@@ -45,27 +48,26 @@ namespace Blog.Web.Areas.Admin.Controllers
                 return StatusCode(500, $"Internal server error: {ex.Message}");
             }
         }
-        [HttpPost("Update/{id}")]
-        public IActionResult Update([FromBody] Tag tag)
+
+        [HttpPut("Update/{id}")]
+        public IActionResult Update(Guid id, [FromBody] Tag tag)
         {
             if (tag == null)
             {
                 return BadRequest();
             }
-            else
-            {
-                try
-                {
-                    tagService.Update(tag);
-                    return Ok();
-                }
-                catch (Exception ex)
-                {
-                    return StatusCode(500, $"Internal server error: {ex.Message}");
-                }
-            }
 
+            try
+            {
+                tagService.Update(tag);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
         }
+
         [HttpGet("GetById/{id}")]
         public IActionResult GetById(Guid id)
         {
@@ -73,12 +75,13 @@ namespace Blog.Web.Areas.Admin.Controllers
             {
                 return BadRequest("Invalid Id Format");
             }
+
             try
             {
                 var tag = tagService.GetById(id);
                 if (tag == null)
                 {
-                    return NotFound("Category Not Found");
+                    return NotFound("Tag Not Found");
                 }
                 return Ok(tag);
             }
@@ -87,6 +90,7 @@ namespace Blog.Web.Areas.Admin.Controllers
                 return StatusCode(500, $"Internal server error: {ex.Message}");
             }
         }
+
         [HttpDelete("Delete/{id}")]
         public IActionResult Delete(Guid id)
         {
@@ -98,13 +102,11 @@ namespace Blog.Web.Areas.Admin.Controllers
             var tag = tagService.GetById(id);
             if (tag == null)
             {
-                return NotFound("Category Not Found");
+                return NotFound("Tag Not Found");
             }
 
             tagService.Delete(id);
             return Ok();
         }
-
     }
-
 }
