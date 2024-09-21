@@ -16,7 +16,7 @@ namespace Blog.Core.Models
         //Slug(URL dostu etiket adı)
 
 
-        public int AppUserId { get; set; }
-        public virtual AppUser AppUser { get; set; }
+        //public int? AppUserId { get; set; }
+        //public virtual AppUser AppUser { get; set; }
     }
 }

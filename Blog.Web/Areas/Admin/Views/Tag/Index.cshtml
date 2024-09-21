@@ -21,8 +21,8 @@
                     </div>
                     <div class="mb-3 row">
                         <label class="form-label">Etiket Açıklaması: </label>
-                        <input type="text" id="tagDescription" placeholder="Lütfen Etiket Açıklamasını giriniz" class="form-control" required />
-                        <span id="tagDescription-error" style="color:red; display:none;">Alan boş bırakılamaz.</span>
+                        <input type="text" id="tagDescription" placeholder="Lütfen Etiket Açıklamasını giriniz" class="form-control" required/>
+                     <span id="tagDescription-error" style="color:red; display:none;">Alan boş bırakılamaz.</span> 
                     </div>
 
                     <div class="modal-footer">
@@ -55,7 +55,7 @@
 
 @section Scripts {
     <script>
-        jQuery(document).ready(function () {
+        $(document).ready(function () {
             // Sayfa yüklendiğinde input alanlarını sıfırla
             $("input,textarea").val("");
             $(".error-message").hide();
@@ -71,9 +71,10 @@
                 },
                 columns: [
                     { data: 'name', title: 'Etiket Adı' },
-                    { data: 'postId', title: 'PostId' },
-                    { data: 'appUserId', title: 'AppUserId' },
-                    { data: 'appUser', title: 'AppUser' },
+                    { data: 'tagDescription', title: 'Etiket Acıklaması' },
+                    // { data: 'postId', title: 'PostId' },
+                    // { data: 'appUserId', title: 'AppUserId' },
+                    // { data: 'appUser', title: 'AppUser' },
                     {
                         data: null,
                         title: 'İşlemler',
@@ -100,14 +101,16 @@
                 $('#tagDescription-error').hide();
             });
 
+
+            //UpdateEt
             // Etiket düzenleme butonuna tıklama işlemi
             $('#tblTags').on('click', '.editTag', function () {
                 var id = $(this).data('id');
                 $.ajax({
-                    url: "/Admin/Tag/GetById/ " + id,
+                    url: "/Admin/Tag/GetById/"+id,
                     success: function (res) {
                         $('#name').val(res.name);
-                        $('#tagDescription').val(res.description);
+                        $('#tagDescription').val(res.tagDescription);
                         $('#modalTitle').text('Etiket Düzenle');
                         $('#btnSave').text('Güncelle');
                         $('#modal').modal('show');
@@ -149,9 +152,9 @@
             // Kaydet butonuna tıklama işlemi
             $('#btnSave').click(function () {
                 var tag = {
-                    id: $('#tag-id').val(),  // Güncelleme işlemi için ID
+                    //id: $('#tag-id').val(),  // Güncelleme işlemi için ID
                     name: $('#name').val(),
-                    description: $('#tagDescription').val()
+                    tagDescription: $('#tagDescription').val()
                 };
 
                 let isValid = true;
@@ -164,7 +167,7 @@
                     $('#name-error').hide();
                 }
 
-                if (!tag.description) {
+                if (!tag.tagDescription) {
                     $('#tagDescription-error').show();
                     isValid = false;
                 } else {
