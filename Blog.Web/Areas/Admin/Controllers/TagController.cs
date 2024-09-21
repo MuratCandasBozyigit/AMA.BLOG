@@ -67,9 +67,9 @@ namespace Blog.Web.Areas.Admin.Controllers
 
         }
         [HttpGet("GetById/{id}")]
-        public IActionResult GetById(Guid id)
+        public IActionResult GetById(int id)
         {
-            if (id == Guid.Empty)
+            if (id ==null)
             {
                 return BadRequest("Invalid Id Format");
             }
@@ -88,9 +88,9 @@ namespace Blog.Web.Areas.Admin.Controllers
             }
         }
         [HttpDelete("Delete/{id}")]
-        public IActionResult Delete(Guid id)
+        public IActionResult Delete(int id)
         {
-            if (id == Guid.Empty)
+            if (id ==null)
             {
                 return BadRequest("Invalid Id Format");
             }
