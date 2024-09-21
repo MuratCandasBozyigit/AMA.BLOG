@@ -104,11 +104,12 @@
                 $('#modal').modal('show');
             });
 
+            //Update yap
             // Kategori düzenleme butonuna tıklama olayı
             $('#tblCategories').on('click', '.editTitle', function () {
                 var id = $(this).data('id');
                 $.ajax({
-                    url: "/Admin/Category/GetById/" + id, // Route düzeltildi
+                    url: "/Admin/Category/GetById/"+id, // Route düzeltildi
                     success: function (res) {
                         $('#name').val(res.name);
                         $('#slug').val(res.slug);

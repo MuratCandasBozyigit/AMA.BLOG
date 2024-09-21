@@ -102,24 +102,24 @@ namespace Blog.Web.Areas.Admin.Controllers
         }
 
 
-        //// DELETE: Admin/Category/Delete/{id}
-        //[HttpDelete("Delete")]
-        //public IActionResult Delete([FromQuery] Guid id)
-        //{
-        //    if (id == Guid.Empty)
-        //    {
-        //        return BadRequest("Invalid ID format.");
-        //    }
+    
+    [HttpDelete("Delete/{id}")]
+    public IActionResult Delete(int id)
+    {
+        if (id == null)
+        {
+            return BadRequest("Invalid ID format.");
+        }
 
-        //    var color = _categoryService.GetFirstOrDefault(i => i.GuidId == id);
-        //    if (color == null)
-        //    {
-        //        return NotFound("Color not found.");
-        //    }
+        var iD = _categoryService.GetFirstOrDefault(i => i.Id == id);
+        if (iD == null)
+        {
+            return NotFound("Color not found.");
+        }
 
-        //    _categoryService.Delete(color.Id);
-        //    return Ok(color);
-        //}-
+        _categoryService.Delete(iD.Id);
+        return Ok(iD);
+    }
 
 
     }

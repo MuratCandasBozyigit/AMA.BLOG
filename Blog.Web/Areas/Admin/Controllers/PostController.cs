@@ -69,11 +69,10 @@ namespace Blog.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        [ValidateAntiForgeryToken]
+       // [ValidateAntiForgeryToken]
         public IActionResult Create([FromForm] Post post, IFormFile image)
         {
-            if (ModelState.IsValid)
-            {
+            
                 if (image != null && image.Length > 0)
                 {
                     var fileName = Path.GetFileName(image.FileName);
@@ -84,14 +83,14 @@ namespace Blog.Web.Areas.Admin.Controllers
                         image.CopyTo(stream);
                     }
 
-                    post.ImagePath = "~/images/" + fileName;
+                    post.ImagePath = "/images/" + fileName;
                 }
 
                 _postService.Add(post);
                 return Json(new { success = true, message = "Post başarıyla kaydedildi." });
-            }
+            
 
-            return Json(new { success = false, message = "Post kaydedilirken bir hata oluştu." });
+         
         }
 
       
