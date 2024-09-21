@@ -17,7 +17,7 @@ namespace Blog.Business.Concrete
         private readonly IRepository<AppUser> _userRepository;
         private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public UserService(IHttpContextAccessor httpContextAccessor, IRepository<AppUser> userRepository)
+        public UserService(IHttpContextAccessor httpContextAccessor, IRepository<AppUser> userRepository):base(userRepository)
         {
             _httpContextAccessor = httpContextAccessor;
             _userRepository = userRepository;

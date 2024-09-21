@@ -44,6 +44,9 @@ namespace Blog.Web.Controllers
             await _userService.Logout();
             return RedirectToAction("Login");
         }
-
+        public IActionResult Register()
+        {
+            return View();
+        }
     }
 }
