@@ -159,7 +159,6 @@ namespace Blog.Data.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("ImagePath")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("IsActive")

@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Blog.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240908171012_Inıtıal1")]
-    partial class Inıtıal1
+    [Migration("20240922091553_TagCRUDPAGE")]
+    partial class TagCRUDPAGE
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -134,13 +134,12 @@ namespace Blog.Data.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("AuthorId")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("CategoryId")
                         .HasColumnType("int");
 
-                    b.Property<int>("Comments")
+                    b.Property<int?>("Comments")
                         .HasColumnType("int");
 
                     b.Property<string>("Content")
@@ -163,7 +162,6 @@ namespace Blog.Data.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("ImagePath")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("IsActive")
@@ -175,7 +173,7 @@ namespace Blog.Data.Migrations
                     b.Property<bool>("IsPublished")
                         .HasColumnType("bit");
 
-                    b.Property<int>("Likes")
+                    b.Property<int?>("Likes")
                         .HasColumnType("int");
 
                     b.Property<string>("Summary")
@@ -200,9 +198,6 @@ namespace Blog.Data.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("AppUserId")
-                        .HasColumnType("int");
 
                     b.Property<DateTime>("DateCreated")
                         .HasColumnType("datetime2");
@@ -229,11 +224,11 @@ namespace Blog.Data.Migrations
                     b.Property<int?>("PostId")
                         .HasColumnType("int");
 
+                    b.Property<string>("TagDescription")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.HasKey("Id");
-
-                    b.HasIndex("AppUserId");
-
-                    b.HasIndex("PostId");
 
                     b.ToTable("Tags");
                 });
@@ -283,37 +278,12 @@ namespace Blog.Data.Migrations
             modelBuilder.Entity("Blog.Core.Models.Post", b =>
                 {
                     b.HasOne("Blog.Core.Models.Category", "Category")
-                        .WithMany("Posts")
+                        .WithMany()
                         .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Category");
-                });
-
-            modelBuilder.Entity("Blog.Core.Models.Tag", b =>
-                {
-                    b.HasOne("AppUser", "AppUser")
-                        .WithMany()
-                        .HasForeignKey("AppUserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Blog.Core.Models.Post", null)
-                        .WithMany("Tags")
-                        .HasForeignKey("PostId");
-
-                    b.Navigation("AppUser");
-                });
-
-            modelBuilder.Entity("Blog.Core.Models.Category", b =>
-                {
-                    b.Navigation("Posts");
-                });
-
-            modelBuilder.Entity("Blog.Core.Models.Post", b =>
-                {
-                    b.Navigation("Tags");
                 });
 #pragma warning restore 612, 618
         }
