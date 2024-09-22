@@ -1,8 +1,5 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
-    ViewData["Title"] = "Admin Etiket EKleme";
+﻿@{
+    ViewData["Title"] = "Admin Etiket Ekleme";
 }
 <h2>Etiketler</h2>
 <div>
@@ -13,6 +10,8 @@
                     <h5 class="modal-title" id="modalTitle"></h5>
                     <button type="button" class="btn-close emptyValue" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
+                <input type="hidden" id="tagId" />
+
                 <div class="modal-body">
                     <div class="mb-3 row">
                         <label class="form-label">Etiket Adı: </label>
@@ -21,8 +20,8 @@
                     </div>
                     <div class="mb-3 row">
                         <label class="form-label">Etiket Açıklaması: </label>
-                        <input type="text" id="tagDescription" placeholder="Lütfen Etiket Açıklamasını giriniz" class="form-control" required/>
-                     <span id="tagDescription-error" style="color:red; display:none;">Alan boş bırakılamaz.</span> 
+                        <input type="text" id="tagDescription" placeholder="Lütfen Etiket Açıklamasını giriniz" class="form-control" required />
+                        <span id="tagDescription-error" style="color:red; display:none;">Alan boş bırakılamaz.</span>
                     </div>
 
                     <div class="modal-footer">
@@ -33,7 +32,6 @@
             </div>
         </div>
     </div>
-
 
     <div class="card bg-dark text-white">
         <div class="card-header bg-dark text-white">
@@ -52,7 +50,6 @@
     </div>
 </div>
 
-
 @section Scripts {
     <script>
         $(document).ready(function () {
@@ -62,7 +59,7 @@
 
             var table = $('#tblTags').DataTable({
                 ajax: {
-                    url: '/Admin/Tag/GetAll',  // Tüm etiketleri getiren doğru URL
+                    url: '/Admin/Tag/GetAll',
                     dataSrc: '',
                     error: function (xhr, error, thrown) {
                         console.error('Ajax Error:', error, thrown);
@@ -71,23 +68,19 @@
                 },
                 columns: [
                     { data: 'name', title: 'Etiket Adı' },
-                    { data: 'tagDescription', title: 'Etiket Acıklaması' },
-                    // { data: 'postId', title: 'PostId' },
-                    // { data: 'appUserId', title: 'AppUserId' },
-                    // { data: 'appUser', title: 'AppUser' },
+                    { data: 'tagDescription', title: 'Etiket Açıklaması' },
                     {
                         data: null,
                         title: 'İşlemler',
                         render: function (data, type, row) {
                             return `
-                            <a href="#" class="btn btn-sm btn-warning editTag" data-id="${row.id}">Düzenle</a>
-                            <a href="#" class="btn btn-sm btn-danger deleteTag" data-id="${row.id}">Sil</a>
-                        `;
+                                    <a href="#" class="btn btn-sm btn-warning editTag" data-id="${row.id}">Düzenle</a>
+                                    <a href="#" class="btn btn-sm btn-danger deleteTag" data-id="${row.id}">Sil</a>
+                                `;
                         }
                     }
                 ]
             });
-
 
             // Yeni Kategori Ekle butonuna tıklama işlemi
             $('#btnAdd').click(function () {
@@ -101,24 +94,20 @@
                 $('#tagDescription-error').hide();
             });
 
-
-            //UpdateEt
             // Etiket düzenleme butonuna tıklama işlemi
             $('#tblTags').on('click', '.editTag', function () {
                 var id = $(this).data('id');
                 $.ajax({
-                    url: "/Admin/Tag/GetById/"+id,
+                    url: "/Admin/Tag/GetById/" + id,
                     success: function (res) {
                         $('#name').val(res.name);
                         $('#tagDescription').val(res.tagDescription);
-                        $('#modalTitle').text('Etiket Düzenle');
-                        $('#btnSave').text('Güncelle');
-                        $('#modal').modal('show');
-                    },
-                    error: function () {
-                        Swal.fire('Hata', 'Etiket verisi getirilirken bir sorun oluştu.', 'error');
+                        $('#tagId').val(res.id);
                     }
                 });
+                $('#modalTitle').text('Etiket Düzenle');
+                $('#btnSave').text('Güncelle');
+                $('#modal').modal('show');
             });
 
             // Etiket silme işlemi
@@ -152,7 +141,7 @@
             // Kaydet butonuna tıklama işlemi
             $('#btnSave').click(function () {
                 var tag = {
-                    //id: $('#tag-id').val(),  // Güncelleme işlemi için ID
+                    id: $('#tagId').val(), // ID'yi burada ekliyoruz
                     name: $('#name').val(),
                     tagDescription: $('#tagDescription').val()
                 };
@@ -179,8 +168,10 @@
                     return;
                 }
 
-                var url = $('#btnSave').text() === 'Ekle' ? '/Admin/Tag/Add' : '/Admin/Tag/Update';
-                var method = $('#btnSave').text() === 'Ekle' ? 'POST' : 'PUT';
+                var url = $('#btnSave').text().toLowerCase() === 'ekle'
+                    ? '/Admin/Tag/Add'
+                    : '/Admin/Tag/Update/' + tag.id;
+                var method = $('#btnSave').text().toLowerCase() === 'ekle' ? 'POST' : 'PUT';
 
                 // AJAX ile kaydetme işlemi
                 $.ajax({
@@ -190,6 +181,7 @@
                     contentType: 'application/json; charset=utf-8',
                     success: function (response) {
                         $('#modal').modal('hide');
+                        $("input, textarea").val("");
                         table.ajax.reload();
                         Swal.fire('Başarılı!', 'Etiket başarıyla kaydedildi.', 'success');
                     },
