@@ -141,7 +141,7 @@
             // Kaydet butonuna tıklama işlemi
             $('#btnSave').click(function () {
                 var tag = {
-                   // id: $('#tagId').val(), // ID'yi burada ekliyoruz
+                    //id: $('#tagId').val(), // ID'yi burada ekliyoruz
                     name: $('#name').val(),
                     tagDescription: $('#tagDescription').val()
                 };
@@ -170,7 +170,7 @@
 
                 var url = $('#btnSave').text().toLowerCase() === 'ekle'
                     ? '/Admin/Tag/Add'
-                    : '/Admin/Tag/Update/' + tag.id;
+                    : '/Admin/Tag/Update/'+tagId;
                 var method = $('#btnSave').text().toLowerCase() === 'ekle' ? 'POST' : 'PUT';
 
                 // AJAX ile kaydetme işlemi
