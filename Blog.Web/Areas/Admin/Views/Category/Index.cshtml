@@ -189,8 +189,8 @@
                 if (!isValid) {
                     return;
                 }
-                var url = $('#btnSave').text() === 'Ekle' ? '/Admin/Category/Add' : '/Admin/Category/Update';
-                var method = $('#btnSave').text() === 'Ekle' ? 'POST' : 'PUT';
+                var url = $('#btnSave').text().toUpperCase() === 'Ekle' ? '/Admin/Category/Add' : '/Admin/Category/Update';
+                var method = $('#btnSave').text().toUpperCase() === 'Ekle' ? 'POST' : 'PUT';
 
                 $.ajax({
                     type: method,

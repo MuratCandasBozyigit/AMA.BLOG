@@ -4,10 +4,12 @@ using System.IO;
 using System;
 using Blog.Business.Absract;
 using Blog.Business.Concrete;
+using Microsoft.Extensions.Hosting;
 
 namespace Blog.Web.Areas.Admin.Controllers
 {
     [Area("Admin")]
+    [Route("Admin/[controller]/[action]")]
     public class PostController : Controller
     {
         private readonly IPostService _postService;
@@ -52,7 +54,7 @@ namespace Blog.Web.Areas.Admin.Controllers
         [HttpGet("GetAll")]
         public IActionResult GetAll()
         {
-          _postService.GetAll();
+            _postService.GetAll();
             return Ok();
         }
 
@@ -69,31 +71,31 @@ namespace Blog.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-       // [ValidateAntiForgeryToken]
+        // [ValidateAntiForgeryToken]
         public IActionResult Create([FromForm] Post post, IFormFile image)
         {
-            
-                if (image != null && image.Length > 0)
+
+            if (image != null && image.Length > 0)
+            {
+                var fileName = Path.GetFileName(image.FileName);
+                var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images", fileName);
+
+                using (var stream = new FileStream(filePath, FileMode.Create))
                 {
-                    var fileName = Path.GetFileName(image.FileName);
-                    var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images", fileName);
-
-                    using (var stream = new FileStream(filePath, FileMode.Create))
-                    {
-                        image.CopyTo(stream);
-                    }
-
-                    post.ImagePath = "/images/" + fileName;
+                    image.CopyTo(stream);
                 }
 
-                _postService.Add(post);
-                return Json(new { success = true, message = "Post başarıyla kaydedildi." });
-            
+                post.ImagePath = "/images/" + fileName;
+            }
 
-         
+            _postService.Add(post);
+            return Json(new { success = true, message = "Post başarıyla kaydedildi." });
+
+
+
         }
 
-      
+
 
         [HttpGet]
         public IActionResult Edit()
@@ -127,14 +129,31 @@ namespace Blog.Web.Areas.Admin.Controllers
         }
 
 
+        [HttpDelete("Delete/{id}")]
+        public IActionResult Delete(int id)
+        {
+            if (id == 0) // null kontrolü yerine 0 ile kontrol
+            {
+                return BadRequest("Invalid Id Format");
+            }
+
+            var post = _postService.GetById(id);
+            if (post == null)
+            {
+                return NotFound("Post Not Found");
+            }
+
+            _postService.Delete(id);
+            return Ok();
+        }
+
+
+
 
         #endregion
 
     }
 }
-
-
-
 
 
 
