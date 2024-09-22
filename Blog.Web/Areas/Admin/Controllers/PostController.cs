@@ -50,7 +50,7 @@ namespace Blog.Web.Areas.Admin.Controllers
         }
 
         #region Tamamlandı 
-      
+
         [HttpGet("GetAll")]
         public IActionResult GetAll()
         {
@@ -94,7 +94,23 @@ namespace Blog.Web.Areas.Admin.Controllers
 
         }
 
-
+        [HttpGet("GetById{id}")]
+        public IActionResult GetById(int id)
+        {
+            if (id == 0)
+            {
+                return BadRequest("Geçerli ıd yok ");
+            }
+            try
+            {
+                var Post = _postService.GetById(id);
+                return Ok(Post);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message + "sea sorun getbyıd");
+            }
+        }
         #endregion
 
 
@@ -166,7 +182,7 @@ namespace Blog.Web.Areas.Admin.Controllers
 
 
 
-       
+
     }
 }
 #region YORUMSATIRLARISSSS
