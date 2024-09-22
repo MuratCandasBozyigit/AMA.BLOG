@@ -94,6 +94,24 @@ namespace Blog.Web.Areas.Admin.Controllers
 
         }
 
+        [HttpDelete("Delete/{id}")]
+        public IActionResult Delete(int id)
+        {
+            if (id == 0) // null kontrolü yerine 0 ile kontrol
+            {
+                return BadRequest("Invalid Id Format");
+            }
+
+            var post = _postService.GetById(id);
+            if (post == null)
+            {
+                return NotFound("Post Not Found");
+            }
+
+            _postService.Delete(id);
+            return Ok();
+        }
+
         [HttpGet("GetById{id}")]
         public IActionResult GetById(int id)
         {
@@ -111,6 +129,7 @@ namespace Blog.Web.Areas.Admin.Controllers
                 return BadRequest(ex.Message + "sea sorun getbyıd");
             }
         }
+
         #endregion
 
 
@@ -133,14 +152,18 @@ namespace Blog.Web.Areas.Admin.Controllers
             return View(viewModel);
         }
 
-        [HttpPost]
+        [HttpPost("Edit/{id}")]
         public IActionResult Edit(PostEditViewModel viewModel, IFormFile image)
         {
-            if (!ModelState.IsValid)
+            var postToUpdate = _postService.GetById(viewModel.Post.Id);
+            if (postToUpdate == null)
             {
-                viewModel.Categories = _categoryService.GetAll(); // Kategorileri yeniden yükle
-                return View(viewModel);
+                return NotFound();
             }
+
+            postToUpdate.Title = viewModel.Post.Title;
+            postToUpdate.Content = viewModel.Post.Content;
+            postToUpdate.CategoryId = viewModel.Post.CategoryId;
 
             if (image != null && image.Length > 0)
             {
@@ -152,37 +175,12 @@ namespace Blog.Web.Areas.Admin.Controllers
                     image.CopyTo(stream);
                 }
 
-                viewModel.Post.ImagePath = "/images/" + fileName;
+                postToUpdate.ImagePath = "/images/" + fileName;
             }
 
-            _postService.Update(viewModel.Post);
-            return RedirectToAction("Index");
+            _postService.Update(postToUpdate);
+            return Json(new { success = true, message = "Post başarıyla güncellendi." });
         }
-
-
-
-        [HttpDelete("Delete/{id}")]
-        public IActionResult Delete(int id)
-        {
-            if (id == 0) // null kontrolü yerine 0 ile kontrol
-            {
-                return BadRequest("Invalid Id Format");
-            }
-
-            var post = _postService.GetById(id);
-            if (post == null)
-            {
-                return NotFound("Post Not Found");
-            }
-
-            _postService.Delete(id);
-            return Ok();
-        }
-
-
-
-
-
     }
 }
 #region YORUMSATIRLARISSSS
