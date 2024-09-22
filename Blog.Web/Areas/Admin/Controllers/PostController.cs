@@ -9,9 +9,10 @@ using Microsoft.Extensions.Hosting;
 namespace Blog.Web.Areas.Admin.Controllers
 {
     [Area("Admin")]
-    [Route("Admin/[controller]/[action]")]
+    [Route("Admin/[controller]")]
     public class PostController : Controller
     {
+        #region Servisler 
         private readonly IPostService _postService;
         private readonly ICategoryService _categoryService;
         private readonly ITagService _tagService;
@@ -23,8 +24,9 @@ namespace Blog.Web.Areas.Admin.Controllers
             _tagService = tagService;
         }
 
+        #endregion
         // GET: Post/Index
-        [HttpGet]
+        [HttpGet("Index")]
         public IActionResult Index()
         {
             var posts = _postService.GetAll();
@@ -41,16 +43,14 @@ namespace Blog.Web.Areas.Admin.Controllers
             return View(viewModel);
         }
 
-
         public class HomeViewModel
         {
             public IEnumerable<Post> Posts { get; set; }
             public IEnumerable<Category> Categories { get; set; }
         }
 
-
-
-        #region POST_CRUD
+        #region Tamamlandı 
+      
         [HttpGet("GetAll")]
         public IActionResult GetAll()
         {
@@ -58,7 +58,7 @@ namespace Blog.Web.Areas.Admin.Controllers
             return Ok();
         }
 
-        [HttpGet]
+        [HttpGet("Create")]
         public IActionResult Create()
         {
             var categories = _categoryService.GetAll(); // Kategorileri al
@@ -70,8 +70,7 @@ namespace Blog.Web.Areas.Admin.Controllers
             return View(viewModel);
         }
 
-        [HttpPost]
-        // [ValidateAntiForgeryToken]
+        [HttpPost("Create")]
         public IActionResult Create([FromForm] Post post, IFormFile image)
         {
 
@@ -96,38 +95,53 @@ namespace Blog.Web.Areas.Admin.Controllers
         }
 
 
-        [HttpGet]
-        public IActionResult Edit()
+        #endregion
+
+
+        [HttpGet("Edit/{id}")]
+        public IActionResult Edit(int id)
         {
-            return View();
-        }
-        [HttpPost]
-        public IActionResult Edit([FromBody] Post post)
-        {
+            var post = _postService.GetById(id);
             if (post == null)
             {
-                return BadRequest("Post nesnesi null.");
+                return NotFound();
             }
 
-            if (!ModelState.IsValid)
+            var categories = _categoryService.GetAll();
+            var viewModel = new PostEditViewModel
             {
-                return BadRequest("Post model doğrulama hatası.");
-            }
+                Post = post,
+                Categories = categories
+            };
 
-            try
-            {
-                // Eğer 'GetAll' metodunun doğru bir kullanımı değilse, uygun metodu çağırmalısınız.
-                var posts = _postService.GetAll(); // Eğer 'post' ile filtreleme yapılacaksa uygun metodu çağırmalısınız
-                return Ok(posts);
-            }
-            catch (Exception ex)
-            {
-                // Özel hata mesajları veya loglama
-                return StatusCode(500, $"Sunucu hatası: {ex.Message}");
-            }
+            return View(viewModel);
         }
 
+        [HttpPost]
+        public IActionResult Edit(PostEditViewModel viewModel, IFormFile image)
+        {
+            if (!ModelState.IsValid)
+            {
+                viewModel.Categories = _categoryService.GetAll(); // Kategorileri yeniden yükle
+                return View(viewModel);
+            }
 
+            if (image != null && image.Length > 0)
+            {
+                var fileName = Path.GetFileName(image.FileName);
+                var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images", fileName);
+
+                using (var stream = new FileStream(filePath, FileMode.Create))
+                {
+                    image.CopyTo(stream);
+                }
+
+                viewModel.Post.ImagePath = "/images/" + fileName;
+            }
+
+            _postService.Update(viewModel.Post);
+            return RedirectToAction("Index");
+        }
 
 
 
@@ -152,10 +166,42 @@ namespace Blog.Web.Areas.Admin.Controllers
 
 
 
-        #endregion
-
+       
     }
 }
+#region YORUMSATIRLARISSSS
+
+//ASIL EDİT BU
+//[HttpGet]
+//public IActionResult Edit()
+//{
+//    return View();
+//}
+//[HttpPost]
+//public IActionResult Edit([FromBody] Post post)
+//{
+//    if (post == null)
+//    {
+//        return BadRequest("Post nesnesi null.");
+//    }
+
+//    if (!ModelState.IsValid)
+//    {
+//        return BadRequest("Post model doğrulama hatası.");
+//    }
+
+//    try
+//    {
+//        // Eğer 'GetAll' metodunun doğru bir kullanımı değilse, uygun metodu çağırmalısınız.
+//        var posts = _postService.GetAll(); // Eğer 'post' ile filtreleme yapılacaksa uygun metodu çağırmalısınız
+//        return Ok(posts);
+//    }
+//    catch (Exception ex)
+//    {
+//        // Özel hata mesajları veya loglama
+//        return StatusCode(500, $"Sunucu hatası: {ex.Message}");
+//    }
+//}
 
 
 //[HttpGet]
@@ -267,3 +313,5 @@ namespace Blog.Web.Areas.Admin.Controllers
 //    _postService.Update(viewModel.Post); // Update metodunu çağırdığınızdan emin olun
 //    return RedirectToAction("Index");
 //}
+
+#endregion
