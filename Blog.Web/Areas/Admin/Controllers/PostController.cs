@@ -96,7 +96,6 @@ namespace Blog.Web.Areas.Admin.Controllers
         }
 
 
-
         [HttpGet]
         public IActionResult Edit()
         {
@@ -129,6 +128,9 @@ namespace Blog.Web.Areas.Admin.Controllers
         }
 
 
+
+
+
         [HttpDelete("Delete/{id}")]
         public IActionResult Delete(int id)
         {
@@ -156,7 +158,36 @@ namespace Blog.Web.Areas.Admin.Controllers
 }
 
 
+//[HttpGet]
+//public IActionResult Edit()
+//{
+//    return View();
+//}
+//[HttpPost]
+//public IActionResult Edit([FromBody] Post post)
+//{
+//    if (post == null)
+//    {
+//        return BadRequest("Post nesnesi null.");
+//    }
 
+//    if (!ModelState.IsValid)
+//    {
+//        return BadRequest("Post model doğrulama hatası.");
+//    }
+
+//    try
+//    {
+//        // Eğer 'GetAll' metodunun doğru bir kullanımı değilse, uygun metodu çağırmalısınız.
+//        var posts = _postService.GetAll(); // Eğer 'post' ile filtreleme yapılacaksa uygun metodu çağırmalısınız
+//        return Ok(posts);
+//    }
+//    catch (Exception ex)
+//    {
+//        // Özel hata mesajları veya loglama
+//        return StatusCode(500, $"Sunucu hatası: {ex.Message}");
+//    }
+//}
 
 
 
@@ -182,4 +213,57 @@ namespace Blog.Web.Areas.Admin.Controllers
 //    }
 
 //    return View(post);
+//}
+
+
+
+
+
+
+
+
+
+//[HttpGet("{id}")]
+//public IActionResult Edit(int id)
+//{
+//    var post = _postService.GetById(id);
+//    if (post == null)
+//    {
+//        return NotFound();
+//    }
+
+//    var categories = _categoryService.GetAll();
+//    var viewModel = new PostEditViewModel
+//    {
+//        Post = post,
+//        Categories = categories
+//    };
+
+//    return View(viewModel);
+//}
+
+//[HttpPost]
+//public IActionResult Edit(PostEditViewModel viewModel, IFormFile image)
+//{
+//    if (!ModelState.IsValid)
+//    {
+//        viewModel.Categories = _categoryService.GetAll(); // Kategorileri yeniden yükle
+//        return View(viewModel);
+//    }
+
+//    if (image != null && image.Length > 0)
+//    {
+//        var fileName = Path.GetFileName(image.FileName);
+//        var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images", fileName);
+
+//        using (var stream = new FileStream(filePath, FileMode.Create))
+//        {
+//            image.CopyTo(stream);
+//        }
+
+//        viewModel.Post.ImagePath = "/images/" + fileName;
+//    }
+
+//    _postService.Update(viewModel.Post); // Update metodunu çağırdığınızdan emin olun
+//    return RedirectToAction("Index");
 //}
