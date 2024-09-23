@@ -1,4 +1,4 @@
-﻿@model Blog.Dtos.UserDTOs.LoginDTO;
+﻿@model Blog.Dtos.UserDTOs.LoginDTO
 @{
     Layout = null;
 }
@@ -8,60 +8,62 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Sign Up Form by Colorlib</title>
+    <title>Login Page</title>
 
-    <link rel="stylesheet" href="fonts/material-icon/css/material-design-iconic-font.min.css">
-
-    <link rel="stylesheet" href="~/assets/css/login.css">
-    <meta name="robots" content="noindex, follow">
+    <link rel="stylesheet" href="~/css/loginPage.css" />
 </head>
 <body>
     <div class="main">
-
-        <section class="signup">
+        <section class="login-section">
             <div class="container">
-                <div class="signup-content">
-                    <div class="signup-form">
-                        <h2 class="form-title">Vkod Üye Giriş Paneli</h2>
-                        <form method="POST" action="Login" class="register-form" id="register-form">
-                            <div class="form-group">
-                                <label for="email"><i class="zmdi zmdi-email"></i></label>
-                                <input asp-for="Email" type="email" name="email" id="email" placeholder="Email Giriniz" />
-                            </div>
+                <div class="login-content">
+                    <h2 class="form-title">Üye Giriş Paneli</h2>
+                    <form method="POST" action="Login" class="login-form">
+                        <div class="form-group">
+                            <label for="email">Email</label>
+                            <input asp-for="Email" type="email" id="email" placeholder="Email Giriniz" />
+                        </div>
+                        <div class="form-group">
+                            <label for="password">Şifre</label>
+                            <input asp-for="Password" type="password" id="password" placeholder="Şifre Giriniz" />
+                        </div>
+                        <div class="form-group remember-me">
+                            <input asp-for="IsRememberMe" type="checkbox" id="remember-me" />
+                            <label for="remember-me">Beni Hatırla</label>
+                        </div>
+                        <div class="form-group form-button">
+                            <input type="submit" class="form-submit" value="Giriş Yap" />
+                        </div>
+                    </form>
 
-                            <div class="form-group">
-                                <label for="pass"><i class="zmdi zmdi-lock"></i></label>
-                                <input asp-for="Password" type="password" placeholder="Şifre Giriniz" />
-                            </div>
+                    <!-- Home ve Register Butonları -->
+                    <a href="/Home/Index" class="secondary-btn">Home</a>
+                    <a href="/User/Register" class="secondary-btn">Register</a>
 
-                            <div class="form-group">
-                                <input asp-for="IsRememberMe" type="checkbox" name="agree-term" id="agree-term" class="agree-term" />
-                                <label for="agree-term" class="label-agree-term"><span><span></span></span>Beni Hatirla </label>
-                            </div>
-                            <div class="form-group form-button">
-                                <input type="submit" name="signup" id="signup" class="form-submit" value="Giriş Yap" />
-                            </div>
-                        </form>
-                    </div>
-                    <div class="signup-image">
-                        <figure><img src="~/assets/images/login-logo.png" alt="sing up image"></figure>
-                    </div>
+                    <!-- Gece Modu Butonu -->
+                    <button id="night-mode-toggle" class="night-mode-button">Night Mode</button>
                 </div>
             </div>
         </section>
-
     </div>
 
-    <script src="vendor/jquery/jquery.min.js"></script>
-    <script src="js/main.js"></script>
-
-    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-23581568-13"></script>
     <script>
-        window.dataLayer = window.dataLayer || [];
-        function gtag() { dataLayer.push(arguments); }
-        gtag('js', new Date());
+        // Gece teması geçişi
+        document.getElementById('night-mode-toggle').addEventListener('click', function () {
+            document.body.classList.toggle('night-mode');
+        });
 
-        gtag('config', 'UA-23581568-13');
+        // Input alanına tıklanınca arka plan renk geçişi
+        document.querySelectorAll('input').forEach(input => {
+            input.addEventListener('focus', function () {
+                // Renklerin sırası değişiyor
+                document.body.style.backgroundImage = 'linear-gradient(135deg, #c19a6b 25%, transparent 25%, transparent 50%, #c19a6b 50%, #9370DB 75%, transparent 75%, transparent), linear-gradient(135deg, #89c2d9 25%, transparent 25%, transparent 50%, #89c2d9 50%, #c19a6b 75%, transparent 75%, transparent)';
+            });
+            input.addEventListener('blur', function () {
+                // Orijinal renk düzenine dönüyor
+                document.body.style.backgroundImage = 'linear-gradient(135deg, #89c2d9 25%, transparent 25%, transparent 50%, #89c2d9 50%, #9370DB 75%, transparent 75%, transparent), linear-gradient(135deg, #c19a6b 25%, transparent 25%, transparent 50%, #c19a6b 50%, #89c2d9 75%, transparent 75%, transparent)';
+            });
+        });
     </script>
 </body>
 </html>

@@ -46,7 +46,12 @@ namespace Blog.Web.Controllers
         }
         public IActionResult Register()
         {
+            Response.Headers["Cache-Control"] = "no-cache, no-store, must-revalidate";
+            Response.Headers["Pragma"] = "no-cache";
+            Response.Headers["Expires"] = "-1";
+
             return View();
+           
         }
     }
 }
