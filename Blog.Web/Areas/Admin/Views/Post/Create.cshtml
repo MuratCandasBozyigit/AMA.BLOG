@@ -146,8 +146,9 @@
                     processData: false,
                     contentType: false,
                     success: function (response) {
-                        Swal.fire('Başarılı!', 'Post başarıyla kaydedildi.', 'success');
-
+                        Swal.fire('Başarılı!', 'Post başarıyla kaydedildi.', 'success').then(() => {
+                            window.location.href = '/Admin/Post/Index'; 
+                        });
                     },
                     error: function (jqXHR, textStatus, errorThrown) {
                         Swal.fire('Hata', 'Post kaydedilirken bir sorun oluştu: ' + errorThrown, 'error');
