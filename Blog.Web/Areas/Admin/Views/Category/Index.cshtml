@@ -5,66 +5,73 @@
 
 <h2>Kategoriler</h2>
 
-<div>
-    <div class="modal fade" id="modal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false" role="dialog" aria-labelledby="modalTitleId" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-lg" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="modalTitle"></h5>
-                    <button type="button" class="btn-close emptyValue" data-bs-dismiss="modal" aria-label="Close"></button>
+<!-- Modal for Adding and Editing Categories -->
+<div class="modal fade" id="modal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false" role="dialog" aria-labelledby="modalTitleId" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalTitle"></h5>
+                <button type="button" class="btn-close emptyValue" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <input type="hidden" id="categoryId" />
+            <div class="modal-body">
+                <!-- Category Name -->
+                <div class="mb-3 row">
+                    <label for="name" class="form-label">Kategori Adı:</label>
+                    <input type="text" id="name" placeholder="Lütfen Kategori Adı giriniz" class="form-control" required />
+                    <span id="name-error" class="text-danger" style="display:none;">Alan boş bırakılamaz.</span>
                 </div>
-                <input type="hidden" id="categoryId" />
 
-                <div class="modal-body">
-                    <div class="mb-3 row">
-                        <label class="form-label">Kategori Adı: </label>
-                        <input type="text" id="name" placeholder="Lütfen Kategori Adı giriniz" class="form-control" required />
-                        <span id="name-error" style="color:red; display:none;">Alan boş bırakılamaz.</span>
-                    </div>
-                    <div class="mb-3 row">
-                        <label class="form-label">Açıklama: </label>
-                        <textarea id="description" placeholder="Lütfen Açıklama giriniz" class="form-control" required></textarea>
-                        <span id="description-error" style="color:red; display:none;">Alan boş bırakılamaz.</span>
-                    </div>
-                    <div class="mb-3 row">
-                        <label class="form-label">Slug: </label>
-                        <input type="text" id="slug" placeholder="Lütfen Slug giriniz" class="form-control" required />
-                        <span id="slug-error" style="color:red; display:none;">Alan boş bırakılamaz.</span>
-                    </div>
-
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary emptyValue" data-bs-dismiss="modal">Kapat</button>
-                        <button type="button" id="btnSave" class="btn btn-primary">Kaydet</button>
-                    </div>
+                <!-- Category Description -->
+                <div class="mb-3 row">
+                    <label for="description" class="form-label">Açıklama:</label>
+                    <textarea id="description" placeholder="Lütfen Açıklama giriniz" class="form-control" required></textarea>
+                    <span id="description-error" class="text-danger" style="display:none;">Alan boş bırakılamaz.</span>
                 </div>
+
+                <!-- Category Slug -->
+                <div class="mb-3 row">
+                    <label for="slug" class="form-label">Slug:</label>
+                    <input type="text" id="slug" placeholder="Lütfen Slug giriniz" class="form-control" required />
+                    <span id="slug-error" class="text-danger" style="display:none;">Alan boş bırakılamaz.</span>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary emptyValue" data-bs-dismiss="modal">Kapat</button>
+                <button type="button" id="btnSave" class="btn btn-primary">Kaydet</button>
             </div>
         </div>
     </div>
+</div>
 
-    <div class="card bg-dark text-white">
-        <div class="card-header bg-dark text-white">
-            <div class="row">
-                <div class="col-11">
-                    <box-icon name="category" color="white" size="sm" animation="tada"></box-icon> Kategorilerim
-                </div>
-                <div class="col-1 text-end">
-
-                    <a id="btnAdd" href="#" class="btn btn-outline-light">+ Yeni Kategori Ekle</a>
-                </div>
+<!-- Categories Management Table -->
+<div class="card bg-dark text-white">
+    <div class="card-header bg-dark text-white">
+        <div class="row">
+            <div class="col-11">
+                <box-icon name="category" color="white" size="sm" animation="tada"></box-icon> Kategorilerim
+            </div>
+            <div class="col-1 text-end">
+                <a id="btnAdd" href="#" class="btn btn-outline-light">+ Yeni Kategori Ekle</a>
             </div>
         </div>
-        <div class="card-body">
-            <table id="tblCategories" class="table table-hover table-striped table-bordered"></table>
-        </div>
+    </div>
+    <div class="card-body">
+        <table id="tblCategories" class="table table-hover table-striped table-bordered"></table>
     </div>
 </div>
 
 @section Scripts {
     <script>
         $(document).ready(function () {
-            $("input, textarea").val("");
-            $(".error-message").hide();
+            // Initialize and reset form values
+            function resetForm() {
+                $("#categoryId").val("");
+                $("#name, #description, #slug").val("");
+                $(".text-danger").hide();
+            }
 
+            // Initialize DataTable for categories
             var table = $('#tblCategories').DataTable({
                 ajax: {
                     url: '/Admin/Category/GetAllCategories',
@@ -77,28 +84,28 @@
                 columns: [
                     { data: 'name', title: 'Kategori Adı' },
                     { data: 'description', title: 'Açıklama' },
-                    { data: 'slug', title: 'Slug' }, // Slug kolonu
+                    { data: 'slug', title: 'Slug' },
                     {
                         data: null,
                         title: 'İşlemler',
                         render: function (data, type, row) {
                             return `
                                         <a href="#" class="btn btn-sm btn-warning editCategory" data-id="${row.id}">Düzenle</a>
-                                        <a href="#" class="btn btn-sm btn-danger deleteCategory" data-id="${row.id}">Sil</a>
-                                    `;
+                                        <a href="#" class="btn btn-sm btn-danger deleteCategory" data-id="${row.id}">Sil</a>`;
                         }
                     }
                 ]
             });
 
+            // Open the modal for adding a new category
             $('#btnAdd').click(function () {
                 $('#modalTitle').text('Yeni Kategori Ekle');
                 $('#btnSave').text('Ekle');
+                resetForm();
                 $('#modal').modal('show');
-               // $("input, textarea").val("");
-                $(".error-message").hide();
             });
 
+            // Edit Category
             $('#tblCategories').on('click', '.editCategory', function () {
                 var id = $(this).data('id');
                 $.ajax({
@@ -118,6 +125,7 @@
                 $('#modal').modal('show');
             });
 
+            // Delete Category
             $('#tblCategories').on('click', '.deleteCategory', function () {
                 var id = $(this).data('id');
                 Swal.fire({
@@ -145,6 +153,7 @@
                 });
             });
 
+            // Save Category (Add or Update)
             $('#btnSave').click(function () {
                 var category = {
                     id: $('#categoryId').val(),
@@ -155,6 +164,7 @@
 
                 let isValid = true;
 
+                // Validate form
                 if (!category.name) {
                     $('#name-error').show();
                     isValid = false;
@@ -180,9 +190,11 @@
                     return;
                 }
 
+                // Determine Add or Update operation
                 var url = $('#btnSave').text().toLocaleLowerCase() === 'ekle' ? '/Admin/Category/Add' : '/Admin/Category/Update/' + category.id;
                 var method = $('#btnSave').text().toLocaleLowerCase() === 'ekle' ? 'POST' : 'PUT';
 
+                // Perform Add or Update
                 $.ajax({
                     type: method,
                     url: url,
@@ -190,7 +202,6 @@
                     contentType: 'application/json; charset=utf-8',
                     success: function (response) {
                         $('#modal').modal('hide');
-                        $("input, textarea").val("");
                         table.ajax.reload();
                         Swal.fire('Başarılı!', 'Kategori başarıyla kaydedildi.', 'success');
                     },
