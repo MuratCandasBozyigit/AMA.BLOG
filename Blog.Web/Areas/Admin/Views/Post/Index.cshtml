@@ -27,9 +27,8 @@
 @section Scripts {
     <script>
         $(document).ready(function () {
-            // Sil butonuna tıklama olayını dinle
             $('#tblPosts').on('click', '.deletePost', function () {
-                var id = $(this).data('id'); // data-id'yi al
+                var id = $(this).data('id');
                 Swal.fire({
                     title: 'Emin misiniz?',
                     text: 'Bu post kalıcı olarak silinecektir!!!',
@@ -42,9 +41,9 @@
                     if (result.isConfirmed) {
                         $.ajax({
                             type: 'DELETE',
-                            url: '/Admin/Post/Delete/' + id, // Doğru id ile silme isteği gönder
+                            url: '/Admin/Post/Delete/' + id,
                             success: function () {
-                                location.reload(); // Sayfayı yenile
+                                location.reload();
                                 Swal.fire('Silindi!', 'Post başarıyla silindi', 'success');
                             },
                             error: function () {
@@ -57,6 +56,7 @@
         });
     </script>
 }
+
 
 @section Css {
     <link rel="stylesheet" href="~/css/postIndexAdminPage.css" asp-append-version="true" />

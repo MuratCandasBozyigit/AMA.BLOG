@@ -183,6 +183,13 @@ namespace Blog.Web.Areas.Admin.Controllers
         }
     }
 }
+
+
+
+
+
+
+
 #region YORUMSATIRLARISSSS
 
 //ASIL EDİT BU
