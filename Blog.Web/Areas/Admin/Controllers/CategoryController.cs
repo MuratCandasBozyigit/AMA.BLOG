@@ -26,7 +26,7 @@ namespace Blog.Web.Areas.Admin.Controllers
 
         // GET: Admin/Category/GetAllCategories
         [HttpGet("GetAllCategories")]
-        public IActionResult GetAllCategories()
+        public IActionResult GetAll()
         {
             try
             {
@@ -105,10 +105,7 @@ namespace Blog.Web.Areas.Admin.Controllers
         [HttpPost("Add")]
         public IActionResult Add([FromBody] Category category)
         {
-            if (category == null)
-            {
-                return BadRequest("Invalid category data.");
-            }
+           
 
             try
             {
