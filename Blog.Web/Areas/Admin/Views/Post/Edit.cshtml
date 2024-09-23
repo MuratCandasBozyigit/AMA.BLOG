@@ -17,11 +17,13 @@
         <textarea id="content" asp-for="Post.Content" class="form-control" rows="5" placeholder="İçeriği girin"></textarea>
         <span asp-validation-for="Post.Content" class="text-danger"></span>
     </div>
+
     <div class="form-group">
         <label asp-for="Post.Summary" class="font-weight-bold"></label>
         <textarea id="summary" asp-for="Post.Summary" class="form-control" rows="5" placeholder="Kısa İçeriği girin"></textarea>
         <span asp-validation-for="Post.Summary" class="text-danger"></span>
     </div>
+
 
     <div class="form-group">
         <label class="font-weight-bold">Mevcut Resim</label>
@@ -71,26 +73,29 @@
                 var formData = new FormData($('#postEditForm')[0]);
                 let isValid = true;
 
+                // Başlık kontrolü
                 if (!$('#title').val()) {
                     Swal.fire('Hata', 'Başlık boş olamaz!', 'error');
                     isValid = false;
                 }
-                
+
+                // İçerik kontrolü
                 if (!$('#content').val()) {
                     Swal.fire('Hata', 'İçerik boş olamaz!', 'error');
                     isValid = false;
                 }
 
+                // Summary kontrolü
                 if (!$('#summary').val()) {
                     Swal.fire('Hata', 'Kısa İçerik boş olamaz!', 'error');
                     isValid = false;
                 }
 
-
                 if (!isValid) {
                     return;
                 }
 
+                // Form gönderimi
                 $.ajax({
                     type: 'POST',
                     url: '/Admin/Post/Edit/' + $('#postId').val(),
@@ -100,7 +105,7 @@
                     success: function (response) {
                         if (response.success) {
                             Swal.fire('Başarı', response.message, 'success').then(function () {
-                                window.location.href = "/Admin/Post/Index"; // Yönlendirme
+                                window.location.href = "/Admin/Post/Index"; // Başarılı yönlendirme
                             });
                         } else {
                             Swal.fire('Hata', response.message, 'error');
@@ -111,6 +116,7 @@
                     }
                 });
             });
+
         });
     </script>
 }
