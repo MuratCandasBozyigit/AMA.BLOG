@@ -23,17 +23,17 @@
                         <label class="form-label">Slug: </label>
                         <input type="text" id="slug" placeholder="Lütfen Slug giriniz" class="form-control" required />
                         <span id="slug-error" style="color:red; display:none;">Alan boş bırakılamaz.</span>
-
                     </div>
                     <div class="mb-3 row">
                         <label class="form-label">Kategori Açıklaması: </label>
                         <input type="text" id="description" placeholder="Lütfen Kategori Açıklaması giriniz" class="form-control" required />
                         <span id="description-error" style="color:red; display:none;">Alan boş bırakılamaz.</span>
                     </div>
-
+                    <input type="hidden" id="category-id" value="" />
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary emptyValue" data-bs-dismiss="modal">Kapat</button>
                         <button type="button" id="btnSave" class="btn btn-primary">Kaydet</button>
+                        <button type="button" id="btnUpdate" class="btn btn-warning" style="display:none;">Güncelle</button>
                     </div>
                 </div>
             </div>
@@ -58,19 +58,20 @@
 </div>
 
 @section Scripts {
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.10.25/js/dataTables.bootstrap5.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
         $(document).ready(function () {
-            // Form alanlarını başlangıçta temizle ve hata mesajlarını gizle
+            // Form temizleme ve hata mesajlarını gizleme
             $("input,textarea").val("");
             $(".error-message").hide();
 
-            // DataTables yapılandırması
+            // DataTable ayarları ve kategori verilerinin yüklenmesi
             var table = $('#tblCategories').DataTable({
                 ajax: {
-                    url: '/Admin/Category/GetAllCategories', // Route düzeltildi
+                    url: '/Admin/Category/GetAllCategories',
                     dataSrc: '',
                     error: function (xhr, error, thrown) {
                         console.error('Ajax Error:', error, thrown);
@@ -86,45 +87,49 @@
                         title: 'İşlemler',
                         render: function (data, type, row) {
                             return `
-                                                <a href="#" class="btn btn-sm btn-warning editTitle" data-id="${row.id}">Düzenle</a>
-                                                <a href="#" class="btn btn-sm btn-danger deleteTitle" data-id="${row.id}">Sil</a>
-                                            `;
+                                        <a href="#" class="btn btn-sm btn-warning editTitle" data-id="${row.id}">Düzenle</a>
+                                        <a href="#" class="btn btn-sm btn-danger deleteTitle" data-id="${row.id}">Sil</a>
+                                    `;
                         }
                     }
                 ]
             });
 
-            // Yeni kategori ekleme butonuna tıklama olayı
+            // Yeni kategori ekleme butonuna tıklama işlemi
             $('#btnAdd').click(function () {
                 $('#modalTitle').text('Yeni Kategori Ekle');
-                $('#btnSave').text('Ekle');
+                $('#btnSave').show();
+                $('#btnUpdate').hide();
                 $('#name').val('');
                 $('#description').val('');
                 $('#slug').val('');
+                $('#category-id').val(''); // Gizli inputu temizle
                 $('#modal').modal('show');
             });
 
-            //Update yap
-            // Kategori düzenleme butonuna tıklama olayı
+            // Kategori düzenleme
             $('#tblCategories').on('click', '.editTitle', function () {
                 var id = $(this).data('id');
                 $.ajax({
-                    url: "/Admin/Category/GetById/"+id, // Route düzeltildi
+                    url: "/Admin/Category/GetById/" + id,
                     success: function (res) {
                         $('#name').val(res.name);
                         $('#slug').val(res.slug);
                         $('#description').val(res.description);
-                        $('#modalTitle').text('Kategori Düzenle');
-                        $('#btnSave').text('Güncelle');
-                        $('#modal').modal('show');
+                        $('#category-id').val(res.id);
                     },
                     error: function () {
                         Swal.fire('Hata', 'Kategori verisi yüklenirken bir sorun oluştu.', 'error');
                     }
                 });
+
+                $('#modalTitle').text('Kategori Düzenle');
+                $('#btnSave').hide();
+                $('#btnUpdate').show();
+                $('#modal').modal('show');
             });
 
-            // Kategori silme butonuna tıklama olayı
+            // Kategori silme işlemi
             $('#tblCategories').on('click', '.deleteTitle', function () {
                 var id = $(this).data('id');
                 Swal.fire({
@@ -139,7 +144,7 @@
                     if (result.isConfirmed) {
                         $.ajax({
                             type: "DELETE",
-                            url: "/Admin/Category/Delete/" + id, // Route düzeltildi
+                            url: "/Admin/Category/Delete/" + id,
                             success: function () {
                                 table.ajax.reload();
                                 Swal.fire('Silindi!', 'Kategori başarıyla silindi.', 'success');
@@ -151,9 +156,22 @@
                     }
                 });
             });
+
+            // Kaydet butonuna tıklama
             $('#btnSave').click(function () {
+                processForm('/Admin/Category/Add', 'POST');
+            });
+
+            // Güncelle butonuna tıklama
+            $('#btnUpdate').click(function () {
+                var id = $('#category-id').val();
+                processForm('/Admin/Category/Update/' + id, 'PUT');
+            });
+
+            // Form işleme fonksiyonu
+            function processForm(url, method) {
                 var category = {
-                    id: $('#category-id').val(), // ID'yi de gönder
+                    id: $('#category-id').val(),
                     name: $('#name').val(),
                     slug: $('#slug').val(),
                     description: $('#description').val()
@@ -161,7 +179,7 @@
 
                 let isValid = true;
 
-                // Kategori adı doğrulaması
+                // Form doğrulama
                 if (!category.name) {
                     $('#name-error').show();
                     isValid = false;
@@ -169,7 +187,6 @@
                     $('#name-error').hide();
                 }
 
-                // Slug Name Doğrulaması
                 if (!category.slug) {
                     $('#slug-error').show();
                     isValid = false;
@@ -177,7 +194,6 @@
                     $('#slug-error').hide();
                 }
 
-                // Kategori açıklaması doğrulaması
                 if (!category.description) {
                     $('#description-error').show();
                     isValid = false;
@@ -185,19 +201,17 @@
                     $('#description-error').hide();
                 }
 
-                // Form geçerli değilse kaydetme
                 if (!isValid) {
                     return;
                 }
-                var url = $('#btnSave').text().toUpperCase() === 'Ekle' ? '/Admin/Category/Add' : '/Admin/Category/Update';
-                var method = $('#btnSave').text().toUpperCase() === 'Ekle' ? 'POST' : 'PUT';
 
+                // Ajax isteği
                 $.ajax({
                     type: method,
                     url: url,
                     data: JSON.stringify(category),
                     contentType: 'application/json; charset=utf-8',
-                    success: function (response) {
+                    success: function () {
                         $('#modal').modal('hide');
                         table.ajax.reload();
                         Swal.fire('Başarılı!', 'Kategori başarıyla kaydedildi.', 'success');
@@ -206,8 +220,7 @@
                         Swal.fire('Hata', 'Kategori kaydedilirken bir sorun oluştu. Detaylar: ' + errorThrown, 'error');
                     }
                 });
-            });
-
+            }
         });
     </script>
 }
