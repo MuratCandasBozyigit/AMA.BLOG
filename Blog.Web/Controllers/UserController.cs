@@ -145,8 +145,11 @@ namespace Blog.Web.Controllers
                     UserName = registerDto.UserName,
                     Email = registerDto.Email,
                     Password = registerDto.Password,
-                    DateOfBirth = registerDto.DateOfBirth,
-                    IsAdmin = registerDto.IsAdmin = false
+                    IsAdmin = registerDto.IsAdmin = false,
+                    //Bu alttaki ücü sorun cıkarıyor ona göre bunların değerlerinde de sorun var db yede ekleyemiyorum istedğim kadar migrate etsemde 
+                    DateOfBirth = registerDto.DateOfBirth = DateTime.Today,
+                    ProfilePicture = null,
+                    ApplicationForm = null,
                 };
 
                 var addedUser = _userService.Add(appUser);
