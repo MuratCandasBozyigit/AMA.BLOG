@@ -17,6 +17,8 @@ namespace Blog.Business.Shared.Concrete
             _repository = repository;
         }
 
+     
+
         public virtual T Add(T entity)
         {
             return _repository.Add(entity);

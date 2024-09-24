@@ -18,7 +18,6 @@ namespace Blog.Business.Shared.Absract
         bool Delete(int id);
         bool Delete(Guid guid);
         T GetFirstOrDefault(Expression<Func<T, bool>> expression);
-
         ICollection<T> GetAll(Expression<Func<T, bool>> expression);
     }
 }

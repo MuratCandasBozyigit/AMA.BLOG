@@ -149,6 +149,20 @@ namespace Blog.Business.Concrete
             throw new NotImplementedException();
         }
 
+        public AppUser GetByEmail(string email)
+        {
+            return _userRepository.GetFirstOrDefault(x => x.Email == email);
+        }
+        public AppUser GetPassword(string password)
+        {
+            return _userRepository.GetFirstOrDefault(x => x.Password == password);
+        }
+
+
+
+
+
+
 
 
 

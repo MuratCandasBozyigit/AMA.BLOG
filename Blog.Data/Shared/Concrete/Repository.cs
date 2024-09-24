@@ -18,6 +18,7 @@ namespace Blog.Data.Shared.Concrete
         private readonly DbSet<T> _dbSet;
         private readonly IHttpContextAccessor _httpContextAccessor;
         private int? _ownerAndUpdateId;
+        
 
         public Repository(ApplicationDbContext context, IHttpContextAccessor httpContextAccessor)
         {
@@ -75,6 +76,8 @@ namespace Blog.Data.Shared.Concrete
         {
             return GetAll().Where(predicate);
         }
+
+      
 
         public T GetById(int id)
         {
