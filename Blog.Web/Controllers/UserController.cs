@@ -35,15 +35,41 @@ namespace Blog.Web.Controllers
 
 
         }
+        #region GirişCıkış 
         public IActionResult Login()
         {
             return View();
         }
+        public IActionResult GetById(int id)
+        {
+            if (id == 0)
+            { return BadRequest("AYDİ YOK LOGİN "); }
+            else
+            {
+                try
+                {
+                    var user = _userService.GetById(id);
+                    return Ok(user);
+                }
+                catch (Exception ex)
+                {
+                    return BadRequest(ex.Message);
+                }
+
+            }
+        }
+
+
+
+
+
         public async Task<IActionResult> Logout()
         {
             await _userService.Logout();
             return RedirectToAction("Login");
         }
+        #endregion
+        #region KayıtOl 
         public IActionResult Register()
         {
             Response.Headers["Cache-Control"] = "no-cache, no-store, must-revalidate";
@@ -51,20 +77,21 @@ namespace Blog.Web.Controllers
             Response.Headers["Expires"] = "-1";
 
             return View();
-           
+
         }
 
-        public IActionResult Add(int id)
+        public IActionResult Add([FromBody] AppUser user)
         {
             try
             {
-                var user = _userService.Add();
-                return Ok(user);
+                var appUser = _userService.Add(user);
+                return Ok(appUser);
             }
             catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }
         }
+        #endregion
     }
 }
