@@ -53,5 +53,18 @@ namespace Blog.Web.Controllers
             return View();
            
         }
+
+        public IActionResult Add(int id)
+        {
+            try
+            {
+                var user = _userService.Add();
+                return Ok(user);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
     }
 }
