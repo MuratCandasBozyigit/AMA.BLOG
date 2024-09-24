@@ -146,7 +146,7 @@ namespace Blog.Web.Controllers
                     Email = registerDto.Email,
                     Password = registerDto.Password,
                     IsAdmin = registerDto.IsAdmin = false,
-                    //Bu alttaki ücü sorun cıkarıyor ona göre bunların değerlerinde de sorun var db yede ekleyemiyorum istedğim kadar migrate etsemde 
+                    //Bu alttaki ücü sorun cıkarıyor ona göre bunların değerlerinde de sorun var db yede ekleyemiyorum istedğim kadar migrate etsemde convert etmek icin alttakileri getirdim hata gider gibi düşnüp null eyledim ama olmadi 
                     DateOfBirth = registerDto.DateOfBirth = DateTime.Today,
                     ProfilePicture = null,
                     ApplicationForm = null,
