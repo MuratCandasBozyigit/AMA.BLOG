@@ -21,5 +21,10 @@ namespace Blog.Data.Shared.Abstract
         T GetFirstOrDefault(Expression<Func<T, bool>> predicate);
         void Save();
         bool Delete(Guid guid);
+
+
+        //LOGİN İÇİN EKLEİDKLERİM.
+        //Task<AppUser> GetByEmailAsync (string email);
+        Task<T> GetFirstOrDefaultAsync(Expression<Func<T, bool>> predicate);
     }
 }

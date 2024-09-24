@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
+using System.Data.Entity;
 using System.Security.Claims;
 using System.Text.RegularExpressions;
 
@@ -139,6 +140,17 @@ namespace Blog.Business.Concrete
         {
             return _userRepository.GetFirstOrDefault(x => x.Password == password);
         }
+        public async Task<bool> CheckPasswordAsync(AppUser user, string password)
+        {
+            // Şifre doğrulaması burada yapılıyor, isteğe bağlı olarak hash kontrolü ekleyebilirsiniz
+            return user != null && user.Password == password;
+        }
+        public async Task<AppUser> GetByEmailAsync(string email)
+        {
+            return await _userRepository.GetFirstOrDefaultAsync(x => x.Email == email);
+            //
+        }
+
         #endregion 
         #endregion
         #region Log 
@@ -183,6 +195,8 @@ namespace Blog.Business.Concrete
             return appUser;
         }
 
+
+
         #endregion
 
 
@@ -193,45 +207,48 @@ namespace Blog.Business.Concrete
 
 
 
-        //ICollection<UserDto> IUserService.GetAll()
-        //{
-        //    var payment = _paymentService.GetAll().ToList();
 
-        //    return GetAll().GroupJoin(payment, u => u.Id, p => p.UserId, (u, p) => new { U = u, P = p }).Select(x => new UserDto
-        //    {
-        //        Id = x.U.Id,
-        //        ApplicationForm = x.U.ApplicationForm,
-        //        City = x.U.City,
-        //        Gender = x.U.Gender,
-        //        BirthDate = x.U.BirthDate,
-        //        Email = x.U.Email,
-        //        FullName = x.U.FullName,
-        //        Gsm = x.U.Gsm,
-        //        Password = x.U.Password,
-        //        Facebook = x.U.Facebook,
-        //        Payment = x.P.OrderByDescending(p => p.PaymentDate).FirstOrDefault(),
-        //        RemainingDay = RemainingDaysForMember(x.U.Id),
-        //        Description = x.U.Description,
-        //        Instagram = x.U.Instagram,
-        //        Twitter = x.U.Twitter,
-        //        DateCreated = x.U.DateCreated,
-        //        DateUpdated = x.U.DateUpdated,
-        //        DateDeleted = x.U.DateDeleted,
-        //        Guid = x.U.Guid,
-        //        IsActive = x.U.IsActive,
-        //        IsAdmin = x.U.IsAdmin,
-        //        IsDeleted = x.U.IsDeleted,
-        //        MembershipStartDate = x.U.MembershipStartDate,
-        //        ModifierId = x.U.ModifierId,
-        //        OwnerId = x.U.OwnerId,
-        //        ProfilePicture = x.U.ProfilePicture
-
-        //    }).ToList(); ;
-
-
-
-        //}
     }
 }
 
 
+#region NTE 
+//ICollection<UserDto> IUserService.GetAll()
+//{
+//    var payment = _paymentService.GetAll().ToList();
+
+//    return GetAll().GroupJoin(payment, u => u.Id, p => p.UserId, (u, p) => new { U = u, P = p }).Select(x => new UserDto
+//    {
+//        Id = x.U.Id,
+//        ApplicationForm = x.U.ApplicationForm,
+//        City = x.U.City,
+//        Gender = x.U.Gender,
+//        BirthDate = x.U.BirthDate,
+//        Email = x.U.Email,
+//        FullName = x.U.FullName,
+//        Gsm = x.U.Gsm,
+//        Password = x.U.Password,
+//        Facebook = x.U.Facebook,
+//        Payment = x.P.OrderByDescending(p => p.PaymentDate).FirstOrDefault(),
+//        RemainingDay = RemainingDaysForMember(x.U.Id),
+//        Description = x.U.Description,
+//        Instagram = x.U.Instagram,
+//        Twitter = x.U.Twitter,
+//        DateCreated = x.U.DateCreated,
+//        DateUpdated = x.U.DateUpdated,
+//        DateDeleted = x.U.DateDeleted,
+//        Guid = x.U.Guid,
+//        IsActive = x.U.IsActive,
+//        IsAdmin = x.U.IsAdmin,
+//        IsDeleted = x.U.IsDeleted,
+//        MembershipStartDate = x.U.MembershipStartDate,
+//        ModifierId = x.U.ModifierId,
+//        OwnerId = x.U.OwnerId,
+//        ProfilePicture = x.U.ProfilePicture
+
+//    }).ToList(); ;
+
+
+
+//} 
+#endregion

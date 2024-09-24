@@ -28,31 +28,30 @@ namespace Blog.Web.Controllers
             return View();
         }
         [HttpPost]
-        public IActionResult Login(LoginDTO loginDTO)
+        public async Task<IActionResult> Login(LoginDTO loginDto)
         {
             if (!ModelState.IsValid)
             {
-                return View(loginDTO);
+                return View(loginDto);
             }
 
-            var user = _userService.GetByEmail(loginDTO.Email);
+            // Kullanıcıyı email ile veritabanından buluyoruz
+            var user = await _userService.GetByEmailAsync(loginDto.Email);
 
-            if (user == null ||  _userService.GetPassword(user, loginDTO.Password))
+            // Kullanıcı null ise ya da şifre yanlışsa hata mesajı döndür
+            if (user == null || !await _userService.CheckPasswordAsync(user, loginDto.Password))
             {
                 ModelState.AddModelError("", "Geçersiz kullanıcı adı veya şifre.");
-                return View(loginDTO);
+                return View(loginDto);
             }
 
-            // Login başarılı -> oturum açılır
-            // Session, Cookie veya Authentication mekanizmaları burada kullanılabilir
+            // Başarılı giriş durumunda oturum açma işlemleri
             HttpContext.Session.SetString("UserId", user.Id.ToString());
 
             return RedirectToAction("Index", "Home");
         }
-        // Login başarılı -> oturum açılır
-        // Session, Cookie veya Authentication mekanizmaları burada kullanılabilir
-     
-public IActionResult GetById(int id)
+
+        public IActionResult GetById(int id)
         {
             if (id == 0)
             { return BadRequest("AYDİ YOK LOGİN "); }

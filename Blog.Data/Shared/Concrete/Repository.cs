@@ -77,7 +77,14 @@ namespace Blog.Data.Shared.Concrete
             return GetAll().Where(predicate);
         }
 
-      
+        //public async Task<AppUser> GetByEmailAsync(string email)
+        //{
+        //    return await _context.GetFirstOrDefaultAsync(x => x.Email == email);
+        //}
+        public async Task<T> GetFirstOrDefaultAsync(Expression<Func<T, bool>> predicate)
+        {
+            return await _dbSet.FirstOrDefaultAsync(predicate);
+        }
 
         public T GetById(int id)
         {
