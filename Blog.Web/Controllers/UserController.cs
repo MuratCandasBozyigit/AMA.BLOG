@@ -2,6 +2,7 @@
 using Blog.Business.Absract;
 using Blog.Dtos.UserDTOs;
 using Blog.Business.Concrete;
+using Blog.DTOS.UserDTOs;
 
 
 namespace Blog.Web.Controllers
@@ -122,26 +123,64 @@ namespace Blog.Web.Controllers
             return View();
 
         }
-
-        public IActionResult Add([FromBody] AppUser user)
+        public IActionResult Add([FromBody] RegisterDTO registerDto)
         {
-            if (user != null)
+            if (registerDto == null)
             {
-                return BadRequest("Kullanıcı Mevcut");
+                return BadRequest("Kullanıcı bilgileri eksik.");
             }
-            else
+
+            try
             {
-                try
+                // Kullanıcının var olup olmadığını kontrol ediyoruz
+                var existingUser = _userService.GetByEmail(registerDto.Email);
+                if (existingUser != null)
                 {
-                    var appUser = _userService.Add(user);
-                    return Ok(appUser);
+                    return BadRequest("Bu email ile zaten bir kullanıcı mevcut.");
                 }
-                catch (Exception ex)
+
+                // DTO'dan AppUser'a dönüşüm
+                var appUser = new AppUser
                 {
-                    return BadRequest(ex.Message);
-                }
+                    UserName = registerDto.UserName,
+                    Email = registerDto.Email,
+                    Password = registerDto.Password,
+                    DateOfBirth = registerDto.DateOfBirth,
+                    IsAdmin = registerDto.IsAdmin = false
+                };
+
+                var addedUser = _userService.Add(appUser);
+                return Ok(addedUser);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
             }
         }
+
+
+
         #endregion
     }
 }
+
+
+//public IActionResult Add([FromBody] AppUser user)
+//{
+//    if (user != null)
+//    {
+//        return BadRequest("Kullanıcı Mevcut");
+//    }
+//    else
+//    {
+//        try
+//        {
+//            var appUser = _userService.Add(user);
+//            return Ok(appUser);
+//        }
+//        catch (Exception ex)
+//        {
+//            return BadRequest(ex.Message);
+//        }
+//    }
+//}

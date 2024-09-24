@@ -9,9 +9,10 @@ public class AppUser : BaseModel
     public string Password { get; set; }
     public string Email { get; set; } 
     public DateTime CreatedDate { get; set; } = DateTime.Now;
+    public DateTime DateOfBirth { get; set; }
     public string? ProfilePicture { get; set; }
     public bool IsAdmin { get; set; }
-    public string ApplicationForm { get; set; }
+    public string? ApplicationForm { get; set; }
 }
 
 //Gereksiz zaten hesap acılmadan okunulabilinyor ?D
