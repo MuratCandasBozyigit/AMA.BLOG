@@ -1,5 +1,4 @@
-﻿
-@{
+﻿@{
     ViewData = null;
 }
 <!DOCTYPE html>
@@ -50,3 +49,17 @@
     <script src="/js/registerPage.js"></script>
 </body>
 </html>
+
+
+@section Scripts {<script>
+        $(dodument).ready(function () {
+            $('#input').val("");
+            var table = ('#tblAppUser').DataTable({
+                ajax: {
+
+                }
+            })
+        });
+
+
+    </script>}
