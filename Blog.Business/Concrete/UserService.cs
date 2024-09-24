@@ -2,6 +2,7 @@
 using Blog.Business.Shared.Concrete;
 using Blog.Data.Shared.Abstract;
 using Blog.Dtos.UserDTOs;
+using Blog.DTOS.UserDTOs;
 using Blog.Models.Dtos;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -12,52 +13,25 @@ using System.Text.RegularExpressions;
 
 namespace Blog.Business.Concrete
 {
-    public class UserService:Service<AppUser>, IUserService
+    public class UserService : Service<AppUser>, IUserService
     {
         private readonly IRepository<AppUser> _userRepository;
         private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public UserService(IHttpContextAccessor httpContextAccessor, IRepository<AppUser> userRepository):base(userRepository)
+        public UserService(IHttpContextAccessor httpContextAccessor, IRepository<AppUser> userRepository) : base(userRepository)
         {
             _httpContextAccessor = httpContextAccessor;
             _userRepository = userRepository;
         }
 
-        public async Task<LoginDTO> Login(LoginDTO appuser)
-        {
-            AppUser user = _userRepository.GetFirstOrDefault(x => x.Email == appuser.Email && x.Password == appuser.Password);
 
-            if (user != null)
-            {
-
-
-                List<Claim> claims = new List<Claim>();
-                claims.Add(new Claim(ClaimTypes.Email, user.Email));
-                claims.Add(new Claim(ClaimTypes.Name, user.UserName));
-                claims.Add(new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()));
-                claims.Add(new Claim(ClaimTypes.Role, user.IsAdmin ? "Admin" : "Member"));
-
-                ClaimsIdentity identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
-
-
-
-                await _httpContextAccessor.HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-                await _httpContextAccessor.HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(identity), new AuthenticationProperties { IsPersistent = appuser.IsRememberMe });
-                appuser.Role = user.IsAdmin ? "Admin" : "Member";
-                return appuser;
-            }
-            return appuser;
-
-
-        }
         public async Task Logout()
         {
             await _httpContextAccessor.HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
         }
-        public override ICollection<AppUser> GetAll()
-        {
-            return _userRepository.GetAll().ToList();
-        }
+
+        #region CRUD
+        #region ADD 
         public override AppUser Add(AppUser entity)
         {
 
@@ -105,6 +79,9 @@ namespace Blog.Business.Concrete
 
             return true;
         }
+
+        #endregion
+        #region Update 
         public override AppUser Update(AppUser user)
         {
             var currentUser = GetFirstOrDefault(u => u.Id == user.Id);
@@ -144,11 +121,16 @@ namespace Blog.Business.Concrete
             return base.Update(currentUser);
         }
 
+        #endregion
+        #region Get 
         ICollection<UserDto> IUserService.GetAll()
         {
             throw new NotImplementedException();
         }
-
+        public override ICollection<AppUser> GetAll()
+        {
+            return _userRepository.GetAll().ToList();
+        }
         public AppUser GetByEmail(string email)
         {
             return _userRepository.GetFirstOrDefault(x => x.Email == email);
@@ -157,7 +139,51 @@ namespace Blog.Business.Concrete
         {
             return _userRepository.GetFirstOrDefault(x => x.Password == password);
         }
+        #endregion 
+        #endregion
+        #region Log 
+        LoginDTO IUserService.Login(LoginDTO appUser)
+        {
+            AppUser user = _userRepository.GetFirstOrDefault(x => x.Email == appUser.Email && x.Password == appUser.Password);
 
+            if (user != null)
+            {
+
+
+                List<Claim> claims = new List<Claim>();
+                claims.Add(new Claim(ClaimTypes.Email, user.Email));
+                claims.Add(new Claim(ClaimTypes.Name, user.UserName));
+                claims.Add(new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()));
+                claims.Add(new Claim(ClaimTypes.Role, user.IsAdmin ? "Admin" : "Member"));
+
+                ClaimsIdentity identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+
+
+
+                _httpContextAccessor.HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+                _httpContextAccessor.HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(identity), new AuthenticationProperties { IsPersistent = appUser.IsRememberMe });
+                appUser.Role = user.IsAdmin ? "Admin" : "Member";
+                return appUser;
+            }
+            return appUser;
+        }
+
+        public RegisterDTO Register(RegisterDTO appUser)
+        {
+            var newUser = new AppUser
+            {
+                UserName = appUser.UserName,
+                Email = appUser.Email,
+                Password = appUser.Password,
+                IsAdmin = appUser.IsAdmin
+            };
+
+            _userRepository.Add(newUser);
+            _userRepository.Save();
+            return appUser;
+        }
+
+        #endregion
 
 
 

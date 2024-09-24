@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Blog.Business.Absract;
 using Blog.Dtos.UserDTOs;
+using Blog.Business.Concrete;
 
 
 namespace Blog.Web.Controllers
@@ -19,28 +20,39 @@ namespace Blog.Web.Controllers
             return View();
         }
 
-        [HttpPost]
-        public async Task<IActionResult> Login(LoginDTO loginDTO)
-        {
-            LoginDTO dto = await _userService.Login(loginDTO);
 
-
-
-            if (dto.Role is not null)
-                return RedirectToAction("Index", "Home", new { area = dto.Role });
-            else
-                return RedirectToAction("Login");
-
-
-
-
-        }
         #region GirişCıkış 
+        [HttpGet]
         public IActionResult Login()
         {
             return View();
         }
-        public IActionResult GetById(int id)
+        [HttpPost]
+        public IActionResult Login(LoginDTO loginDTO)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(loginDTO);
+            }
+
+            var user = _userService.GetByEmail(loginDTO.Email);
+
+            if (user == null ||  _userService.GetPassword(user, loginDTO.Password))
+            {
+                ModelState.AddModelError("", "Geçersiz kullanıcı adı veya şifre.");
+                return View(loginDTO);
+            }
+
+            // Login başarılı -> oturum açılır
+            // Session, Cookie veya Authentication mekanizmaları burada kullanılabilir
+            HttpContext.Session.SetString("UserId", user.Id.ToString());
+
+            return RedirectToAction("Index", "Home");
+        }
+        // Login başarılı -> oturum açılır
+        // Session, Cookie veya Authentication mekanizmaları burada kullanılabilir
+     
+public IActionResult GetById(int id)
         {
             if (id == 0)
             { return BadRequest("AYDİ YOK LOGİN "); }
@@ -58,9 +70,37 @@ namespace Blog.Web.Controllers
 
             }
         }
+        public IActionResult GetByEmail(string email)
+        {
+            if (email == null)
+            {
+                return BadRequest("Email bulunamadı");
+            }
+            else
+            {
+                try
+                {
+                    var mail = _userService.GetByEmail(email);
+                    return Ok(mail);
+                }
+                catch (Exception ex)
+                {
+                    return BadRequest(ex.Message + "mayil bülunamadi");
+                }
+            }
+        }
 
-
-
+        public IActionResult GetPassword(string password)
+        {
+            if (password == null)
+            {
+                return BadRequest("Şifre boş kankss");
+            }
+            else
+            {
+                try { var pwd = _userService.GetPassword(password); return Ok(pwd); } catch (Exception ex) { return BadRequest(ex.Message + "şifrede sorin vardir gardaş"); }
+            }
+        }
 
 
         public async Task<IActionResult> Logout()
@@ -69,6 +109,10 @@ namespace Blog.Web.Controllers
             return RedirectToAction("Login");
         }
         #endregion
+
+
+
+
         #region KayıtOl 
         public IActionResult Register()
         {
@@ -82,14 +126,21 @@ namespace Blog.Web.Controllers
 
         public IActionResult Add([FromBody] AppUser user)
         {
-            try
+            if (user != null)
             {
-                var appUser = _userService.Add(user);
-                return Ok(appUser);
+                return BadRequest("Kullanıcı Mevcut");
             }
-            catch (Exception ex)
+            else
             {
-                return BadRequest(ex.Message);
+                try
+                {
+                    var appUser = _userService.Add(user);
+                    return Ok(appUser);
+                }
+                catch (Exception ex)
+                {
+                    return BadRequest(ex.Message);
+                }
             }
         }
         #endregion
