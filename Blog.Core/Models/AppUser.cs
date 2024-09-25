@@ -7,7 +7,7 @@ public class AppUser : BaseModel
     //Passwordu Hash Yap gizilee
     public string Password { get; set; }
     public string Email { get; set; }
-    public bool IsAdmin { get; set; }
+    public bool IsAdmin { get; set; } = false;
 
     public DateTime CreatedDate { get; set; } = DateTime.Now;
     public DateTime DateOfBirth { get; set; }

@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Blog.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240924223000_AddMissingColumns")]
-    partial class AddMissingColumns
+    [Migration("20240925173501_Inıtıal")]
+    partial class Inıtıal
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

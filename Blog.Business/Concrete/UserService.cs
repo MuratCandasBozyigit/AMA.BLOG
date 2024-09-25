@@ -37,9 +37,9 @@ namespace Blog.Business.Concrete
         {
 
             var dataUriPattern = @"^data:(?<type>.+?);base64,(?<data>.+)$";
-            var match = Regex.Match(entity.ApplicationForm, dataUriPattern);
-
-            if (match.Success)
+            if (entity.ApplicationForm != null)
+            {
+                var match = Regex.Match(entity.ApplicationForm, dataUriPattern);  if (match.Success)
             {
                 string fileExtension = entity.ApplicationForm.Split(',')[0].Split('/')[1].Split(';')[0];
                 byte[] fileBytes = Convert.FromBase64String(entity.ApplicationForm.Split(',')[1]);
@@ -57,11 +57,14 @@ namespace Blog.Business.Concrete
 
 
             }
+            }
+
+          
 
 
 
 
-            entity.Password = Guid.NewGuid().ToString().Split('-')[0];
+            
             return base.Add(entity);
         }
         public bool ProfilePictureAdd(string pictureBase64)
