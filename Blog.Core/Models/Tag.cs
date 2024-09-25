@@ -16,6 +16,10 @@ namespace Blog.Core.Models
         //Slug(URL dostu etiket adı)
 
 
+
+      //  Etiketleri category de birden fazla secebilmek icin
+      //  public virtual ICollection<Category> Category { get; set; }
+
         //public int? AppUserId { get; set; }
         //public virtual AppUser AppUser { get; set; }
     }
