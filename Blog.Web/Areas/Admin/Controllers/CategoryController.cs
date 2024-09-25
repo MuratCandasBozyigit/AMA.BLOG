@@ -103,10 +103,9 @@ namespace Blog.Web.Areas.Admin.Controllers
 
 
         [HttpPost("Add")]
-        public IActionResult Add(Category category)
+        public IActionResult Add([FromBody]Category category)
         {
-            if (category.Id > 0)
-            {
+            
                 try
                 {
                    var categories = _categoryService.Add(category);
@@ -116,14 +115,6 @@ namespace Blog.Web.Areas.Admin.Controllers
                 {
                     return StatusCode(500, $"Internal category server error: {ex.Message}");
                 }
-
-            }
-            else
-            {
-                return BadRequest("Id yok nete kankss");
-            }
-
-
 
         }
 

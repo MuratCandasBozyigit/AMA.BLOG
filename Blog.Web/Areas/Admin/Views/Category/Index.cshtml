@@ -156,14 +156,14 @@
             // Save Category (Add or Update)
             $('#btnSave').click(function () {
                 var category = {
-                    id: $('#categoryId').val(),
+                    id: $('#categoryId').val() === '' ? 0 : $('#categoryId').val(),
                     name: $('#name').val(),
                     description: $('#description').val(),
                     slug: $('#slug').val()
                 };
 
                 let isValid = true;
-
+              
                 // Validate form
                 if (!category.name) {
                     $('#name-error').show();
