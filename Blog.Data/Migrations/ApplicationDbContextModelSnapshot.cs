@@ -225,7 +225,10 @@ namespace Blog.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+
+
                     b.HasKey("Id");
+
 
                     b.ToTable("Tags");
                 });
@@ -282,6 +285,20 @@ namespace Blog.Data.Migrations
 
                     b.Navigation("Category");
                 });
+
+
+            modelBuilder.Entity("Blog.Core.Models.Tag", b =>
+                {
+                    b.HasOne("AppUser", "AppUser")
+                        .WithMany()
+                        .HasForeignKey("AppUserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("AppUser");
+                });
+
+
 #pragma warning restore 612, 618
         }
     }

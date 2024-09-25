@@ -7,6 +7,10 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+	  <_ContentIncludedByDefault Remove="wwwroot\css\postEditPage.css" />
+	</ItemGroup>
+
+	<ItemGroup>
 	  <PackageReference Include="EntityFramework" Version="6.5.1" />
 	  <PackageReference Include="Microsoft.AspNetCore.Identity" Version="2.2.0" />
 	  <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="8.0.8" />
@@ -30,6 +34,7 @@
 	  <Folder Include="Areas\Admin\Data\" />
 	  <Folder Include="Areas\Admin\Models\" />
 	  <Folder Include="wwwroot\images\" />
+	  <Folder Include="wwwroot\Scripts\" />
 	</ItemGroup>
 
 	<ItemGroup>

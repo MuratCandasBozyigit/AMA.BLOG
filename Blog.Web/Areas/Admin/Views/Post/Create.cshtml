@@ -1,6 +1,11 @@
 ﻿@model Blog.Web.Areas.Admin.Controllers.PostController.HomeViewModel
 
 <h2>Yeni Post Oluştur</h2>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.9.3/basic.min.css" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.9.3/dropzone.min.js"></script>
+
+
+
 
 <form asp-action="Create" method="post" enctype="multipart/form-data">
     <div class="mb-3">
@@ -49,11 +54,29 @@
     <button type="submit" id="btnSave" class="btn btn-primary">Kaydet</button>
 </form>
 
+
+
+
+@section Css {
+    <link rel="stylesheet" href="~/css/postCreatePage.css" asp-append-version="true" />
+}
+ 
+
+
+
+
+
+
+
+
+
+
+
 @section Scripts {
     <script>
         $(document).ready(function () {
             $('#btnSave').click(function (event) {
-                event.preventDefault(); 
+                event.preventDefault();
 
                 var post = {
                     title: $('#title').val(),
@@ -65,7 +88,7 @@
 
                 let isValid = true;
 
-             
+
                 if (!post.title) {
                     $('#title-error').show();
                     isValid = false;
@@ -80,7 +103,7 @@
                     $('#content-error').hide();
                 }
 
-           
+
                 if (!post.summary) {
                     $('#summary-error').show();
                     isValid = false;
@@ -88,7 +111,7 @@
                     $('#summary-error').hide();
                 }
 
-            
+
                 if (!post.categorySelect) {
                     $('#CategorySelect-error').show();
                     isValid = false;
@@ -96,7 +119,7 @@
                     $('#CategorySelect-error').hide();
                 }
 
-              
+
                 if (!post.image) {
                     $('#image-error').show();
                     isValid = false;
@@ -104,7 +127,7 @@
                     $('#image-error').hide();
                 }
 
-              
+
                 if (!isValid) {
                     return;
                 }
@@ -113,7 +136,7 @@
                 formData.append('Title', post.title);
                 formData.append('Content', post.content);
                 formData.append('Summary', post.summary);
-                formData.append('CategoryId', post.categorySelect); 
+                formData.append('CategoryId', post.categorySelect);
                 formData.append('Image', post.image);
 
                 $.ajax({
@@ -123,8 +146,9 @@
                     processData: false,
                     contentType: false,
                     success: function (response) {
-                        Swal.fire('Başarılı!', 'Post başarıyla kaydedildi.', 'success');
-                       
+                        Swal.fire('Başarılı!', 'Post başarıyla kaydedildi.', 'success').then(() => {
+                            window.location.href = '/Admin/Post/Index'; 
+                        });
                     },
                     error: function (jqXHR, textStatus, errorThrown) {
                         Swal.fire('Hata', 'Post kaydedilirken bir sorun oluştu: ' + errorThrown, 'error');

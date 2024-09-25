@@ -16,6 +16,7 @@ namespace Blog.Web.Areas.Admin.Controllers
             _categoryService = categoryService;
         }
 
+        #region Tamamlandı 
         // GET: Admin/Category
         [HttpGet]
         public IActionResult Index()
@@ -25,7 +26,7 @@ namespace Blog.Web.Areas.Admin.Controllers
 
         // GET: Admin/Category/GetAllCategories
         [HttpGet("GetAllCategories")]
-        public IActionResult GetAllCategories()
+        public IActionResult GetAll()
         {
             try
             {
@@ -38,18 +39,35 @@ namespace Blog.Web.Areas.Admin.Controllers
             }
         }
 
-        // POST: Admin/Category/Add
-        [HttpPost("Add")]
-        public IActionResult Add([FromBody] Category category)
+        [HttpDelete("Delete/{id}")]
+        public IActionResult Delete(int id)
         {
+            if (id == null)
+            {
+                return BadRequest("Invalid ID format.");
+            }
+
+            var iD = _categoryService.GetFirstOrDefault(i => i.Id == id);
+            if (iD == null)
+            {
+                return NotFound("Color not found.");
+            }
+
+            _categoryService.Delete(iD.Id);
+            return Ok(iD);
+        }
+
+        [HttpPut("Update/{id}")]
+        public IActionResult Update(int id, [FromBody] Category category)
+        {
+            if (category == null || category.Id != id)
+            {
+                return BadRequest("Invalid category data.");
+            }
+
             try
             {
-                if (category == null)
-                {
-                    return BadRequest("Category cannot be null");
-                }
-
-                _categoryService.Add(category);
+                _categoryService.Update(category);
                 return Ok();
             }
             catch (Exception ex)
@@ -58,7 +76,7 @@ namespace Blog.Web.Areas.Admin.Controllers
             }
         }
 
-        // GET: Admin/Category/GetById/{id}
+
         [HttpGet("GetById/{id}")]
         public IActionResult GetById(int id)
         {
@@ -81,45 +99,27 @@ namespace Blog.Web.Areas.Admin.Controllers
             }
         }
 
+        #endregion
 
-        [HttpPut("Update")]
-        public IActionResult Update([FromBody] Category category)
+
+        [HttpPost("Add")]
+        public IActionResult Add([FromBody]Category category)
         {
-            if (category == null || category.Id == 0)
-            {
-                return BadRequest("Invalid category data.");
-            }
+            
+                try
+                {
+                   var categories = _categoryService.Add(category);
+                    return Ok(categories);
+                }
+                catch (Exception ex)
+                {
+                    return StatusCode(500, $"Internal category server error: {ex.Message}");
+                }
 
-            try
-            {
-                _categoryService.Update(category);
-                return Ok();
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, $"Internal server error: {ex.Message}");
-            }
         }
 
 
-        //// DELETE: Admin/Category/Delete/{id}
-        //[HttpDelete("Delete")]
-        //public IActionResult Delete([FromQuery] Guid id)
-        //{
-        //    if (id == Guid.Empty)
-        //    {
-        //        return BadRequest("Invalid ID format.");
-        //    }
 
-        //    var color = _categoryService.GetFirstOrDefault(i => i.GuidId == id);
-        //    if (color == null)
-        //    {
-        //        return NotFound("Color not found.");
-        //    }
-
-        //    _categoryService.Delete(color.Id);
-        //    return Ok(color);
-        //}-
 
 
     }
