@@ -90,6 +90,7 @@
                         title: 'İşlemler',
                         render: function (data, type, row) {
                             return `
+
                                         <a href="#" class="btn btn-sm btn-warning editCategory" data-id="${row.id}">Düzenle</a>
                                         <a href="#" class="btn btn-sm btn-danger deleteCategory" data-id="${row.id}">Sil</a>`;
                         }
@@ -177,39 +178,49 @@
                     isValid = false;
                 } else {
                     $('#description-error').hide();
-                }
 
-                if (!category.slug) {
-                    $('#slug-error').show();
-                    isValid = false;
-                } else {
-                    $('#slug-error').hide();
-                }
-
-                if (!isValid) {
-                    return;
-                }
-
-                // Determine Add or Update operation
-                var url = $('#btnSave').text().toLocaleLowerCase() === 'ekle' ? '/Admin/Category/Add' : '/Admin/Category/Update/' + category.id;
-                var method = $('#btnSave').text().toLocaleLowerCase() === 'ekle' ? 'POST' : 'PUT';
-
-                // Perform Add or Update
-                $.ajax({
-                    type: method,
-                    url: url,
-                    data: JSON.stringify(category),
-                    contentType: 'application/json; charset=utf-8',
-                    success: function (response) {
-                        $('#modal').modal('hide');
-                        table.ajax.reload();
-                        Swal.fire('Başarılı!', 'Kategori başarıyla kaydedildi.', 'success');
-                    },
-                    error: function (jqXHR, textStatus, errorThrown) {
-                        Swal.fire('Hata', 'Kategori kaydedilirken bir sorun oluştu. Detaylar: ' + errorThrown, 'error');
+                                                        <a href="#" class="btn btn-sm btn-warning editTitle" data-id="${row.id}">Düzenle</a>
+                                                        <a href="#" class="btn btn-sm btn-danger deleteTitle" data-id="${row.id}">Sil</a>
+                                                    `;
+                        }
                     }
-                });
+                ]
+            })
+        });
+
+        // Yeni kategori ekleme butonuna tıklama olayı
+        $('#btnAdd').click(function () {
+            $('#modalTitle').text('Yeni Kategori Ekle');
+            $('#btnSave').text('Ekle');
+            $('#name').val('');
+            $('#description').val('');
+            $('#slug').val('');
+            $('#modal').modal('show');
+        });
+
+        // Kategori düzenleme butonuna tıklama olayı
+        $('#tblCategories').on('click', '.editTitle', function () {
+            var id = $(this).data('id');
+            $.ajax({
+                url: "/Admin/Category/GetById/" + id, // Route düzeltildi
+                success: function (res) {
+                    $('#name').val(res.name);
+                    $('#slug').val(res.slug);
+                    $('#description').val(res.description);
+                    $('#modalTitle').text('Kategori Düzenle');
+                    $('#btnSave').text('Güncelle');
+                    $('#modal').modal('show');
+                },
+                error: function () {
+                    Swal.fire('Hata', 'Kategori verisi yüklenirken bir sorun oluştu.', 'error');
+
+                }
             });
         });
+
+            });
+        });
+
+                });
     </script>
 }

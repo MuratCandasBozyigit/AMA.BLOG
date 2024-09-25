@@ -196,9 +196,6 @@ namespace Blog.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("AppUserId")
-                        .HasColumnType("int");
-
                     b.Property<DateTime>("DateCreated")
                         .HasColumnType("datetime2");
 
@@ -224,9 +221,14 @@ namespace Blog.Data.Migrations
                     b.Property<int?>("PostId")
                         .HasColumnType("int");
 
+                    b.Property<string>("TagDescription")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+
+
                     b.HasKey("Id");
 
-                    b.HasIndex("AppUserId");
 
                     b.ToTable("Tags");
                 });
@@ -284,6 +286,7 @@ namespace Blog.Data.Migrations
                     b.Navigation("Category");
                 });
 
+
             modelBuilder.Entity("Blog.Core.Models.Tag", b =>
                 {
                     b.HasOne("AppUser", "AppUser")
@@ -294,6 +297,8 @@ namespace Blog.Data.Migrations
 
                     b.Navigation("AppUser");
                 });
+
+
 #pragma warning restore 612, 618
         }
     }

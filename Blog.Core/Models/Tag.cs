@@ -12,10 +12,11 @@ namespace Blog.Core.Models
 
         public string Name {  get; set; }
         public int? PostId { get; set; }
+        public string TagDescription { get; set; }
         //Slug(URL dostu etiket adı)
 
 
-        public int AppUserId { get; set; }
-        public virtual AppUser AppUser { get; set; }
+        //public int? AppUserId { get; set; }
+        //public virtual AppUser AppUser { get; set; }
     }
 }
