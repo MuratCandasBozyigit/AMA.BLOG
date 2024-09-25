@@ -41,8 +41,8 @@ namespace Blog.Web.Areas.Admin.Controllers
         {
             try
             {
-                tagService.Add(tag);
-                return Ok();
+              var tags =tagService.Add(tag);
+                return Ok(tags);
             }
             catch (Exception ex)
             {
