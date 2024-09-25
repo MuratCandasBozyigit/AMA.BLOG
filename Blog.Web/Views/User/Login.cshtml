@@ -32,7 +32,7 @@
                             <label for="remember-me">Beni Hatırla</label>
                         </div>
                         <div class="form-group form-button">
-                            <input type="submit" class="form-submit" value="Giriş Yap" />
+                            <input type="submit" id="btnSave" class="form-submit" value="Giriş Yap" />
                         </div>
                     </form>
 
@@ -67,3 +67,52 @@
     </script>
 </body>
 </html>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $.ajax({
+                url: '/User/GetPassword',
+                method: 'GET',
+                success: function (response) {
+                    checkPassword(response);
+                },
+                error: function (error) {
+                    console.log('Bir hata oluştu:', error);
+                }
+            });
+
+            $.ajax({
+                url: '/User/GetByEmail',
+                method: 'GET',
+                success: function (response) {
+                    checkEmail(response);
+                },
+                error: function (error) {
+                    console.log('Bir hata oluştu:', error);
+                }
+            });
+
+            function checkEmail(data) {
+                var inputEmail = $('#email').val();
+                var ajaxEmail = data.email;  // Gelen JSON verisi içinde email
+                if (inputEmail === ajaxEmail) {
+                    console.log('Email eşit!');
+                } else {
+                    console.log('Email eşit değil!');
+                }
+            }
+
+            function checkPassword(data) {
+                var inputPassword = $('#password').val();
+                var ajaxPassword = data.password;  // Gelen JSON verisi içinde password
+                if (inputPassword === ajaxPassword) {
+                    console.log('Şifre eşit!');
+                } else {
+                    console.log('Şifre eşit değil!');
+                }
+            }
+        });
+
+    </script>
+}
