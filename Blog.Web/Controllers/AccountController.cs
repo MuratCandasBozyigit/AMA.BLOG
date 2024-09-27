@@ -80,8 +80,7 @@ namespace Blog.Web.Controllers
         [HttpPost]
         public async Task<IActionResult> VerifyEmail(VerifyEmailViewModel model)
         {
-            if (!ModelState.IsValid)
-            {
+          
                 var user = await _userManager.FindByNameAsync(model.Email);
                 if (user == null)
                 {
@@ -93,14 +92,14 @@ namespace Blog.Web.Controllers
                     // Burada yönlendirme yapıyorsunuz
                     return RedirectToAction("ChangePassword", "Account", new { username = user.UserName });
                 }
-            }
+           
+          
+                ModelState.AddModelError("", "Maildesorunvarbro");
+          
             return View(model);
         }
 
-        public IActionResult ChangePassword()
-        {
-            return View();
-        }
+     
 
         public IActionResult ChangePassword(string username)
         {
@@ -110,10 +109,10 @@ namespace Blog.Web.Controllers
             }
             return View(new ChangePasswordViewModel { Email = username });
         }
-            [HttpPost]
+        [HttpPost]
         public async Task<IActionResult> ChangePassword(ChangePasswordViewModel model)
         {
-            if (!ModelState.IsValid)
+            if (ModelState.IsValid)
             {
                 var user = await _userManager.FindByNameAsync(model.Email);
                 if (user != null)
