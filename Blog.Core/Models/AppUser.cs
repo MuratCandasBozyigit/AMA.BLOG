@@ -1,7 +1,8 @@
 ﻿using Blog.Core.Models;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
-public class AppUser : BaseModel
+public class AppUser : IdentityDbContext
 {
     public string UserName { get; set; }
     public int? AppUserId { get; set; }
