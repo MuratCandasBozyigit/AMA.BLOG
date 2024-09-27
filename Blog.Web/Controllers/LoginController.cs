@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authorization;
+using Blog.Core.Models;
 namespace Blog.Web.Controllers
 {
     [AllowAnonymous]
@@ -19,10 +20,19 @@ namespace Blog.Web.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Index(AppUser p)
+        public async Task<IActionResult> Index(UserSignInViewModel p)
         {
-            var result = await _signInManager.PasswordSignInAsync(p.Email, p.Password);
-            return View();
+            if (ModelState.IsValid)
+            {
+                var result = await _signInManager.PasswordSignInAsync(p.email, p.password, false, true);
+
+                if (result.Succeeded)
+                {
+                    return RedirectToAction("Index", "Home");
+                }
+                else { return View(); }
+            }
+            else { return View(); }
         }
     }
 }
