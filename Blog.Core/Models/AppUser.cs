@@ -1,19 +1,18 @@
 ﻿using Blog.Core.Models;
 using Microsoft.AspNetCore.Identity;
 
-public class AppUser : BaseModel
+public class AppUser : IdentityUser
 {
-    public string UserName { get; set; }
-    public int? AppUserId { get; set; }
     //Passwordu Hash Yap gizilee
-    public string Password { get; set; }
-    public string Email { get; set; } 
+    public string FullName { get; set; }
+    //public string Password { get; set; }
+    //public string Email { get; set; } 
   
     public DateTime CreatedDate { get; set; } = DateTime.Now;
 
     public string? ProfilePictureUrl { get; set; }
 
-    public bool IsAdmin { get; set; }
+    public bool IsAdmin { get; set; } = false;
 }
 
 //Gereksiz zaten hesap acılmadan okunulabilinyor ?D

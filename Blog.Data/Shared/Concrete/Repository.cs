@@ -27,10 +27,10 @@ namespace Blog.Data.Shared.Concrete
 
             var user = _httpContextAccessor.HttpContext?.User;
 
-            if (user?.Identity?.IsAuthenticated == true)
-            {
-                _ownerAndUpdateId = int.Parse(user.FindFirst(ClaimTypes.NameIdentifier)?.Value);
-            }
+            //if (user?.Identity?.IsAuthenticated == true)
+            //{
+            //    _ownerAndUpdateId = int.Parse(user.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+            //}
         }
 
         public T Add(T entity)
