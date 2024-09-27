@@ -12,8 +12,9 @@ namespace Blog.Core.ViewModels
         [Required(ErrorMessage = "isim girmeniz gerekli")]
         public string Name { get; set; }
         [Required(ErrorMessage = "Mail girmeniz gerekli")]
-        [EmailAddress]
+        [EmailAddress(ErrorMessage = "Geçersiz email formatı")]
         public string Email { get; set; }
+
         [Required(ErrorMessage = "Şifre girmeniz gerekli")]
         [StringLength(40,MinimumLength =8,ErrorMessage ="The {0} must be at {2} and at max {1} character")]
         [DataType(DataType.Password)]
