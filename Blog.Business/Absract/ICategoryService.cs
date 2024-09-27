@@ -8,9 +8,11 @@ using System.Threading.Tasks;
 
 namespace Blog.Business.Absract
 {
-    public interface ICategoryService:IService<Category>
+    public interface ICategoryService : IService<Category>
     {
+
         ICollection<Category> GetAllCategories(Category category);
         IEnumerable<Category> GetAllCategories();
+
     }
 }

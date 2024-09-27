@@ -24,8 +24,7 @@ namespace Blog.Business.Configuration
             services.AddScoped<ICommentService, CommentService>();
             services.AddScoped<IPostService, PostService>();
             services.AddScoped<ITagService, TagService>();
-            services.AddScoped<IAppUserService, AppUserService>();
-            services.AddScoped<IAccountService, AccountService>();
+          
         }
         public static void RepositoryDI(this IServiceCollection services)
         {

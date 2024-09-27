@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Blog.Business.Configuration;
 using Blog.Core.Models;
+using System;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -33,7 +34,14 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
 
     });
 
-
+builder.Services.AddIdentity<AppUser, IdentityRole>()
+             .AddEntityFrameworkStores<ApplicationDbContext>()
+             .AddDefaultTokenProviders();
+builder.Services.ConfigureApplicationCookie(options =>
+{
+    options.AccessDeniedPath = "/User/Login";
+    options.LoginPath = "/User/Login";
+});
 
 // DI methods for Business and Repository layers
 builder.Services.BusinessDI();

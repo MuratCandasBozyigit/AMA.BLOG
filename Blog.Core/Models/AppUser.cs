@@ -1,8 +1,9 @@
 ﻿using Blog.Core.Models;
 using Microsoft.AspNetCore.Identity;
-
-public class AppUser : BaseModel
+using Microsoft.AspNetCore.Identity;
+public class AppUser : IdentityUser
 {
+
     public string UserName { get; set; }
     public int? AppUserId { get; set; }
     //Passwordu Hash Yap gizilee
