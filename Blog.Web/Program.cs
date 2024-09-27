@@ -22,17 +22,17 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-// Configure authentication
-builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-    .AddCookie(options =>
-    {
-        options.LoginPath = "/Account/Login";
-        options.LogoutPath = "/Account/Login";
-        options.AccessDeniedPath = "/Account/Login";
-        options.Cookie.Name = "MuratBlogCookie";
-        options.SlidingExpiration = true;
+//// Configure authentication
+//builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+//    .AddCookie(options =>
+//    {
+//        options.LoginPath = "/Account/Login";
+//        options.LogoutPath = "/Account/Login";
+//        options.AccessDeniedPath = "/Account/Login";
+//        options.Cookie.Name = "MuratBlogCookie";
+//        options.SlidingExpiration = true;
 
-    });
+//    });
 
 builder.Services.AddIdentity<AppUser, IdentityRole>()
              .AddEntityFrameworkStores<ApplicationDbContext>()
