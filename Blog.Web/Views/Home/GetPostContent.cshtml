@@ -1,0 +1,36 @@
+﻿@model Blog.Core.Models.Post
+
+@{
+    ViewData["Title"] = "Post Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container mt-5">
+    <h2 class="text-center mb-4">Post Details</h2>
+
+    <form method="post">
+        <div class="mb-3">
+            <label for="Title" class="form-label">Title</label>
+            <input type="text" id="Title" class="form-control" value="@Model.Title" readonly />
+        </div>
+
+        <div class="mb-3">
+            <label for="Content" class="form-label">Content</label>
+            <textarea id="Content" class="form-control" rows="5" readonly>@Model.Content</textarea>
+        </div>
+
+        <div class="mb-3">
+            <label for="Summary" class="form-label">Summary</label>
+            <input type="text" id="Summary" class="form-control" value="@Model.Summary" readonly />
+        </div>
+
+        <div class="mb-3">
+            <label for="DatePublished" class="form-label">Date Published</label>
+            <input type="text" id="DatePublished" class="form-control" value="@Model.DatePublished.ToString("yyyy-MM-dd HH:mm:ss")" readonly />
+        </div>
+
+        <div class="text-center">
+            <a href="@Url.Action("Index", "Post")" class="btn btn-primary">Back to List</a>
+        </div>
+    </form>
+</div>

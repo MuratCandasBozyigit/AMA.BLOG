@@ -30,7 +30,7 @@
                         </div>
                         <div class="footer">
                             <div class="actions">
-                                <a id="okuDetay" href="@Url.Action("Details", "Blog", new { id = post.Id })" class="btn btn-outline-secondary">Oku</a>
+                                <a id="okuDetay" href="@Url.Action("PostDetails", "Home", new { id = post.Id })" class="btn btn-outline-secondary">Oku</a>
                             </div>
                             <ul class="stats" style="margin-left:15px;padding-right:0px;margin-right:0px;">
 
@@ -40,14 +40,14 @@
                         </div>
                     </div>
                 }
-
-                <ul class="pagination pagination-primary">
+@* Burayı ayarlasın bi rşekilde satlafar otomatik olşssun  *@
+               @*  <ul class="pagination pagination-primary">
                     <li class="page-item"><a class="page-link" href="javascript:void(0);">Previous</a></li>
                     <li class="page-item active"><a class="page-link" href="javascript:void(0);">1</a></li>
                     <li class="page-item"><a class="page-link" href="javascript:void(0);">2</a></li>
                     <li class="page-item"><a class="page-link" href="javascript:void(0);">3</a></li>
                     <li class="page-item"><a class="page-link" href="javascript:void(0);">Next</a></li>
-                </ul>
+                </ul> *@
             </div>
             <div class="col-lg-4 col-md-12 right-box">
                 <div class="card">

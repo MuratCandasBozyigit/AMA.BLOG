@@ -1,0 +1,16 @@
+﻿.post-title {
+    font-size: 2.5rem;
+    font-weight: bold;
+}
+
+.post-content {
+    font-size: 1.2rem;
+    line-height: 1.8;
+}
+
+.post-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* İçeriği kapsar, oranı korur ve taşan kısımları kırpar */
+    border-radius: 10px; /* Eğer köşeleri yuvarlak yapmak istersen */
+}
