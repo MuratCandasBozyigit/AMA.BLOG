@@ -2,14 +2,14 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
-public class AppUser : IdentityDbContext
+public class AppUser : IdentityUser
 {
     public string UserName { get; set; }
     public int? AppUserId { get; set; }
     //Passwordu Hash Yap gizilee
     public string Password { get; set; }
-    public string Email { get; set; } 
-  
+    public string Email { get; set; }
+
     public DateTime CreatedDate { get; set; } = DateTime.Now;
 
     public string? ProfilePictureUrl { get; set; }
