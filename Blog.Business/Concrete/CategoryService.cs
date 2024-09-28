@@ -5,23 +5,36 @@ using Blog.Data.Shared.Abstract;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Blog.Business.Concrete
 {
-    public class CategoryService(IRepository<Category> categoryRepo) : Service<Category>(categoryRepo), ICategoryService
+    public class CategoryService : Service<Category>, ICategoryService
     {
-        private readonly IRepository<Category> _repo = categoryRepo;
-      
-        public ICollection<Category> GetAllCategories(Category category)
+        private readonly IRepository<Category> _repo;
+
+        // Constructor injection
+        public CategoryService(IRepository<Category> categoryRepo) : base(categoryRepo)
         {
-          return _repo.GetAll(x => x.Id == category.Id).ToList();
+            _repo = categoryRepo;
         }
 
+        // Belirli bir category ID'sine göre kategorileri getirir
+        public ICollection<Category> GetAllCategories(Category category)
+        {
+            return _repo.GetAll(x => x.Id == category.Id).ToList();
+        }
+
+        // Tüm kategorileri getirir
         public IEnumerable<Category> GetAllCategories()
         {
-          return _repo.GetAll().ToList(); 
+            return _repo.GetAll().ToList();
+        }
+
+        // Asenkron olarak tüm kategorileri getirir
+        public async Task<ICollection<Category>> GetAllCategoriesAsync()
+        {
+            return await Task.Run(() => _repo.GetAll().ToList());
         }
     }
 }

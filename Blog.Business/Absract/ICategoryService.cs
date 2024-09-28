@@ -12,5 +12,6 @@ namespace Blog.Business.Absract
     {
         ICollection<Category> GetAllCategories(Category category);
         IEnumerable<Category> GetAllCategories();
+        Task<ICollection<Category>> GetAllCategoriesAsync();
     }
 }

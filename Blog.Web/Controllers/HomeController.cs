@@ -1,9 +1,8 @@
 ﻿using Blog.Web.Models;
 using Microsoft.AspNetCore.Mvc;
-
 using Microsoft.Extensions.Logging;
 using System;
-using System.Collections.Generic; // IEnumerable için gerekli
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Threading.Tasks;
 using Blog.Core.Models;
@@ -16,22 +15,30 @@ namespace Blog.Web.Controllers
         private readonly ILogger<HomeController> _logger;
         private readonly IPostService _postService;
         private readonly ICategoryService _categoryService;
+        private readonly ICommentService _commentService;
 
-        public HomeController(ILogger<HomeController> logger, IPostService postService, ICategoryService categoryService)
+        public HomeController(ILogger<HomeController> logger, IPostService postService, ICategoryService categoryService, ICommentService commentService)
         {
             _logger = logger;
             _postService = postService;
             _categoryService = categoryService;
+            _commentService = commentService;
         }
 
+        public class HomeViewModel
+        {
+            public IEnumerable<Post> Posts { get; set; }
+            public IEnumerable<Category> Categories { get; set; }
+        }
 
-
+        // Ana sayfa
         public async Task<IActionResult> Index()
         {
             try
             {
-                var posts = _postService.GetAllPosts(); // Senkron şekilde postları al
-                var categories = _categoryService.GetAllCategories(); // Senkron şekilde kategorileri al
+                // Asenkron işlemler
+                var posts = await _postService.GetAllPostsAsync(); // Asenkron metod
+                var categories = await _categoryService.GetAllCategoriesAsync(); // Asenkron metod
 
                 var model = new HomeViewModel
                 {
@@ -44,17 +51,33 @@ namespace Blog.Web.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Ana sayfa yüklenirken hata oluştu.");
-                return View("Error"); // Hata sayfasını döndür
+                return View("Error");
             }
         }
 
-
-        public class HomeViewModel
+        // Post detayını getir
+        public async Task<IActionResult> Details(int postId)
         {
-            public IEnumerable<Post> Posts { get; set; }
-            public IEnumerable<Category> Categories { get; set; }
-        }
+            try
+            {
+                // Asenkron metodları çağır
+                var post = await _postService.GetAllPostsAsync();
+                var categories = await _categoryService.GetAllCategoriesAsync();
+                var comments = await _commentService.GetCommentsByPostIdAsync(postId);
 
+                // Verileri ViewBag ile taşı
+                ViewBag.Posts = post;
+                ViewBag.Categories = categories;
+                ViewBag.Comments = comments;
+
+                return View();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Detaylar yüklenirken hata oluştu.");
+                return BadRequest(ex.Message + " Post yorumu yüklenemedi");
+            }
+        }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
@@ -64,6 +87,5 @@ namespace Blog.Web.Controllers
                 RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier
             });
         }
-
     }
 }

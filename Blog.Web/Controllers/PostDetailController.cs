@@ -16,7 +16,6 @@ namespace Blog.Web.Controllers
         {
             return View();
         }
-        //Post detayını getir
-        public IActionResult Details() { return View(); }
+       
     }
 }

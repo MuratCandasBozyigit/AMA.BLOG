@@ -25,12 +25,12 @@
                                     <img class="d-block img-fluid" src="default-image-path.jpg" alt="Default Image">
                                 }
                             </div>
-                            <h3><a href="@Url.Action("Details", "Blog", new { id = post.Id })">@post.Title</a></h3>
+                            <h3><a href="@Url.Action("Details", "Home", new { id = post.Id })">@post.Title</a></h3>
                             <p>@post.Summary</p>
                         </div>
                         <div class="footer">
                             <div class="actions">
-                                <a id="okuDetay" href="@Url.Action("Details", "Blog", new { id = post.Id })" class="btn btn-outline-secondary">Oku</a>
+                                <a id="okuDetay" href="@Url.Action("Details", "Home", new { id = post.Id })" class="btn btn-outline-secondary">Oku</a>
                             </div>
                             <ul class="stats" style="margin-left:15px;padding-right:0px;margin-right:0px;">
 
