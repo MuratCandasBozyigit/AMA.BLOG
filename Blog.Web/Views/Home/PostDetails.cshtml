@@ -1,4 +1,5 @@
-﻿@model Blog.Core.Models.Post
+﻿@using Blog.Core.Models
+@model Blog.Core.Models.Post
 
 @{
     ViewData["Title"] = "Post Details";
@@ -12,7 +13,7 @@
                 <!-- Başlık ve Tarih -->
                 <h1 class="post-title text-center mb-3">@Model.Title</h1>
                 <p class="text-muted text-center">
-                    Published on @Model.DatePublished.ToString("MMMM dd, yyyy") <!-- Tarih formatını daha doğal yaptım -->
+                    Published on @Model.DatePublished.ToString("MMMM dd, yyyy")
                 </p>
                 <!-- Görüntü varsa göster -->
                 @if (!string.IsNullOrEmpty(Model.ImagePath))
@@ -21,20 +22,43 @@
                         <img src="@Model.ImagePath" alt="Post Image" class="img-fluid" />
                     </div>
                 }
-                <!-- Özet kısmı gerekirse eklenir, şu anda eklemiyorum çünkü kısa içerik olmasın dedin -->
                 <!-- İçerik kısmı -->
                 <div class="post-content mt-4">
                     <p>@Html.Raw(Model.Content)</p>
                 </div>
 
-             
+                <!-- Yorum Ekleme Formu -->
+                <form asp-action="AddCommentToPost" method="post">
+                    <input type="hidden" name="postId" value="@Model.Id" />
+                    <label for="commentContent">Yorumunuzu Yazın:</label>
+                    <textarea name="commentContent" id="commentContent" rows="4" required></textarea>
+                    <button type="submit" class="btn btn-success">Yorum Ekle</button>
+                </form>
+
+                <!-- Yorumları Göster -->
+                <div class="mt-4">
+                    <h3>Yorumlar:</h3>
+                    @foreach (var comment in Model.Comment)
+                    {
+                        <div class="comment mb-3 border p-3 rounded">
+                            <p><strong>@comment.AuthorId:</strong> @Html.Raw(comment.Content)</p>
+                            <small>@comment.DateCommented.ToString("MMMM dd, yyyy HH:mm")</small>
+                            <!-- Yorum Güncelleme Formu -->
+                            <form asp-action="UpdateComment" method="post" class="mt-2">
+                                <input type="hidden" name="postId" value="@Model.Id" />
+                                <input type="hidden" name="commentId" value="@comment.Id" />
+                                <textarea name="commentContent" rows="2">@comment.Content</textarea>
+                                <button type="submit" class="btn btn-warning">Yorum Güncelle</button>
+                            </form>
+                        </div>
+                    }
+                </div>
 
                 <!-- Geri butonu -->
                 <div class="text-center mt-5">
-                    <a href="@Url.Action("Index", "Post")" class="btn btn-primary">Back to Blog</a>
+                    <a href="@Url.Action("Index", "Home")" class="btn btn-primary">Geri Dön</a>
                 </div>
             </div>
         </div>
     </div>
 </div>
-

@@ -27,7 +27,32 @@ namespace Blog.Business.Concrete
         {
             return _repo.GetAll().ToList(); // Parametresiz versiyon
         }
+        public void AddCommentToPost(int postId, Comment comment)
+        {
+            var post = _repo.GetById(postId);
+            if (post != null)
+            {
+                post.Comment.Add(comment); // Yorumları eklemek için
+                _repo.Update(post);
+            }
+        }
 
-      
+        public void UpdateCommentInPost(int postId, Comment comment)
+        {
+            var post = _repo.GetById(postId);
+            if (post != null)
+            {
+                var existingComment = post.Comment.FirstOrDefault(c => c.Id == comment.Id);
+                if (existingComment != null)
+                {
+                    existingComment.Content = comment.Content; // Yorumu güncelle
+                    _repo.Update(post);
+                }
+            }
+        }
+        public Comment GetComment(int commentId)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

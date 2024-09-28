@@ -1,6 +1,6 @@
 ﻿using Blog.Web.Models;
 using Microsoft.AspNetCore.Mvc;
-
+using System.Security.Claims;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic; // IEnumerable için gerekli
@@ -58,6 +58,58 @@ namespace Blog.Web.Controllers
                 return NotFound();
             }
             return View(post);
+        }
+        public void AddCommentToPost(int postId, Comment comment)
+        {
+            var post = _postService.GetById(postId);
+            if (post != null)
+            {
+                // Post'un yorum koleksiyonu null değilse doğrudan ekle
+                if (post.Comment == null)
+                {
+                    post.Comment = new List<Comment>();
+                }
+
+                post.Comment.Add(comment); // Yorumları eklemek için
+                _postService.Update(post);
+            }
+        }
+
+        //[HttpPost]
+        //public IActionResult AddComment(int postId, string commentContent)
+        //{
+        //    // Kullanıcının ID'sini al
+        //    var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+        //    // Yeni yorumu oluştur
+        //    var comment = new Comment
+        //    {
+        //        Content = commentContent,
+        //        AuthorId = userId, // Kullanıcının kimliği buraya atanıyor
+        //        DateCommented = DateTime.Now
+        //    };
+
+        //    _postService.AddCommentToPost(postId, comment); // Servis üzerinden yorumu ekle
+        //    return RedirectToAction("PostDetails", new { id = postId });
+        //}
+
+        [HttpPost]
+        public IActionResult UpdateComment(int postId, int commentId, string commentContent)
+        {
+            // Kullanıcının ID'sini al
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            // Güncellenmiş yorumu oluştur
+            var updatedComment = new Comment
+            {
+                Id = commentId,
+                Content = commentContent,
+                AuthorId = userId, // Gerekli ise burada da kullanabilirsin
+                DateCommented = DateTime.Now
+            };
+
+            _postService.UpdateCommentInPost(postId, updatedComment); // Servis üzerinden yorumu güncelle
+            return RedirectToAction("PostDetails", new { id = postId });
         }
 
 
