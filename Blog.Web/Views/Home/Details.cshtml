@@ -1,17 +1,85 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿@model Blog.Core.Models.Post
 @{
+    ViewBag.Title = Model?.Title ?? "Post bulunamadı"; // Model'in null olması durumunda varsayılan bir başlık gösteriyoruz
 }
-@* @if (ViewBag.Comments != null && ViewBag.Comments.Any())
-{
-    foreach (var comment in ViewBag.Comments)
-    {
-        <p>@comment.Content</p>
-    }
-}
-else
-{
-    <p>Bu yazıya henüz yorum yapılmamış.</p>
-}
- *@
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-8">
+            <!-- Post Başlığı -->
+            <h1>@(Model?.Title ?? "Başlık bulunamadı")</h1>
+
+            <!-- Yayınlanma Tarihi ve Kategori -->
+            <p class="text-muted">
+                Yayınlanma Tarihi: @(Model?.DatePublished.ToShortDateString() ?? "Tarih yok") |
+                Kategori: @(Model?.Category?.Name ?? "Kategori yok")
+            </p>
+
+            <!-- Post Resmi -->
+            @if (!string.IsNullOrEmpty(Model?.ImagePath))
+            {
+                <img src="@Model.ImagePath" alt="Post Resmi" class="img-fluid" />
+            }
+
+            <!-- Post İçeriği -->
+            <div class="mt-3">
+                <p>@(Model?.Content ?? "İçerik bulunamadı")</p>
+            </div>
+
+            <!-- Beğeni Sayısı -->
+            <p class="mt-3">
+                <strong>Beğeni:</strong> @(Model?.Likes?.ToString() ?? "0")
+            </p>
+
+            <!-- Yorumlar -->
+            <section class="comments mt-4">
+                <h3>Yorumlar</h3>
+                @if (ViewBag.Comments != null && ViewBag.Comments.Count > 0)
+                {
+                    foreach (var comment in ViewBag.Comments)
+                    {
+                        <div class="comment mb-4 p-3 border rounded">
+                            <p><strong>@comment.AuthorName</strong></p>
+                            <p>@comment.Content</p>
+                            <p class="text-muted">@comment.DateCreated.ToShortDateString()</p>
+                        </div>
+                    }
+                }
+                else
+                {
+                    <p>Henüz yorum yapılmamış.</p>
+                }
+            </section>
+
+            <!-- Yorum Ekleme Formu -->
+            <section class="add-comment mt-5">
+                <h4>Yorum Yap</h4>
+                <form asp-action="AddComment" method="post">
+                    <input type="hidden" name="PostId" value="@Model?.Id" />
+                    <div class="form-group">
+                        <label for="commentContent">Yorumunuz</label>
+                        <textarea class="form-control" name="Content" rows="4" required></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary mt-3">Yorumu Gönder</button>
+                </form>
+            </section>
+        </div>
+
+        <!-- Kategoriler -->
+        <div class="col-md-4">
+            <h4>Kategoriler</h4>
+            <ul class="list-group">
+                @if (ViewBag.Categories != null)
+                {
+                    @foreach (var category in ViewBag.Categories)
+                    {
+                        <li class="list-group-item">
+                            <a href="@Url.Action("Index", "Home", new { categoryId = category.Id })">@category.Name</a>
+                        </li>
+                    }
+                }
+            </ul>
+        </div>
+    </div>
+</div>
+ 
