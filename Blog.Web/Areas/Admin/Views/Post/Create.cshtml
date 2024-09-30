@@ -16,13 +16,13 @@
 
     <div class="mb-3">
         <label for="Content" class="form-label">İçerik</label>
-        <textarea class="form-control" id="content" name="Content" rows="3" required>@Model?.Posts?.FirstOrDefault()?.Content</textarea>
+        <textarea class="form-control" id="content" name="Content" rows="20" required>@Model?.Posts?.FirstOrDefault()?.Content</textarea>
         <span id="content-error" style="color:red; display:none;">Alan boş bırakılamaz.</span>
     </div>
 
     <div class="mb-3">
         <label for="Summary" class="form-label">Kısa İçerik</label>
-        <textarea class="form-control" id="summary" name="Summary" rows="3" required>@Model?.Posts?.FirstOrDefault()?.Summary</textarea>
+        <textarea class="form-control" id="summary" name="Summary" rows="6" required>@Model?.Posts?.FirstOrDefault()?.Summary</textarea>
         <span id="summary-error" style="color:red; display:none;">Alan boş bırakılamaz.</span>
     </div>
 
