@@ -1,51 +1,85 @@
 ﻿@{
     ViewData["Title"] = "Admin Etiket Ekleme";
 }
-<h2>Etiketler</h2>
-<div>
-    <div class="modal fade" id="modal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false" role="dialog" aria-labelledby="modalTitleId" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-lg" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="modalTitle"></h5>
-                    <button type="button" class="btn-close emptyValue" data-bs-dismiss="modal" aria-label="Close"></button>
+
+<div class="main-content">
+    <div class="page-content">
+        <div class="container-fluid">
+            <!-- start page title -->
+            <div class="row">
+                <div class="col-12">
+                    <div class="page-title-box d-flex align-items-center justify-content-between">
+                        <h4 class="mb-0">Etiketler</h4>
+                        <div class="page-title-right">
+                            <ol class="breadcrumb m-0">
+                                <li class="breadcrumb-item"><a href="javascript: void(0);">Tables</a></li>
+                                <li class="breadcrumb-item active">Editable Table</li>
+                            </ol>
+                        </div>
+                    </div>
                 </div>
-                <input type="hidden" id="tagId" />
+            </div>
+            <!-- end page title -->
 
-                <div class="modal-body">
-                    <div class="mb-3 row">
-                        <label class="form-label">Etiket Adı: </label>
-                        <input type="text" id="name" placeholder="Lütfen Etiket Adı giriniz" class="form-control" required />
-                        <span id="name-error" style="color:red; display:none;">Alan boş bırakılamaz.</span>
-                    </div>
-                    <div class="mb-3 row">
-                        <label class="form-label">Etiket Açıklaması: </label>
-                        <input type="text" id="tagDescription" placeholder="Lütfen Etiket Açıklamasını giriniz" class="form-control" required />
-                        <span id="tagDescription-error" style="color:red; display:none;">Alan boş bırakılamaz.</span>
-                    </div>
-
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary emptyValue" data-bs-dismiss="modal">Kapat</button>
-                        <button type="button" id="btnSave" class="btn btn-primary">Kaydet</button>
+            <div class="row">
+                <div class="col-12">
+                    <div class="card bg-light text-dark">
+                        <div class="card-header">
+                            <div class="row">
+                                <div class="col-11">
+                                    <box-icon name="tag" color="dark" size="sm" animation="tada"></box-icon> Etiketlerim
+                                </div>
+                                <div class="col-1 text-end">
+                                    <a id="btnAdd" href="#" class="btn btn-outline-primary">+ Yeni Etiket</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table id="tblTags" class="table table-editable table-nowrap align-middle">
+                                    <thead>
+                                        <tr>
+                                            <th>Etiket Adı</th>
+                                            <th>Etiket Açıklaması</th>
+                                            <th>İşlemler</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody></tbody>
+                                </table>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+</div>
 
-    <div class="card bg-dark text-white">
-        <div class="card-header bg-dark text-white">
-            <div class="row">
-                <div class="col-11">
-                    <box-icon name="car" color="white" size="sm" animation="tada"></box-icon> Kategorilerim
+<div class="modal fade" id="modal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false" role="dialog" aria-labelledby="modalTitleId" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalTitle"></h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <input type="hidden" id="tagId" />
+
+            <div class="modal-body">
+                <div class="mb-3 row">
+                    <label class="form-label">Etiket Adı: </label>
+                    <input type="text" id="name" placeholder="Lütfen Etiket Adı giriniz" class="form-control" required />
+                    <span id="name-error" style="color:red; display:none;">Alan boş bırakılamaz.</span>
                 </div>
-                <div class="col-1 text-end">
-                    <a id="btnAdd" href="#" class="btn btn-outline-light">+ Yeni Kategori</a>
+                <div class="mb-3 row">
+                    <label class="form-label">Etiket Açıklaması: </label>
+                    <input type="text" id="tagDescription" placeholder="Lütfen Etiket Açıklamasını giriniz" class="form-control" required />
+                    <span id="tagDescription-error" style="color:red; display:none;">Alan boş bırakılamaz.</span>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Kapat</button>
+                    <button type="button" id="btnSave" class="btn btn-primary">Kaydet</button>
                 </div>
             </div>
-        </div>
-        <div class="card-body">
-            <table id="tblTags" class="table table-hover table-striped table-bordered"></table>
         </div>
     </div>
 </div>
@@ -74,17 +108,17 @@
                         title: 'İşlemler',
                         render: function (data, type, row) {
                             return `
-                                    <a href="#" class="btn btn-sm btn-warning editTag" data-id="${row.id}">Düzenle</a>
-                                    <a href="#" class="btn btn-sm btn-danger deleteTag" data-id="${row.id}">Sil</a>
-                                `;
+                                                <a href="#" class="btn btn-sm btn-warning editTag" data-id="${row.id}">Düzenle</a>
+                                                <a href="#" class="btn btn-sm btn-danger deleteTag" data-id="${row.id}">Sil</a>
+                                            `;
                         }
                     }
                 ]
             });
 
-            // Yeni Kategori Ekle butonuna tıklama işlemi
+            // Yeni Etiket Ekle butonuna tıklama işlemi
             $('#btnAdd').click(function () {
-                $('#modalTitle').text('Yeni Kategori Ekle');
+                $('#modalTitle').text('Yeni Etiket Ekle');
                 $('#btnSave').text('Ekle');
                 $('#modal').modal('show');
                 // Modal açıldığında input'ları temizle
@@ -103,11 +137,11 @@
                         $('#name').val(res.name);
                         $('#tagDescription').val(res.tagDescription);
                         $('#tagId').val(res.id);
+                        $('#modalTitle').text('Etiket Düzenle');
+                        $('#btnSave').text('Güncelle');
+                        $('#modal').modal('show');
                     }
                 });
-                $('#modalTitle').text('Etiket Düzenle');
-                $('#btnSave').text('Güncelle');
-                $('#modal').modal('show');
             });
 
             // Etiket silme işlemi
@@ -141,7 +175,6 @@
             // Kaydet butonuna tıklama işlemi
             $('#btnSave').click(function () {
                 var tag = {
-
                     id: $("#tagId").val() === '' ? 0 : $("#tagId").val(),
                     name: $('#name').val(),
                     tagDescription: $('#tagDescription').val()
@@ -171,9 +204,9 @@
 
                 var url = $('#btnSave').text().toLowerCase() === 'ekle'
                     ? '/Admin/Tag/Add'
-                    : '/Admin/Tag/Update/'+tagId;
+                    : '/Admin/Tag/Update/' + tag.id;
                 var method = $('#btnSave').text().toLowerCase() === 'ekle' ? 'POST' : 'PUT';
-                console.log(tag)
+
                 // AJAX ile kaydetme işlemi
                 $.ajax({
                     type: method,
