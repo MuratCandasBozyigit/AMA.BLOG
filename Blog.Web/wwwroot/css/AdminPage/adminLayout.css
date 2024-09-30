@@ -4,6 +4,7 @@
     color: #333333; /* Yazı rengini koyu gri yaparak okunabilirliği artırdık */
     font-family: Arial, sans-serif; /* Yazı tipi */
     line-height: 1.6; /* Satır yüksekliği */
+    color: aquamarine;
 }
 header {
     background-color: lightcyan !important;
@@ -20,6 +21,7 @@ header {
 }
 
 .nav-link {
+    color: aquamarine;
     color: #5b4d36; /* Navbar bağlantı rengi koyu kahverengi */
     text-decoration: none; /* Altını çizme efektini kaldır */
 }
