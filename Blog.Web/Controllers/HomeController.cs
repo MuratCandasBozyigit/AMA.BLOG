@@ -48,6 +48,29 @@ namespace Blog.Web.Controllers
             }
         }
 
+        //PostDetaişlsViewinde kullanacagım.
+        //[HttpGet]
+        //public IActionResult Details(int postId)
+        //{
+        //    try
+        //    {
+        //        // Post detaylarını al
+        //        var post = _postService.GetPostDetails(postId); // Doğrudan Post nesnesini al
+
+        //        if (post == null)
+        //        {
+        //            return NotFound(); // Post bulunamazsa 404 döndür
+
+        //        }
+        //        return View(post);
+        //    } // Tekil postu görünüm ile paylaş
+
+        //    catch (Exception ex)
+        //    {
+        //        ViewBag.ErrorMessage = "Post yüklenirken bir hata oluştu. Lütfen tekrar deneyin.";
+        //        return View("Error");
+        //    }
+        //}
 
         public class HomeViewModel
         {
