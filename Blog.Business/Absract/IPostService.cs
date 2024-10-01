@@ -14,6 +14,7 @@ namespace Blog.Business.Absract
         ICollection<Post> GetAllPosts();
         ICollection<Post> GetAllPosts(Post post);
         ICollection<Post> GetAllPostsByCategoryId(int postId);
+        Post GetPostDetails(int postId);
       
     }
 }
