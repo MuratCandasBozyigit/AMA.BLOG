@@ -12,11 +12,12 @@ namespace Blog.Web.Controllers
             _postService = postService;
         }
 
+        [HttpGet]
         public IActionResult Index()
         {
             return View();
         }
-        //Post detayını getir
-        public IActionResult Details() { return View(); }
+        ////Post detayını getir
+        //public IActionResult Details() { return View(); }
     }
 }

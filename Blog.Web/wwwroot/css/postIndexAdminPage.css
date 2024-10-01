@@ -11,7 +11,12 @@ h2 {
     text-align: center;
     color: #007bff; /* Başlık rengi */
 }
-
+.limited-text {
+    width: 50ch; /* Maksimum 30 karakter genişliğinde */
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
 /*#region Post */
 
 /* Post Listesi */

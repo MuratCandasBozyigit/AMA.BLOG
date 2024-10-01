@@ -11,7 +11,7 @@
             <div class="post-item">
                 <div class="post-content">
                     <h3>@(post.Title ?? "Başlık Yok")</h3> <!-- Null kontrolü -->
-                    <p class="post-summary"><strong>Özet:</strong> @(post.Summary ?? "Özet Yok")</p> <!-- Null kontrolü -->
+                    <p class="post-summary limited-text" id="summary"><strong>Özet:</strong> @(post.Summary ?? "Özet Yok")</p> <!-- Null kontrolü -->
                     <p><strong>Kategori:</strong> @(post.Category?.Name ?? "Kategori Yok")</p> <!-- Null kontrolü -->
                     <div class="post-actions">
                         <a href="Edit/@post.Id" class="btn btn-secondary">Düzenle</a>
@@ -33,6 +33,12 @@
 
 @section Scripts {
     <script>
+        let element = document.getElementById("summary");
+        let text = element.innerText;
+        if (text.length > 30) {
+            element.innerText = text.substring(0, 30) + '...'; 
+        }
+
         $(document).ready(function () {
             $('#tblPosts').on('click', '.deletePost', function () {
                 var id = $(this).data('id');
