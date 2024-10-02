@@ -1,0 +1,76 @@
+﻿.post-container {
+    width: 90%; /* Genişliği biraz artırdık */
+    max-width: 1000px; /* Maksimum genişliği artırdık */
+    margin: 0 auto;
+    background-color: #f9f9f9;
+    padding: 25px; /* İç boşluğu biraz artırdık */
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+}
+
+.post-title {
+    font-size: 2.5em;
+    color: #333;
+    text-align: center;
+    margin-bottom: 25px;
+}
+
+.post-image {
+    width: 100%;
+    height: auto;
+    display: block;
+    margin: 0 auto 25px;
+    border-radius: 10px;
+}
+
+.post-meta {
+    font-size: 1em;
+    color: #777;
+    text-align: center;
+    margin-bottom: 25px;
+}
+
+.post-category,
+.post-category-description,
+.post-date {
+    margin: 8px 0;
+}
+
+.post-content {
+    font-size: 1.2em;
+    line-height: 1.8;
+    color: #444;
+    margin-bottom: 25px;
+}
+
+
+.post-actions {
+    display: flex;
+    justify-content: flex-start; /* Sol tarafa hizalıyoruz */
+    align-items: center; /* Yatay hizalamayı merkezliyoruz */
+    margin-top: 20px;
+    border-top: 1px solid #eee;
+    padding-top: 15px;
+}
+
+.post-likes {
+    font-size: 1.1em;
+    color: #666;
+    margin-right: 20px; /* Beğeniler ile yorum butonu arasına boşluk ekliyoruz */
+}
+
+.comment-button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1em;
+}
+
+    .comment-button:hover {
+        background-color: #0056b3;
+    }

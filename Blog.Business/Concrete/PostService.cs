@@ -4,6 +4,7 @@ using Blog.Core.Models;
 using Blog.Data.Shared.Abstract;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -28,6 +29,14 @@ namespace Blog.Business.Concrete
             return _repo.GetAll().ToList(); // Parametresiz versiyon
         }
 
-      
+        public Post GetPostDetails(int postId)
+        {
+            return _repo.GetAll()
+                .Include(p => p.Category) // İlgili Category nesnesini dahil et
+                .FirstOrDefault(p => p.Id == postId); // Tekil postu ID'ye göre bul
+        }
+
+
+
     }
 }

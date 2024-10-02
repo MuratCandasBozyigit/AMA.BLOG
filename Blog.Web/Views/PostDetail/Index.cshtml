@@ -1,0 +1,18 @@
+﻿<div class="post-container">
+    <h1 class="post-title">@Model.Title</h1>
+    <img class="post-image" src="@Model.ImagePath" alt="Post Image" />
+    <div class="post-meta">
+        <p class="post-date">Yayınlanma Tarihi: @Model.DatePublished</p>
+        <p class="post-category">Kategori: @Model.Category?.Name</p>
+        <p class="post-category-description">Kategori Açıklaması: @Model.Category?.Description</p>
+    </div>
+    <p class="post-content">@Model.Content</p>
+    <div class="post-actions">
+        <p class="post-likes">Beğeniler: @Model.Likes</p>
+        <button class="comment-button">Yorum Yap</button>
+    </div>
+</div>
+
+@section Css {
+    <link rel="stylesheet" href="~/css/HomePage/Post/postDetailsPage.css" asp-append-version="true" />
+}
