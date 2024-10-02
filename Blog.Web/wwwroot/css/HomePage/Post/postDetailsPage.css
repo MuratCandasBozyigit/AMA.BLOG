@@ -62,15 +62,17 @@
 }
 
 .comment-button {
-    background-color: #007bff;
-    color: white;
-    border: none;
-    padding: 10px 15px;
+    background-color: rgb(82, 49, 49);
+    color: antiquewhite;
+    border: 2px solid #297f81 ;
+    padding: 5px 8px;
     border-radius: 5px;
     cursor: pointer;
     font-size: 1em;
 }
 
     .comment-button:hover {
-        background-color: #0056b3;
+        background-color: #777;
+        color:whitesmoke;
+        border:3px solid #2f6a7b ;
     }
