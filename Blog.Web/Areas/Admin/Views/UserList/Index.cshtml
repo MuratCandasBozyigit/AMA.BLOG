@@ -1,0 +1,23 @@
+﻿@model IEnumerable<ApplicationUser>
+
+<h2>Kullanıcılar Listesi</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Kullanıcı Adı</th>
+            <th>Email</th>
+            <th>Admin</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var user in Model)
+        {
+            <tr>
+                <td>@user.UserName</td>
+                <td>@user.Email</td>
+                <td>@user.IsAdmin</td>
+            </tr>
+        }
+    </tbody>
+</table>
