@@ -7,17 +7,21 @@ namespace Blog.Web.Areas.Admin.Controllers
 {
     public class UserListController : Controller
     {
-        private readonly UserManager<IdentityUser> _userManager;
+        //private readonly UserManager<IdentityUser> _userManager;
 
-        public UserListController(UserManager<IdentityUser> userManager)
-        {
-            _userManager = userManager;
-        }
+        //public UserListController(UserManager<IdentityUser> userManager)
+        //{
+        //    _userManager = userManager;
+        //}
 
-        public async Task<IActionResult> Index()
+        //public async Task<IActionResult> Index()
+        //{
+        //    var users = await _userManager.Users.ToListAsync();
+        //    return View(users);
+        //}
+        public IActionResult Index()
         {
-            var users = await _userManager.Users.ToListAsync();
-            return View(users);
+            return View();
         }
     }
 }
