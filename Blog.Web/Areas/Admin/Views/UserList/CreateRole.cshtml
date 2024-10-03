@@ -135,11 +135,11 @@
                 } else {
                     $('#description-error').hide();
                 }
-
-                var ajaxUrl = roleId === "" ? "/Admin/UserList/CreateRole" : "/Admin/UserList/UpdateRoleAsync";
+               
+                var ajaxUrl = roleId === "" ? "/Admin/UserList/CreateRole" : "/Admin/UserList/UpdateRoleAsync?roleId="+roleId;
                 var requestData = JSON.stringify({
-                    roleId: roleId,
-                    roleName: roleName,
+                    
+                   roleName: roleName,
                     description: description
                 });
 
@@ -148,7 +148,7 @@
                     type: "POST",
                     url: ajaxUrl,
                     contentType: 'application/json',
-                    data: requestData,
+                     data: requestData,
                     success: function (response) {
                         $('#modal').modal('hide');
                         $('#tblAspNetRoles').DataTable().ajax.reload(); // Güncellenmiş tablo ID'si
@@ -163,12 +163,12 @@
             // Düzenleme Butonuna Tıklama
             $(document).on('click', '.editRole', function () {
                 var roleId = $(this).data('id');
-
+              
                 // Rolü Getir ve Formu Doldur
                 $.ajax({
                     type: "GET",
-                    url: "/Admin/UserList/GetRoleById", // Doğru URL
-                    data: { roleId: roleId },
+                    url: "/Admin/UserList/GetRoleById?roleId="+roleId, // Doğru URL
+                   
                     success: function (role) {
                         $('#modalTitle').text("Düzenle Rol");
                         $('#roleId').val(role.id);
@@ -185,7 +185,7 @@
             // Silme Butonuna Tıklama
             $(document).on('click', '.deleteRole', function () {
                 var roleId = $(this).data('id');
-                console.log(roleId);
+               
                 Swal.fire({
                     title: 'Emin misiniz?',
                     text: "Bu işlem geri alınamaz!",

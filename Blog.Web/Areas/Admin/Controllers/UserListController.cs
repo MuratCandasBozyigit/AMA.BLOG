@@ -42,8 +42,8 @@ namespace Blog.Web.Areas.Admin.Controllers
         #endregion
 
         #region GetRoleById
-        [HttpGet]
-        public async Task<IActionResult> GetRoleById(string roleId)
+        [HttpGet("GetRoleById")]
+        public async Task<IActionResult> GetRoleById([FromQuery]string roleId)
         {
             if (string.IsNullOrEmpty(roleId))
                 return BadRequest("Role ID cannot be null or empty");
@@ -58,8 +58,8 @@ namespace Blog.Web.Areas.Admin.Controllers
         #endregion
 
         #region Update 
-        [HttpPut("UpdateRoleAsync")]
-        public async Task<IActionResult> UpdateRoleAsync(string roleId, [FromBody] ApplicationRole model)
+        [HttpPost("UpdateRoleAsync")]
+        public async Task<IActionResult> UpdateRoleAsync([FromQuery] string roleId, [FromBody] ApplicationRole model)
         {
             if (roleId == null || model == null)
             {
@@ -77,6 +77,7 @@ namespace Blog.Web.Areas.Admin.Controllers
                 }
 
                 // Rol bilgilerini güncelle
+              
                 existingRole.RoleName = model.RoleName;
                 existingRole.Description = model.Description;
                 existingRole.Name = model.RoleName; // Name property is optional
