@@ -18,6 +18,12 @@ builder.Services.AddHttpContextAccessor();
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
+builder.Services.ConfigureApplicationCookie(options =>
+{
+    options.AccessDeniedPath = "/account/login";
+    options.LoginPath = "/account/login";   
+});
+
 // Configure DbContext
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
@@ -53,6 +59,7 @@ if (!app.Environment.IsDevelopment())
     app.UseExceptionHandler("/Home/Error");
     app.UseHsts();
 }
+
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
