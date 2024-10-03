@@ -1,22 +1,16 @@
 ﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations; // Bu satırı ekleyin
 
 namespace Blog.Core.Models
 {
     public class Category : BaseModel
     {
+        [Required(ErrorMessage = "Kategori adı gereklidir.")]
         public string Name { get; set; }
+
+        [Required(ErrorMessage = "Açıklama gereklidir.")]
         public string Description { get; set; }
-        public string Slug { get; set; }
-        public int? ParentCategoryId { get; set; }
 
-
-        //  Etiketleri category de birden fazla secebilmek icin
-        // public virtual ICollection<Tag> Tag { get; set; }
-
-        //public int AppUserId { get; set; }
-        //public virtual AppUser AppUser { get; set; }
-
-        // Kategoriye ait postlar
-        //public virtual ICollection<Post> Posts { get; set; }
+        public List<Tag> Tags { get; set; } = new List<Tag>();
     }
 }

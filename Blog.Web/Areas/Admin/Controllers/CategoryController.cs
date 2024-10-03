@@ -1,7 +1,9 @@
 ﻿using Blog.Business.Absract;
-using Blog.Business.Concrete;
 using Blog.Core.Models;
 using Microsoft.AspNetCore.Mvc;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Blog.Web.Areas.Admin.Controllers
 {
@@ -10,18 +12,23 @@ namespace Blog.Web.Areas.Admin.Controllers
     public class CategoryController : Controller
     {
         private readonly ICategoryService _categoryService;
+        private readonly ITagService _tagService;
 
-        public CategoryController(ICategoryService categoryService)
+        public CategoryController(ICategoryService categoryService, ITagService tagService)
         {
             _categoryService = categoryService;
+            _tagService = tagService;
         }
 
-        #region Tamamlandı 
         // GET: Admin/Category
         [HttpGet]
         public IActionResult Index()
         {
-            return View();
+            var model = new Category
+            {
+                Tags = _tagService.GetAll()
+            };
+            return View(model);
         }
 
         // GET: Admin/Category/GetAllCategories
@@ -39,24 +46,26 @@ namespace Blog.Web.Areas.Admin.Controllers
             }
         }
 
+        // DELETE: Admin/Category/Delete/{id}
         [HttpDelete("Delete/{id}")]
         public IActionResult Delete(int id)
         {
-            if (id == null)
+            if (id <= 0)
             {
                 return BadRequest("Invalid ID format.");
             }
 
-            var iD = _categoryService.GetFirstOrDefault(i => i.Id == id);
-            if (iD == null)
+            var category = _categoryService.GetFirstOrDefault(i => i.Id == id);
+            if (category == null)
             {
-                return NotFound("Color not found.");
+                return NotFound("Category not found.");
             }
 
-            _categoryService.Delete(iD.Id);
-            return Ok(iD);
+            _categoryService.Delete(category.Id);
+            return Ok(category);
         }
 
+        // PUT: Admin/Category/Update/{id}
         [HttpPut("Update/{id}")]
         public IActionResult Update(int id, [FromBody] Category category)
         {
@@ -68,7 +77,7 @@ namespace Blog.Web.Areas.Admin.Controllers
             try
             {
                 _categoryService.Update(category);
-                return Ok();
+                return Ok(category);
             }
             catch (Exception ex)
             {
@@ -76,20 +85,21 @@ namespace Blog.Web.Areas.Admin.Controllers
             }
         }
 
-
+        // GET: Admin/Category/GetById/{id}
         [HttpGet("GetById/{id}")]
         public IActionResult GetById(int id)
         {
-            if (id == 0)
+            if (id <= 0)
             {
-                return BadRequest("Invalid Id Format");
+                return BadRequest("Invalid ID format.");
             }
+
             try
             {
                 var category = _categoryService.GetById(id);
                 if (category == null)
                 {
-                    return NotFound();
+                    return NotFound("Category not found.");
                 }
                 return Ok(category);
             }
@@ -99,28 +109,32 @@ namespace Blog.Web.Areas.Admin.Controllers
             }
         }
 
-        #endregion
-
-
-        [HttpPost("Add")]
-        public IActionResult Add([FromBody]Category category)
+        // POST: Admin/Category/Add
+        [HttpPost]
+        public IActionResult Add([FromBody] Category category)
         {
-            
-                try
+            if (category == null)
+            {
+                return BadRequest("Invalid category data.");
+            }
+
+
+            try
+            {
+                // If tags are null or empty, create a new list
+                if (category.Tags == null || !category.Tags.Any())
                 {
-                   var categories = _categoryService.Add(category);
-                    return Ok(categories);
-                }
-                catch (Exception ex)
-                {
-                    return StatusCode(500, $"Internal category server error: {ex.Message}");
+                    category.Tags = new List<Tag>();
                 }
 
+                var addedCategory = _categoryService.Add(category);
+                return CreatedAtAction(nameof(GetById), new { id = addedCategory.Id }, addedCategory);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
         }
-
-
-
-
 
     }
 }
