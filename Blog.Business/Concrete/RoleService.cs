@@ -9,16 +9,16 @@ namespace Blog.Core.Services
     public class RoleService : IRoleService
     {
         private readonly RoleManager<ApplicationRole> _roleManager;
-       
+
         public RoleService(RoleManager<ApplicationRole> roleManager)
         {
             _roleManager = roleManager;
         }
 
-      
-        public async Task<List<ApplicationRole>> GetAllRolesAsync()
+
+        public  List<ApplicationRole> GetAllRoles()
         {
-            return await _roleManager.Roles.ToListAsync(); // Tüm rolleri döndür
+            return _roleManager.Roles.ToList(); // Tüm rolleri döndür
         }
 
         public async Task<IdentityResult> CreateRoleAsync(ApplicationRole role)

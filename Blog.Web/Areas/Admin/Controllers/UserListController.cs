@@ -5,19 +5,23 @@ using Blog.Core.Models;
 using Blog.Core.Services;
 using System.Threading.Tasks;
 using Blog.Business.Concrete;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Blog.Web.Areas.Admin.Controllers
 {
     [Area("Admin")]
+    [Route("Admin/[controller]")]
     public class UserListController : Controller
     {
+        private readonly RoleManager<ApplicationRole> _roleManager;
         private readonly IRoleService _roleService;
         private readonly UserManager<AppUser> _userManager; // Use your AppUser if you are using it
 
-        public UserListController(IRoleService roleService, UserManager<AppUser> userManager)
+        public UserListController(IRoleService roleService, UserManager<AppUser> userManager, RoleManager<ApplicationRole> roleManager)
         {
             _roleService = roleService;
             _userManager = userManager;
+            _roleManager = roleManager;
         }
 
         public async Task<IActionResult> Index()
@@ -29,10 +33,10 @@ namespace Blog.Web.Areas.Admin.Controllers
 
         #region GetALLRoles 
        
-        [HttpGet]
-        public async Task<IActionResult> GetAllRolesAsync()
+        [HttpGet("GetAllRolesAsync")]
+        public  IActionResult GetAllRolesAsync()
         {
-            var roles = await _roleService.GetAllRolesAsync();
+           var roles =  _roleManager.Roles.ToList();
             return Json(roles);
         }
         #endregion
@@ -54,7 +58,7 @@ namespace Blog.Web.Areas.Admin.Controllers
         #endregion
 
         #region Update 
-        [HttpPost]
+        [HttpPut("UpdateRoleAsync")]
         public async Task<IActionResult> UpdateRoleAsync(string roleId, [FromBody] ApplicationRole model)
         {
             if (roleId == null || model == null)
@@ -96,7 +100,13 @@ namespace Blog.Web.Areas.Admin.Controllers
         #endregion
 
         #region CreateRole 
-        [HttpPost]
+        [HttpGet("CreateRole")]
+        public IActionResult CreateRole()
+        {
+            return View();
+        }
+
+        [HttpPost("CreateRole")]
         public async Task<IActionResult> CreateRole([FromBody] ApplicationRole model)
         {
             if (ModelState.IsValid)
@@ -124,8 +134,8 @@ namespace Blog.Web.Areas.Admin.Controllers
         #endregion
 
         #region DeleteRole 
-        [HttpPost]
-        public async Task<IActionResult> DeleteAsyncRoles(string roleId)
+        [HttpPost("DeleteAsyncRoles")]
+        public async Task<IActionResult> DeleteAsyncRoles([FromBody]string roleId)
         {
             if (string.IsNullOrEmpty(roleId))
             {
