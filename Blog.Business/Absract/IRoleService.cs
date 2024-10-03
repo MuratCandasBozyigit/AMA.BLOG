@@ -11,5 +11,6 @@ namespace Blog.Core.Services
         Task<IdentityResult> CreateRoleAsync(ApplicationRole role); // Rol oluştur
         Task<IdentityResult> DeleteRoleAsync(string roleId); // Rol sil
         Task<ApplicationRole> GetRoleByIdAsync(string roleId); // Rolü ID ile bul
+        Task<IdentityResult> UpdateRoleAsync(ApplicationRole role);
     }
 }

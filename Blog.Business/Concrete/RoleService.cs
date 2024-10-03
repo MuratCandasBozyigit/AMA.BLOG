@@ -30,6 +30,20 @@ namespace Blog.Core.Services
             var role = await _roleManager.FindByIdAsync(roleId); // Rolü bul
             return await _roleManager.DeleteAsync(role); // Rolü sil
         }
+        public async Task<IdentityResult> UpdateRoleAsync(ApplicationRole role)
+        {
+            var existingRole = await _roleManager.FindByIdAsync(role.Id);
+
+            if (existingRole != null)
+            {
+                existingRole.Name = role.Name;
+                existingRole.NormalizedName = role.NormalizedName;
+                existingRole.Description = role.Description; // ApplicationRole modeline göre
+
+                return await _roleManager.UpdateAsync(existingRole);
+            }
+            return IdentityResult.Failed(new IdentityError { Description = "Rol bulunamadı." });
+        }
 
         public async Task<ApplicationRole> GetRoleByIdAsync(string roleId)
         {

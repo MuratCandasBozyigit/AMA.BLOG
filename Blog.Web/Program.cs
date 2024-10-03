@@ -22,7 +22,6 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-// Configure Identity for AppUser and ApplicationRole
 builder.Services.AddIdentity<AppUser, ApplicationRole>(options =>
 {
     options.Password.RequireNonAlphanumeric = false;
@@ -36,6 +35,7 @@ builder.Services.AddIdentity<AppUser, ApplicationRole>(options =>
 })
 .AddEntityFrameworkStores<ApplicationDbContext>()
 .AddDefaultTokenProviders();
+
 
 // Register RoleManager and RoleService
 builder.Services.AddScoped<RoleManager<ApplicationRole>>();
