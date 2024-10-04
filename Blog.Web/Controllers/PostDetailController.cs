@@ -1,39 +1,43 @@
 ﻿using Blog.Business.Absract;
 using Blog.Core.Models;
 using Blog.Core.ViewModels;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Blog.Web.Controllers
 {
+  // [Authorize] 
     public class PostDetailController : Controller
     {
         private readonly IPostService _postService;
         private readonly ICategoryService _categoryService;
-        private readonly ICommentService _commentService; // Yorum servisi eklendi
+        private readonly ICommentService _commentService; // Yorum servisi
+        private readonly UserManager<AppUser> _userManager; // Kullanıcı yöneticisi
 
-        public PostDetailController(IPostService postService, ICategoryService categoryService, ICommentService commentService)
+        public PostDetailController(IPostService postService, ICategoryService categoryService, ICommentService commentService, UserManager<AppUser> userManager)
         {
             _postService = postService;
             _categoryService = categoryService;
-            _commentService = commentService; // Yorum servisi kullanıma alındı
+            _commentService = commentService;
+            _userManager = userManager; // Kullanıcı yöneticisini kullanıma al
         }
 
         [HttpGet]
-        public async Task<IActionResult> Index(int postId) // async eklendi
+        public async Task<IActionResult> Index(int postId)
         {
             try
             {
                 // Post detaylarını al
                 var post = await _postService.GetPostDetails(postId);
 
-
                 if (post == null)
                 {
                     return NotFound(); // Post bulunamazsa 404 döndür
                 }
 
-                // Post'tan kategori kimliğini al ve kategoriyi getir
-                var category = await _categoryService.GetByIdAsync(post.CategoryId); // Asenkron metod çağrıldı
+                // Kategoriyi al
+                var category = await _categoryService.GetByIdAsync(post.CategoryId);
                 if (category == null)
                 {
                     return NotFound("Kategori bulunamadı."); // Kategori bulunamazsa 404 döndür
@@ -46,8 +50,8 @@ namespace Blog.Web.Controllers
                 var viewModel = new PostDetailsViewModel
                 {
                     Post = post,
-                    Comments = comments.ToList(), // IEnumerable'ı listeye çeviriyoruz
-                    CategoryName = category.Name // Kategori ismi ViewBag yerine ViewModel üzerinden paylaşıldı
+                    Comments = comments.ToList(),
+                    CategoryName = category.Name
                 };
 
                 return View(viewModel); // Tekil postu ve yorumları görünüm ile paylaş
@@ -62,13 +66,22 @@ namespace Blog.Web.Controllers
         [HttpPost]
         public async Task<IActionResult> AddComment(Comment comment)
         {
-            if (ModelState.IsValid)
+            // Kullanıcının giriş yapıp yapmadığını kontrol et
+            if (!User.Identity.IsAuthenticated)
             {
-                await _commentService.AddAsync(comment); // Comment servisini kullanarak ekleme işlemi
-                return RedirectToAction("Index", new { postId = comment.PostId }); // Yorum eklendikten sonra post detay sayfasına yönlendirin
+                // Giriş yapmamışsa hata mesajı ekle
+                ModelState.AddModelError("", "Yorum yapabilmek için giriş yapmalısınız.");
+                return RedirectToAction("Index", new { postId = comment.PostId });
             }
 
-            // Eğer model geçersizse, aynı sayfaya geri dön
+            if (ModelState.IsValid)
+            {
+                comment.DateCommented = DateTime.Now; // Yorum tarihi ayarla
+                await _commentService.AddAsync(comment); // Yorum servisi ile ekleme
+                return RedirectToAction("Index", new { postId = comment.PostId }); // Yorum eklendikten sonra post detay sayfasına yönlendir
+            }
+
+            // Eğer model geçersizse aynı sayfaya geri dön
             return RedirectToAction("Index", new { postId = comment.PostId });
         }
     }

@@ -1,19 +1,25 @@
-﻿<div class="post-container">
+﻿@using System.Linq
+@model Blog.Core.ViewModels.PostDetailsViewModel
+
+<div class="post-container">
     <h1 class="post-title">@Model.Post.Title</h1>
     <img class="post-image" src="@Model.Post.ImagePath" alt="Post Image" />
+
     <div class="post-meta">
-        <p class="post-date">Yayınlanma Tarihi: @Model.Post.DatePublished</p>
-        <p class="post-category">Kategori: @Model.Post.Category?.Name</p>
+        <p class="post-date">Yayınlanma Tarihi: @Model.Post.DatePublished.ToString("dd MMMM yyyy")</p>
+        <p class="post-category">Kategori: @Model.CategoryName</p>
         <p class="post-category-description">Kategori Açıklaması: @Model.Post.Category?.Description</p>
     </div>
+
     <p class="post-content">@Model.Post.Content</p>
+
     <div class="post-actions">
         <p class="post-likes">Beğeniler: @Model.Post.Likes</p>
         <button class="comment-button">Yorum Yap</button>
     </div>
 
     <h3>Yorumlar</h3>
-    @if (Model.Comments != null && Model.Comments.Any())
+    @if (Model.Comments != null && Model.Comments.Count() > 0)
     {
         foreach (var comment in Model.Comments)
         {
@@ -29,14 +35,16 @@
     }
 
     <h4>Yorum Yap</h4>
-    <form asp-action="CreateComment" method="post">
-        <input type="hidden" name="PostId" value="@Model.Post.Id" />
-        <div>
-            <label for="Content">Yorumunuz:</label>
-            <textarea name="Content" required></textarea>
-        </div>
-        <button type="submit">Yorumu Gönder</button>
-    </form>
+    <div class="comment-form-container">
+        <form asp-action="AddComment" method="post">
+            <input type="hidden" name="PostId" value="@Model.Post.Id" />
+            <div class="form-group">
+                <label for="Content">Yorumunuz:</label>
+                <textarea name="Content" required></textarea>
+            </div>
+            <button type="submit" class="submit-button">Yorumu Gönder</button>
+        </form>
+    </div>
 </div>
 
 @section Css {
