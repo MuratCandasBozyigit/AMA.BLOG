@@ -10,5 +10,7 @@ namespace Blog.Business.Absract
     public interface IUserService
     {
         Task<List<AppUser>> GetAllUsersAsync();
+        Task<AppUser> DeleteUserAsync(string userId);
+        Task<AppUser> UpdateUserAsync(AppUser user);
     }
 }
