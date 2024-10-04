@@ -6,6 +6,7 @@ using Blog.Core.Services;
 using System.Threading.Tasks;
 using Blog.Business.Concrete;
 using Microsoft.AspNetCore.Authorization;
+using Blog.Business.Absract;
 
 namespace Blog.Web.Areas.Admin.Controllers
 {
@@ -15,20 +16,22 @@ namespace Blog.Web.Areas.Admin.Controllers
     {
         private readonly RoleManager<ApplicationRole> _roleManager;
         private readonly IRoleService _roleService;
+        private readonly IUserService _userService;
         private readonly UserManager<AppUser> _userManager; // Use your AppUser if you are using it
 
-        public UserListController(IRoleService roleService, UserManager<AppUser> userManager, RoleManager<ApplicationRole> roleManager)
+        public UserListController(IRoleService roleService, UserManager<AppUser> userManager, RoleManager<ApplicationRole> roleManager, IUserService userService)
         {
             _roleService = roleService;
             _userManager = userManager;
             _roleManager = roleManager;
+            _userService = userService;
         }
 
         public async Task<IActionResult> Index()
         {
             // Fetch list of users from UserManager
-            var users = await _userManager.Users.ToListAsync();
-            return View(users); // Pass the list of users to the view
+            var users = await _userService.GetAllUsersAsync();
+            return View(users);
         }
 
         #region GetALLRoles 

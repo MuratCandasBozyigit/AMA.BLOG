@@ -29,6 +29,7 @@ namespace Blog.Business.Configuration
             services.AddScoped<IPostService, PostService>();
             services.AddScoped<ITagService, TagService>();
             services.AddScoped<IRoleService, RoleService>();
+            services.AddScoped<IUserService, UserService>();
         }
         public static void RepositoryDI(this IServiceCollection services)
         {
