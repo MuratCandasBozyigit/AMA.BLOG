@@ -3,39 +3,60 @@ using Blog.Business.Shared.Concrete;
 using Blog.Core.Models;
 using Blog.Data.Shared.Abstract;
 using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace Blog.Business.Concrete
 {
-    public class PostService(IRepository<Post> postRepo) : Service<Post>(postRepo), IPostService
+    public class PostService : Service<Post>, IPostService
     {
-        private readonly IRepository<Post> _repo = postRepo;
-        public ICollection<Post> GetAllPosts(Post post)
+        private readonly IRepository<Post> _postRepo;
+        private readonly IRepository<Category> _categoryRepo; // Kategori repository'si
+        private readonly IRepository<Comment> _commentRepo; // Yorum repository'si
+
+        public PostService(IRepository<Post> postRepo, IRepository<Category> categoryRepo, IRepository<Comment> commentRepo) : base(postRepo)
         {
-            return _repo.GetAll(x=> x.Id == post.Id).ToList();
-           
+            _postRepo = postRepo;
+            _categoryRepo = categoryRepo;
+            _commentRepo = commentRepo;
         }
 
-        public ICollection<Post> GetAllPostsByCategoryId(int postId)
+        public ICollection<Post> GetAllPostsByCategoryId(int categoryId)
         {
-            return _repo.GetAll(x => x.Id == postId).ToList();//Belki tag include etmek isteyebilirim daha sonrasında...
+            return _postRepo.GetAll(x => x.CategoryId == categoryId).ToList(); // Kategoriye göre postları al
         }
+
         public ICollection<Post> GetAllPosts()
         {
-            return _repo.GetAll().ToList(); // Parametresiz versiyon
-        }
-
-        public Post GetPostDetails(int postId)
-        {
-            return _repo.GetAll()
-                .Include(p => p.Category) // İlgili Category nesnesini dahil et
-                .FirstOrDefault(p => p.Id == postId); // Tekil postu ID'ye göre bul
+            return _postRepo.GetAll().ToList(); // Parametresiz versiyon
         }
 
         public async Task<Post> GetByIdAsync(int id)
         {
-            return await _repo.GetByIdAsync(id);
+            return await _postRepo.GetByIdAsync(id);
         }
 
+        public async Task<Post> GetPostDetails(int postId)
+        {
+            var post = await _postRepo.GetByIdAsync(postId);
+            if (post == null)
+            {
+                return null;
+            }
 
+            // Kategoriyi yükle
+            post.Category = await _categoryRepo.GetByIdAsync(post.CategoryId);
+
+            // Yorumları yükle
+            post.Comments = (await _commentRepo.GetCommentsByPostIdAsync(postId)).ToList(); // Yorumları listeye çevir
+
+            return post;
+        }
+
+        public ICollection<Post> GetAllPosts(Post post)
+        {
+            return _postRepo.GetAll().ToList();
+        }
     }
 }

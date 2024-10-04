@@ -40,7 +40,10 @@ namespace Blog.Business.Concrete
             await _context.Set<Comment>().AddAsync(comment); // Yorum ekleme işlemi
             await _context.SaveChangesAsync(); // Değişiklikleri veritabanına kaydet
         }
-
+        public async Task<IEnumerable<Comment>> GetCommentsByPostIdAsync(int postId)
+        {
+            return await _context.Set<Comment>().Where(c => c.PostId == postId).ToListAsync();
+        }
         // Yorum silme metodu
         //public async Task DeleteAsync(int id)
         //{

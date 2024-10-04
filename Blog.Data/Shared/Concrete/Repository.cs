@@ -32,9 +32,13 @@ namespace Blog.Data.Shared.Concrete
             //    _ownerAndUpdateId = int.Parse(user.FindFirst(ClaimTypes.NameIdentifier)?.Value);
             //}
         }
+        public async Task<IEnumerable<Comment>> GetCommentsByPostIdAsync(int postId)
+        {
+            return await _context.Comments.Where(c => c.PostId == postId).ToListAsync();
+        }
         public async Task<T> GetByIdAsync(int id)
         {
-            return await _dbSet.FindAsync(id); // DbSet üzerinden Find işlemi
+            return await _context.Set<T>().FindAsync(id); // Entity Framework kullanıyorsanız
         }
         public T Add(T entity)
         {
