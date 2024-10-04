@@ -26,23 +26,74 @@ namespace Blog.Web.Areas.Admin.Controllers
             _roleManager = roleManager;
             _userService = userService;
         }
-
         public async Task<IActionResult> Index()
         {
-            // Fetch list of users from UserManager
-            var users = await _userService.GetAllUsersAsync();
+            var users = await _userManager.Users.ToListAsync();
+            var roles = await _roleManager.Roles.ToListAsync();
+
+            // Kullanıcıların rollerini alıp birleştiriyoruz
+            foreach (var user in users)
+            {
+                var userRoles = await _userManager.GetRolesAsync(user);
+                user.UserRoles = userRoles.Select(role => new ApplicationUserRole
+                {
+                    Role = roles.FirstOrDefault(r => r.Name == role),
+                    UserId = user.Id
+                }).ToList();
+            }
+
+            ViewBag.AllRoles = roles;
             return View(users);
         }
 
-        #region GetALLRoles 
-       
+
+        [HttpPost]
+        public async Task<IActionResult> AssignRole(string userId, string roleId)
+        {
+            var user = await _userManager.FindByIdAsync(userId);
+            var role = await _roleManager.FindByIdAsync(roleId);
+
+            if (user == null || role == null)
+            {
+                return BadRequest("Kullanıcı veya rol bulunamadı.");
+            }
+
+            // Kullanıcının mevcut rollerini al
+            var currentRoles = await _userManager.GetRolesAsync(user);
+
+            // Eğer kullanıcıda zaten bu rol varsa, işlem yapmaya gerek yok
+            if (currentRoles.Contains(role.Name))
+            {
+                return BadRequest("Kullanıcı zaten bu role sahip.");
+            }
+
+            // Mevcut rollerden eski rolü kaldır
+            // Burada örneğin yalnızca bir rol olacağını varsayıyoruz
+            if (currentRoles.Any())
+            {
+                var oldRole = currentRoles.First();
+                await _userManager.RemoveFromRoleAsync(user, oldRole);
+            }
+
+            // Yeni rolü ata
+            var result = await _userManager.AddToRoleAsync(user, role.Name);
+            if (result.Succeeded)
+            {
+                return Ok("Rol başarıyla atandı.");
+            }
+
+            return BadRequest("Rol atama başarısız.");
+        }
+
+
+
         [HttpGet("GetAllRolesAsync")]
         public  IActionResult GetAllRolesAsync()
         {
            var roles =  _roleManager.Roles.ToList();
             return Json(roles);
         }
-        #endregion
+       
 
         #region GetRoleById
         [HttpGet("GetRoleById")]

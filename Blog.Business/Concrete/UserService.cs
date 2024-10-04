@@ -1,4 +1,5 @@
 ﻿using Blog.Business.Absract;
+using Blog.Core.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System;
