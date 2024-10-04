@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Blog.Web.Controllers
 {
-  // [Authorize] 
+    // [Authorize] 
     public class PostDetailController : Controller
     {
         private readonly IPostService _postService;
@@ -70,19 +70,40 @@ namespace Blog.Web.Controllers
             if (!User.Identity.IsAuthenticated)
             {
                 // Giriş yapmamışsa hata mesajı ekle
-                ModelState.AddModelError("", "Yorum yapabilmek için giriş yapmalısınız.");
-                return RedirectToAction("Index", new { postId = comment.PostId });
+                return Json(new { success = false, message = "Yorum yapabilmek için giriş yapmalısınız." });
             }
 
+            // Modelin geçerliliğini kontrol et
             if (ModelState.IsValid)
             {
                 comment.DateCommented = DateTime.Now; // Yorum tarihi ayarla
-                await _commentService.AddAsync(comment); // Yorum servisi ile ekleme
-                return RedirectToAction("Index", new { postId = comment.PostId }); // Yorum eklendikten sonra post detay sayfasına yönlendir
+                comment.AuthorId = _userManager.GetUserId(User); // Giriş yapan kullanıcının ID'sini al
+
+                // Yorumun hangi post'a ait olduğunu belirt
+                comment.PostId = comment.PostId; // PostId alanını doldur
+
+                // Yorum servisi ile ekleme
+                await _commentService.AddAsync(comment);
+
+                // Yorum eklendikten sonra, başarılı bir yanıt döndür
+                return Json(new
+                {
+                    success = true,
+                    author = comment.Author.UserName,
+                    dateCommented = comment.DateCommented.ToShortDateString(),
+                    content = comment.Content
+                });
             }
 
-            // Eğer model geçersizse aynı sayfaya geri dön
-            return RedirectToAction("Index", new { postId = comment.PostId });
+            // Eğer model geçersizse hata mesajlarını döndür
+            var errors = ModelState.Values.SelectMany(v => v.Errors);
+            return Json(new
+            {
+                success = false,
+                message = "Geçersiz yorum.",
+                errors = errors.Select(e => e.ErrorMessage)
+            });
         }
+
     }
 }

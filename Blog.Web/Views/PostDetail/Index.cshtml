@@ -13,30 +13,27 @@
 
     <p class="post-content">@Model.Post.Content</p>
 
-    <div class="post-actions">
-        <p class="post-likes">Beğeniler: @Model.Post.Likes</p>
-        <button class="comment-button">Yorum Yap</button>
-    </div>
-
     <h3>Yorumlar</h3>
-    @if (Model.Comments != null && Model.Comments.Count() > 0)
-    {
-        foreach (var comment in Model.Comments)
+    <div id="comments-container">
+        @if (Model.Comments != null && Model.Comments.Any())
         {
-            <div class="comment">
-                <p><strong>@comment.Author?.UserName</strong> - @comment.DateCommented.ToShortDateString()</p>
-                <p>@comment.Content</p>
-            </div>
+            foreach (var comment in Model.Comments)
+            {
+                <div class="comment">
+                    <p><strong>@comment.Author?.UserName ?? "Anonim"</strong> - @comment.DateCommented.ToShortDateString()</p>
+                    <p>@comment.Content</p>
+                </div>
+            }
         }
-    }
-    else
-    {
-        <p>Henüz yorum yapılmadı.</p>
-    }
+        else
+        {
+            <p>Henüz yorum yapılmadı.</p>
+        }
+    </div>
 
     <h4>Yorum Yap</h4>
     <div class="comment-form-container">
-        <form asp-action="AddComment" method="post">
+        <form id="commentForm">
             <input type="hidden" name="PostId" value="@Model.Post.Id" />
             <div class="form-group">
                 <label for="Content">Yorumunuz:</label>
@@ -49,4 +46,60 @@
 
 @section Css {
     <link rel="stylesheet" href="~/css/HomePage/Post/postDetailsPage.css" asp-append-version="true" />
+}
+
+@section Scripts {
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script> <!-- SweetAlert2 kütüphanesini ekleyin -->
+    <script>
+        $(document).ready(function () {
+            $('#commentForm').on('submit', function (event) {
+                event.preventDefault();
+
+                var formData = $(this).serialize();
+
+                $.ajax({
+                    type: 'POST',
+                    url: '@Url.Action("AddComment", "PostDetail")',
+                    data: formData,
+                    success: function (response) {
+                        if (response.success) {
+                            $('#comments-container').prepend(
+                                '<div class="comment">' +
+                                '<p><strong>' + response.author + '</strong> - ' + response.dateCommented + '</p>' +
+                                '<p>' + response.content + '</p>' +
+                                '</div>'
+                            );
+
+                            $('textarea[name="Content"]').val(''); // Yorum alanını temizle
+
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Yorum Başarıyla Gönderildi',
+                                showConfirmButton: false,
+                                timer: 1000
+                            });
+                        } else {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Hata',
+                                text: response.message,
+                                showConfirmButton: false,
+                                timer: 1000
+                            });
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Hata',
+                            text: 'Yorum gönderilirken bir hata oluştu: ' + error,
+                            showConfirmButton: false,
+                            timer: 1000
+                        });
+                    }
+                });
+            });
+        });
+    </script>
 }
