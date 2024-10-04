@@ -20,6 +20,6 @@ namespace Blog.Data.Shared.Abstract
         T GetById(Guid guid);
         T GetFirstOrDefault(Expression<Func<T, bool>> predicate);
         void Save();
-        bool Delete(Guid guid);
+        bool Delete(Guid guid); Task<T> GetByIdAsync(int id);
     }
 }

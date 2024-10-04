@@ -10,7 +10,7 @@ namespace Blog.Business.Absract
 {
     public interface IPostService:IService<Post>
     {
-     
+        Task<Post> GetByIdAsync(int id);
         ICollection<Post> GetAllPosts();
         ICollection<Post> GetAllPosts(Post post);
         ICollection<Post> GetAllPostsByCategoryId(int postId);

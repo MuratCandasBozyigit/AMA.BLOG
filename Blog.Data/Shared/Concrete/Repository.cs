@@ -32,7 +32,10 @@ namespace Blog.Data.Shared.Concrete
             //    _ownerAndUpdateId = int.Parse(user.FindFirst(ClaimTypes.NameIdentifier)?.Value);
             //}
         }
-
+        public async Task<T> GetByIdAsync(int id)
+        {
+            return await _dbSet.FindAsync(id); // DbSet üzerinden Find işlemi
+        }
         public T Add(T entity)
         {
             _dbSet.Add(entity);

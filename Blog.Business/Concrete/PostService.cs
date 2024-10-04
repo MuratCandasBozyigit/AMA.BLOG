@@ -2,12 +2,7 @@
 using Blog.Business.Shared.Concrete;
 using Blog.Core.Models;
 using Blog.Data.Shared.Abstract;
-using System;
-using System.Collections.Generic;
-using System.Data.Entity;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 
 namespace Blog.Business.Concrete
 {
@@ -36,6 +31,10 @@ namespace Blog.Business.Concrete
                 .FirstOrDefault(p => p.Id == postId); // Tekil postu ID'ye göre bul
         }
 
+        public async Task<Post> GetByIdAsync(int id)
+        {
+            return await _repo.GetByIdAsync(id);
+        }
 
 
     }

@@ -14,6 +14,12 @@ public class ApplicationDbContext : IdentityDbContext<AppUser, ApplicationRole, 
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        modelBuilder.Entity<Comment>()
+       .HasOne(c => c.Post)
+       .WithMany(p => p.Comments)
+       .HasForeignKey(c => c.PostId)
+       .OnDelete(DeleteBehavior.Cascade);
+
         modelBuilder.Entity<ApplicationUserRole>()
             .HasKey(aur => new { aur.UserId, aur.RoleId });
 

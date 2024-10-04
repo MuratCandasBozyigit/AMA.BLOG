@@ -1,0 +1,31 @@
+﻿@model IEnumerable<Blog.Core.Models.Comment>
+
+<h2>Yorumlar</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Yorum</th>
+            <th>Yorumcu</th>
+            <th>Tarih</th>
+            <th>İşlemler</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var comment in Model)
+        {
+            <tr>
+                <td>@comment.Content</td>
+                <td>@comment.Author?.UserName ?? "Bilinmiyor"</td> <!-- Yorumcunun ismini ekleyin -->
+                <td>@comment.DateCommented.ToShortDateString()</td>
+                <td>
+                    <form asp-action="Delete" asp-route-id="@comment.Id" asp-route-postId="@comment.PostId" method="post" style="display:inline;">
+                        <button type="submit" class="btn btn-danger">Sil</button>
+                    </form>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<a href="@Url.Action("AddComment", "Comment", new { postId = Model.FirstOrDefault()?.PostId })" class="btn btn-primary">Yeni Yorum Ekle</a>
