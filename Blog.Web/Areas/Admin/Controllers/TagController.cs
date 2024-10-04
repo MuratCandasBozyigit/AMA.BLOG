@@ -36,7 +36,6 @@ namespace Blog.Web.Areas.Admin.Controllers
         }
 
         [HttpPost("Add")]
-        //[HttpPost]
         public IActionResult Add([FromBody] Tag tag)
         {
             try

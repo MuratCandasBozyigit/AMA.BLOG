@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Blog.Business.Configuration;
 using Blog.Core.Models;
+using Blog.Core.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,28 +18,34 @@ builder.Services.AddHttpContextAccessor();
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
+builder.Services.ConfigureApplicationCookie(options =>
+{
+    options.AccessDeniedPath = "/account/login";
+    options.LoginPath = "/account/login";   
+});
+
 // Configure DbContext
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-builder.Services.AddIdentity<AppUser, IdentityRole>(options =>
-    {
-        options.Password.RequireNonAlphanumeric = false;
-        options.Password.RequiredLength = 8;
-        options.Password.RequireUppercase = false;
-        options.Password.RequireLowercase = false;
-        options.User.RequireUniqueEmail = true;
-        options.SignIn.RequireConfirmedPhoneNumber = false;
-        options.SignIn.RequireConfirmedEmail = false;
-        options.SignIn.RequireConfirmedAccount = false;
-    }).AddEntityFrameworkStores<ApplicationDbContext>()
-    .AddDefaultTokenProviders();
+builder.Services.AddIdentity<AppUser, ApplicationRole>(options =>
+{
+    options.Password.RequireNonAlphanumeric = false;
+    options.Password.RequiredLength = 8;
+    options.Password.RequireUppercase = false;
+    options.Password.RequireLowercase = false;
+    options.User.RequireUniqueEmail = true;
+    options.SignIn.RequireConfirmedPhoneNumber = false;
+    options.SignIn.RequireConfirmedEmail = false;
+    options.SignIn.RequireConfirmedAccount = false;
+})
+.AddEntityFrameworkStores<ApplicationDbContext>()
+.AddDefaultTokenProviders();
 
 
-
-
-
-
+// Register RoleManager and RoleService
+builder.Services.AddScoped<RoleManager<ApplicationRole>>();
+builder.Services.AddScoped<IRoleService, RoleService>();
 
 // DI methods for Business and Repository layers
 builder.Services.BusinessDI();
@@ -52,6 +59,7 @@ if (!app.Environment.IsDevelopment())
     app.UseExceptionHandler("/Home/Error");
     app.UseHsts();
 }
+
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
