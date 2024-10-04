@@ -11,6 +11,9 @@ namespace Blog.Core.ViewModels
     {
         [Required(ErrorMessage = "isim girmeniz gerekli")]
         public string Name { get; set; }
+        //[Required(ErrorMessage = "Telefon numarası girmeniz gerekli")]
+        public int PhoneNumber { get; set; }
+
         [Required(ErrorMessage = "Mail girmeniz gerekli")]
         [EmailAddress(ErrorMessage = "Geçersiz email formatı")]
         public string Email { get; set; }
