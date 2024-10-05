@@ -1,4 +1,5 @@
-﻿@model Blog.Web.Controllers.HomeController.HomeViewModel
+﻿@using Blog.Core.Models;
+@model Blog.Web.Controllers.HomeController.HomeViewModel
 
 @{
     ViewData["Title"] = "Ana Sayfa";
@@ -26,7 +27,7 @@
                                 }
                             </div>
                             <h3 class="post-title">
-                                <a href="@Url.Action("Index", "PostDetail", new { postId = post.Id })">@post.Title</a>
+                                <a href="@Url.Action("Index", "PostDetail",  new {postcat=post.Category,postSlug=post.Category.Slug, postId = post.Id })">@post.Title</a>
                             </h3>
                             <p class="post-summary">
                                 @if (post.Summary.Length > 50)
@@ -42,7 +43,9 @@
                         </div>
                         <div class="footer">
                             <div class="actions">
-                                <a id="okuDetay" href="@Url.Action("Index", "PostDetail", new { postId = post.Id })" class="btn btn-outline-secondary">Oku</a>
+                               @*  <a id="okuDetay" href="@Url.Action("Index", "PostDetail", new { category = post.Category.Name, slug = post.Category.Slug, postId = post.Id })" class="btn btn-outline-secondary">Oku</a> *@
+                                <a id="okuDetay" href="/postDetail/@post.Category.Name/@post.Category.Slug/@post.Id" class="btn btn-outline-secondary">Oku</a>
+
                             </div>
                             <ul class="stats" style="margin-left:15px;padding-right:0px;margin-right:0px;">
 

@@ -20,7 +20,8 @@ namespace Blog.Business.Concrete
 
         public ICollection<Category> GetAllCategories(Category category)
         {
-            return _repo.GetAll(x => x.Id == category.Id).ToList();
+            return _repo.GetAll(x => x.Id == category.Id)
+                .ToList();
         }
 
         public IEnumerable<Category> GetAllCategories()
