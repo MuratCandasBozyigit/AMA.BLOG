@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Blog.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20241005093925_Inıt")]
-    partial class Inıt
+    [Migration("20241005104846_İnitial")]
+    partial class İnitial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -269,6 +269,9 @@ namespace Blog.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<int>("CategoryId")
+                        .HasColumnType("int");
+
                     b.Property<DateTime>("DateCreated")
                         .HasColumnType("datetime2");
 
@@ -299,6 +302,8 @@ namespace Blog.Data.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CategoryId");
 
                     b.ToTable("Tags");
                 });
@@ -487,6 +492,17 @@ namespace Blog.Data.Migrations
                     b.Navigation("Category");
                 });
 
+            modelBuilder.Entity("Blog.Core.Models.Tag", b =>
+                {
+                    b.HasOne("Blog.Core.Models.Category", "Category")
+                        .WithMany("Tags")
+                        .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Category");
+                });
+
             modelBuilder.Entity("Comment", b =>
                 {
                     b.HasOne("Blog.Core.Models.AppUser", "Author")
@@ -565,6 +581,11 @@ namespace Blog.Data.Migrations
             modelBuilder.Entity("Blog.Core.Models.ApplicationRole", b =>
                 {
                     b.Navigation("UserRoles");
+                });
+
+            modelBuilder.Entity("Blog.Core.Models.Category", b =>
+                {
+                    b.Navigation("Tags");
                 });
 
             modelBuilder.Entity("Blog.Core.Models.Post", b =>

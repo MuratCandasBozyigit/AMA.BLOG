@@ -1,4 +1,5 @@
 ﻿@using System.Security.Claims
+@model ICollection<Blog.Core.Models.Tag> 
 @{
     ViewData["Title"] = "Admin Kategori Yönetimi";
 }
@@ -26,6 +27,16 @@
                     <label for="description" class="form-label">Açıklama:</label>
                     <textarea id="description" placeholder="Lütfen Açıklama giriniz" class="form-control" required></textarea>
                     <span id="description-error" class="text-danger" style="display:none;">Alan boş bırakılamaz.</span>
+                </div>
+
+                <div class="mb-3">
+                    <select class="form-control" id="tagSave">
+                        @foreach (var item in Model)
+                        {
+                            <option  value="@item.Id">@item.Name</option>
+                        }
+                   </select>
+                    <span id="tagSave-error" class="text-danger" style="display:none;">Alan boş bırakılamaz.</span>
                 </div>
 
              
@@ -56,6 +67,7 @@
                     <th>Kategori Adı</th>
                     <th>Açıklama</th>
                     <th>Slug</th>
+                    <th>Etiket</th>
                     <th>İşlemler</th>
                 </tr>
             </thead>
@@ -91,6 +103,7 @@
                     { data: 'name', title: 'Kategori Adı' },
                     { data: 'description', title: 'Açıklama' },
                     { data: 'slug', title: 'Slug' },
+                     { data: 'tagId', title: 'Etiket' },
                     {
                         data: null,
                         title: 'İşlemler',
@@ -120,6 +133,7 @@
                         $('#description').val(res.description);
                         $('#slug').val(res.slug);
                         $('#categoryId').val(res.id);
+                        $('#tagSave').val(res.tagSave);
                     },
                     error: function () {
                         Swal.fire('Hata', 'Kategori verisi yüklenirken bir sorun oluştu.', 'error');
@@ -164,12 +178,21 @@
                     id: $('#categoryId').val() === '' ? 0 : $('#categoryId').val(),
                     name: $('#name').val(),
                     description: $('#description').val(),
-                    slug: $('#slug').val()
+                    slug: $('#slug').val(),
+                    tagId: $("#tagSave option:selected").val()
+                    // tagSave: $('#tagSave').val()
                 };
 
                 let isValid = true;
 
-              
+
+                if (!category.tagId) {
+                    $('#tagSave-error').show();
+                    isValid = false;
+                } else {
+                    $('#tagSave-error').hide();
+                }
+
                 if (!category.name) {
                     $('#name-error').show();
                     isValid = false;

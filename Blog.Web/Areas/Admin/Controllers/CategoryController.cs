@@ -13,17 +13,19 @@ namespace Blog.Web.Areas.Admin.Controllers
     {
         private readonly ICategoryService _categoryService;
         private readonly ITagService _tagService;
-        public CategoryController(ICategoryService categoryService)
+        public CategoryController(ICategoryService categoryService, ITagService tagService)
         {
             _categoryService = categoryService;
+            _tagService = tagService;
         }
 
         #region Tamamlandı 
-      
+
         [HttpGet]
         public IActionResult Index()
         {
-            return View();
+            var tag = _tagService.GetAll();
+            return View(tag);
         }
 
       
@@ -109,6 +111,7 @@ namespace Blog.Web.Areas.Admin.Controllers
             
                 try
                 {
+             
                    var categories = _categoryService.Add(category);
                     return Ok(categories);
                 }
