@@ -8,7 +8,7 @@ namespace Blog.Web.Areas.Admin.Controllers
 {
     [Area("Admin")]
     [Route("Admin/[controller]")]
-    [Authorize(Roles ="Admin")]
+    [Authorize(Roles = "Admin")]
     public class CategoryController : Controller
     {
         private readonly ICategoryService _categoryService;
@@ -19,14 +19,13 @@ namespace Blog.Web.Areas.Admin.Controllers
         }
 
         #region Tamamlandı 
-      
+
         [HttpGet]
         public IActionResult Index()
         {
             return View();
         }
 
-      
         [HttpGet("GetAllCategories")]
         public IActionResult GetAll()
         {
@@ -44,19 +43,19 @@ namespace Blog.Web.Areas.Admin.Controllers
         [HttpDelete("Delete/{id}")]
         public IActionResult Delete(int id)
         {
-            if (id == null)
+            if (id == 0)
             {
                 return BadRequest("Invalid ID format.");
             }
 
-            var iD = _categoryService.GetFirstOrDefault(i => i.Id == id);
-            if (iD == null)
+            var category = _categoryService.GetFirstOrDefault(i => i.Id == id);
+            if (category == null)
             {
-                return NotFound("Color not found.");
+                return NotFound("Category not found.");
             }
 
-            _categoryService.Delete(iD.Id);
-            return Ok(iD);
+            _categoryService.Delete(category.Id);
+            return Ok(category);
         }
 
         [HttpPut("Update/{id}")]
@@ -78,11 +77,10 @@ namespace Blog.Web.Areas.Admin.Controllers
             }
         }
 
-
         [HttpGet("GetById/{id}")]
         public IActionResult GetById(int id)
         {
-            if (id == 0)
+            if (id <= 0)
             {
                 return BadRequest("Invalid Id Format");
             }
@@ -101,28 +99,20 @@ namespace Blog.Web.Areas.Admin.Controllers
             }
         }
 
-
-
         [HttpPost("Add")]
-        public IActionResult Add([FromBody]Category category)
+        public IActionResult Add([FromBody] Category category)
         {
-            
-                try
-                {
-                   var categories = _categoryService.Add(category);
-                    return Ok(categories);
-                }
-                catch (Exception ex)
-                {
-                    return StatusCode(500, $"Internal category server error: {ex.Message}");
-                }
-
+            try
+            {
+                var addedCategory = _categoryService.Add(category);
+                return Ok(addedCategory);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal category server error: {ex.Message}");
+            }
         }
 
-
-
-
         #endregion
-
     }
 }

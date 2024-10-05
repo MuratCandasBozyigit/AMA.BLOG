@@ -6,13 +6,13 @@ namespace Blog.Core.Models
     {
         public string Name { get; set; }
         public string Description { get; set; }
-        public string Slug { get; set; }
+       
         public int? ParentCategoryId { get; set; }
 
 
-        //  Etiketleri category de birden fazla secebilmek icin
-        // public virtual ICollection<Tag> Tag { get; set; }
+        public ICollection<Tag> Tags { get; set; } = new List<Tag>();
 
+       
         //public int AppUserId { get; set; }
         //public virtual AppUser AppUser { get; set; }
 
