@@ -14,6 +14,6 @@ namespace Blog.Core.Models
 
    
         public string RoleId { get; set; }
-        public ApplicationRole Role { get; set; }
+        public ApplicationRole Role { get; set; } 
     }
 }
