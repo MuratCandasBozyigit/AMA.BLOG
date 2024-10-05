@@ -7,7 +7,7 @@ namespace BotanikBambu.Web.Areas.Admin.Controllers
 {
     [Area("Admin")]
     [Route("Admin/[controller]")]
-      [Authorize(Roles = "Admin")]
+     // [Authorize(Roles = "Admin")]
     public class HomeController : AdminBaseController
     {
         public HomeController(IHttpContextAccessor httpContextAccessor) : base(httpContextAccessor)
