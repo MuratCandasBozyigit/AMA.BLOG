@@ -66,6 +66,17 @@ app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
 
+//app.MapControllerRoute(
+//    name: "PostDetail",
+//    pattern: "postdetail/{category}/{slug}/{id}",
+//    defaults: new { controller = "Pos", action = "Detail" }
+//);
+app.MapControllerRoute(
+    name: "PostDetail",
+    pattern: "postdetail/{category}/{slug}/{id}",
+    defaults: new { controller = "PostDetail", action = "Index" }
+);
+
 app.MapControllerRoute(
     name: "areas",
     pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}");

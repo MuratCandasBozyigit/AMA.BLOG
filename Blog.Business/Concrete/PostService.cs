@@ -29,7 +29,7 @@ namespace Blog.Business.Concrete
 
         public ICollection<Post> GetAllPosts()
         {
-            return _postRepo.GetAll().ToList(); 
+            return _postRepo.GetAll().Include(p=>p.Category).ToList(); 
         }
 
         public async Task<Post> GetByIdAsync(int id)
@@ -55,7 +55,7 @@ namespace Blog.Business.Concrete
 
         public ICollection<Post> GetAllPosts(Post post)
         {
-            return _postRepo.GetAll().ToList();
+            return _postRepo.GetAll().Include(p=>p.Category).ToList();
         }
     }
 }

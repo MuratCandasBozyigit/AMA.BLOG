@@ -7,12 +7,12 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Blog.Web.Controllers
 {
-   
+
     public class PostDetailController : Controller
     {
         private readonly IPostService _postService;
         private readonly ICategoryService _categoryService;
-        private readonly ICommentService _commentService; 
+        private readonly ICommentService _commentService;
         private readonly UserManager<AppUser> _userManager;
 
         public PostDetailController(IPostService postService, ICategoryService categoryService, ICommentService commentService, UserManager<AppUser> userManager)
@@ -20,38 +20,34 @@ namespace Blog.Web.Controllers
             _postService = postService;
             _categoryService = categoryService;
             _commentService = commentService;
-            _userManager = userManager; 
+            _userManager = userManager;
         }
 
-        [HttpGet]
-        public async Task<IActionResult> Index(int postId)
+        [HttpGet("[controller]/{category}/{slug}/{postId}")]
+        public async Task<IActionResult> Index([FromRoute] string category, [FromRoute] string slug, [FromRoute] int postId)
         {
             try
             {
-               
                 var post = await _postService.GetPostDetails(postId);
 
                 if (post == null)
                 {
-                    return NotFound(); 
+                    return NotFound();
                 }
 
-               
-                var category = await _categoryService.GetByIdAsync(post.CategoryId);
-                if (category == null)
+                var categoryw = await _categoryService.GetByIdAsync(post.CategoryId);
+                if (categoryw == null)
                 {
                     return NotFound("Kategori bulunamadı.");
                 }
 
-              
                 var comments = await _commentService.GetCommentsByPostIdAsync(postId);
 
-              
                 var viewModel = new PostDetailsViewModel
                 {
                     Post = post,
                     Comments = comments.ToList(),
-                    CategoryName = category.Name
+                    CategoryName = categoryw.Name
                 };
 
                 return View(viewModel);
