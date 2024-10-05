@@ -13,8 +13,8 @@ namespace Blog.Core.Models
         public string Name {  get; set; }
         public int? PostId { get; set; }
         public string TagDescription { get; set; }
-      
 
+        public ICollection<Category> Categories { get; set; } = [];
 
 
 

@@ -12,7 +12,7 @@ namespace Blog.Web.Areas.Admin.Controllers
     public class CategoryController : Controller
     {
         private readonly ICategoryService _categoryService;
-
+        private readonly ITagService _tagService;
         public CategoryController(ICategoryService categoryService)
         {
             _categoryService = categoryService;
