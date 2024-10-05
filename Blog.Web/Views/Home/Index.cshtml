@@ -52,24 +52,11 @@
                 }
 
                 <ul class="pagination pagination-primary">
-                    @if (Model.CurrentPage > 1)
-                    {
-                        <li class="page-item">
-                            <a class="page-link" href="@Url.Action("Index", new { page = Model.CurrentPage - 1 })">Previous</a>
-                        </li>
-                    }
-                    @for (int i = 1; i <= Model.TotalPages; i++)
-                    {
-                        <li class="page-item @(Model.CurrentPage == i ? "active" : "")">
-                            <a class="page-link" href="@Url.Action("Index", new { page = i })">@i</a>
-                        </li>
-                    }
-                    @if (Model.CurrentPage < Model.TotalPages)
-                    {
-                        <li class="page-item">
-                            <a class="page-link" href="@Url.Action("Index", new { page = Model.CurrentPage + 1 })">Next</a>
-                        </li>
-                    }
+                    <li class="page-item"><a class="page-link" href="javascript:void(0);">Previous</a></li>
+                    <li class="page-item active"><a class="page-link" href="javascript:void(0);">1</a></li>
+                    <li class="page-item"><a class="page-link" href="javascript:void(0);">2</a></li>
+                    <li class="page-item"><a class="page-link" href="javascript:void(0);">3</a></li>
+                    <li class="page-item"><a class="page-link" href="javascript:void(0);">Next</a></li>
                 </ul>
             </div>
             <div class="col-lg-4 col-md-12 right-box">
@@ -107,6 +94,6 @@
 
 @section Scripts {
     <script>
-        // JavaScript kodlarınız burada
+        // JavaScript kodları buraya eklenebilir
     </script>
 }
