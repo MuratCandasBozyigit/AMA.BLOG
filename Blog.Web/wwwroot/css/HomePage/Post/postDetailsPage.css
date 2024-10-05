@@ -1,9 +1,9 @@
 ﻿.post-container {
-    width: 90%; /* Genişliği biraz artırdık */
-    max-width: 1000px; /* Maksimum genişliği artırdık */
+    width: 90%;
+    max-width: 1000px;
     margin: 0 auto;
     background-color: #f9f9f9;
-    padding: 25px; /* İç boşluğu biraz artırdık */
+    padding: 25px;
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     word-wrap: break-word;
@@ -45,11 +45,10 @@
     margin-bottom: 25px;
 }
 
-
 .post-actions {
     display: flex;
-    justify-content: flex-start; /* Sol tarafa hizalıyoruz */
-    align-items: center; /* Yatay hizalamayı merkezliyoruz */
+    justify-content: flex-start;
+    align-items: center;
     margin-top: 20px;
     border-top: 1px solid #eee;
     padding-top: 15px;
@@ -58,13 +57,13 @@
 .post-likes {
     font-size: 1.1em;
     color: #666;
-    margin-right: 20px; /* Beğeniler ile yorum butonu arasına boşluk ekliyoruz */
+    margin-right: 20px;
 }
 
 .comment-button {
     background-color: rgb(82, 49, 49);
     color: antiquewhite;
-    border: 2px solid #297f81 ;
+    border: 2px solid #297f81;
     padding: 5px 8px;
     border-radius: 5px;
     cursor: pointer;
@@ -73,6 +72,48 @@
 
     .comment-button:hover {
         background-color: #777;
-        color:whitesmoke;
-        border:3px solid #2f6a7b ;
+        color: whitesmoke;
+        border: 3px solid #2f6a7b;
+    }
+
+.comment-form-container {
+    background-color: #ffffff; /* Yorum formu arka plan rengi */
+    border-radius: 10px; /* Kenar yuvarlama */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Hafif gölge */
+    padding: 20px; /* İç boşluk */
+    margin-top: 20px; /* Üstten boşluk */
+}
+
+.form-group {
+    margin-bottom: 15px; /* Form elemanları arasındaki boşluk */
+}
+
+label {
+    display: block; /* Etiketi blok olarak göster */
+    margin-bottom: 5px; /* Etiket ile textarea arasında boşluk */
+    font-weight: bold; /* Kalın etiket yazısı */
+}
+
+textarea {
+    width: 100%; /* Tam genişlik */
+    height: 100px; /* Yükseklik ayarı */
+    padding: 10px; /* İç boşluk */
+    border: 1px solid #ccc; /* Kenarlık rengi */
+    border-radius: 5px; /* Kenar yuvarlama */
+    resize: vertical; /* Sadece dikey olarak yeniden boyutlandırılabilir */
+}
+
+.submit-button {
+    background-color: #297f81; /* Gönder butonu arka plan rengi */
+    color: #ffffff; /* Yazı rengi */
+    border: none; /* Kenarlık yok */
+    padding: 10px 15px; /* İç boşluk */
+    border-radius: 5px; /* Kenar yuvarlama */
+    cursor: pointer; /* İşaretçi */
+    font-size: 1em; /* Yazı boyutu */
+    transition: background-color 0.3s; /* Geçiş efekti */
+}
+
+    .submit-button:hover {
+        background-color: #3a9c94; /* Hover durumu */
     }
