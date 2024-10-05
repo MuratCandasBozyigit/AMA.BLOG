@@ -14,11 +14,11 @@ namespace Blog.Core.Models
         public int? PostId { get; set; }
         public string TagDescription { get; set; }
 
-        public ICollection<Category> Categories { get; set; } = [];
+
+        public ICollection<Category> Categories { get; set; }
 
 
-
-      //  public virtual ICollection<Category> Category { get; set; }
+        //  public virtual ICollection<Category> Category { get; set; }
 
         //public int? AppUserId { get; set; }
         //public virtual AppUser AppUser { get; set; }

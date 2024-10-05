@@ -14,6 +14,8 @@ public class ApplicationDbContext : IdentityDbContext<AppUser, ApplicationRole, 
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+      
+
         modelBuilder.Entity<Comment>()
        .HasOne(c => c.Post)
        .WithMany(p => p.Comments)
