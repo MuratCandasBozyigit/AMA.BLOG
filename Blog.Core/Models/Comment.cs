@@ -2,11 +2,11 @@
 
 public class Comment : BaseModel
 {
-    public string Content { get; set; }
-    public string AuthorId { get; set; } // Kullanıcı ID'si
-    public AppUser Author { get; set; } // Navigasyon özelliği, kullanıcı bilgilerine ulaşmak için
+    public string? Content { get; set; }
+    public string AuthorId { get; set; } 
+    public AppUser Author { get; set; } 
     public DateTime DateCommented { get; set; } = DateTime.Now;
 
-    public int PostId { get; set; } // Post ile ilişki
-    public Post Post { get; set; } // Navigasyon özelliği
+    public int PostId { get; set; } 
+    public Post Post { get; set; } 
 }

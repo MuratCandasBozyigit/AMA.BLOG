@@ -20,7 +20,7 @@
             foreach (var comment in Model.Comments)
             {
                 <div class="comment">
-                    <p><strong>@comment.Author?.UserName ?? "Anonim"</strong> - @comment.DateCommented.ToShortDateString()</p>
+                    <p><strong>@comment.Author?.FullName</strong> - @comment.DateCommented.ToShortDateString()</p>
                     <p>@comment.Content</p>
                 </div>
             }
@@ -50,7 +50,7 @@
 
 @section Scripts {
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script> <!-- SweetAlert2 kütüphanesini ekleyin -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script> 
     <script>
         $(document).ready(function () {
             $('#commentForm').on('submit', function (event) {
@@ -71,7 +71,7 @@
                                 '</div>'
                             );
 
-                            $('textarea[name="Content"]').val(''); // Yorum alanını temizle
+                            $('textarea[name="Content"]').val('');
 
                             Swal.fire({
                                 icon: 'success',

@@ -17,7 +17,7 @@ namespace Blog.Core.Models
         public int CategoryId { get; set; }
         public Category Category { get; set; }
 
-        // Yorumlarla ilişki
-        public ICollection<Comment> Comments { get; set; } = new List<Comment>(); // Post'a ait yorumlar
+        
+        public ICollection<Comment> Comments { get; set; } = new List<Comment>(); 
     }
 }

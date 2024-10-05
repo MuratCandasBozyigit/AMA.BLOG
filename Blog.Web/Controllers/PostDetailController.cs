@@ -62,40 +62,37 @@ namespace Blog.Web.Controllers
                 return View("Error");
             }
         }
-
         [HttpPost]
         public async Task<IActionResult> AddComment(Comment comment)
         {
-            // Kullanıcının giriş yapıp yapmadığını kontrol et
             if (!User.Identity.IsAuthenticated)
             {
-                // Giriş yapmamışsa hata mesajı ekle
                 return Json(new { success = false, message = "Yorum yapabilmek için giriş yapmalısınız." });
             }
 
-            // Modelin geçerliliğini kontrol et
-            if (ModelState.IsValid)
-            {
-                comment.DateCommented = DateTime.Now; // Yorum tarihi ayarla
-                comment.AuthorId = _userManager.GetUserId(User); // Giriş yapan kullanıcının ID'sini al
+          
+                comment.DateCommented = DateTime.Now;
+                comment.AuthorId = _userManager.GetUserId(User);
 
-                // Yorumun hangi post'a ait olduğunu belirt
-                comment.PostId = comment.PostId; // PostId alanını doldur
+                var user = await _userManager.FindByIdAsync(comment.AuthorId);
+                if (user != null)
+                {
+                    comment.Author = user; 
+                }
 
-                // Yorum servisi ile ekleme
+                comment.PostId = comment.PostId;
+
                 await _commentService.AddAsync(comment);
 
-                // Yorum eklendikten sonra, başarılı bir yanıt döndür
                 return Json(new
                 {
                     success = true,
-                    author = comment.Author.UserName,
+                    author = comment.Author?.FullName ?? "Anonim", 
                     dateCommented = comment.DateCommented.ToShortDateString(),
                     content = comment.Content
                 });
-            }
+           
 
-            // Eğer model geçersizse hata mesajlarını döndür
             var errors = ModelState.Values.SelectMany(v => v.Errors);
             return Json(new
             {
@@ -104,6 +101,7 @@ namespace Blog.Web.Controllers
                 errors = errors.Select(e => e.ErrorMessage)
             });
         }
+
 
     }
 }
