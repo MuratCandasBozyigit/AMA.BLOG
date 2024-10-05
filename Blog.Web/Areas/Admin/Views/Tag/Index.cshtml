@@ -82,7 +82,7 @@
 @section Scripts {
     <script>
         $(document).ready(function () {
-            // Sayfa yüklendiğinde input alanlarını sıfırla
+          
             $("input,textarea").val("");
             $(".error-message").hide();
 
@@ -111,19 +111,19 @@
                 ]
             });
 
-            // Yeni Etiket Ekle butonuna tıklama işlemi
+           
             $('#btnAdd').click(function () {
                 $('#modalTitle').text('Yeni Etiket Ekle');
                 $('#btnSave').text('Ekle');
                 $('#modal').modal('show');
-                // Modal açıldığında input'ları temizle
+             
                 $('input').val('');
                 $('textarea').val('');
                 $('#name-error').hide();
                 $('#tagDescription-error').hide();
             });
 
-            // Etiket düzenleme butonuna tıklama işlemi
+           
             $('#tblTags').on('click', '.editTag', function () {
                 var id = $(this).data('id');
                 $.ajax({
@@ -139,7 +139,7 @@
                 });
             });
 
-            // Etiket silme işlemi
+        
             $('#tblTags').on('click', '.deleteTag', function () {
                 var id = $(this).data('id');
                 Swal.fire({
@@ -167,7 +167,7 @@
                 });
             });
 
-            // Kaydet butonuna tıklama işlemi
+          
             $('#btnSave').click(function () {
                 var tag = {
                     id: $("#tagId").val() === '' ? 0 : $("#tagId").val(),
@@ -177,7 +177,7 @@
 
                 let isValid = true;
 
-                // Form validasyonu
+                
                 if (!tag.name) {
                     $('#name-error').show();
                     isValid = false;
@@ -192,7 +192,7 @@
                     $('#tagDescription-error').hide();
                 }
 
-                // Form geçerli değilse kaydetme işlemi durduruluyor
+              
                 if (!isValid) {
                     return;
                 }
@@ -202,7 +202,7 @@
                     : '/Admin/Tag/Update/' + tag.id;
                 var method = $('#btnSave').text().toLowerCase() === 'ekle' ? 'POST' : 'PUT';
 
-                // AJAX ile kaydetme işlemi
+             
                 $.ajax({
                     type: method,
                     url: url,

@@ -1,52 +1,52 @@
-﻿    /* Genel Ayarlar */
+﻿
     body {
         font-family: 'Arial', sans-serif;
-        background-color: #f8f9fa; /* Arka plan rengi */
-        color: #343a40; /* Yazı rengi */
+        background-color: #f8f9fa; 
+        color: #343a40;
     }
 
 h2 {
     margin-top: 20px;
     text-align: center;
-    color: #007bff; /* Başlık rengi */
-    font-size: 2rem; /* Daha büyük başlık */
+    color: #007bff;
+    font-size: 2rem; 
 }
 
     .limited-text {
-        width: 50ch; /* Maksimum 30 karakter genişliğinde */
+        width: 50ch;
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
     }
-    /*#region Post */
+   
 
 .post-list {
-    max-width: 1000px; /* Maksimum genişlik */
-    margin: 0 auto; /* Ortala */
-    padding: 20px; /* İç boşluk */
+    max-width: 1000px;
+    margin: 0 auto; 
+    padding: 20px; 
 }
 
 
 
 
-    /* Post Resmi */
+   
     .post-image {
-        max-width: %100; /* Maksimum genişlik */
-        height:130px;/* Orantılı yükseklik */
-        border-radius: 0.25rem; /* Köşe yuvarlama */
-        margin-bottom: 10px; /* Alt boşluk */
+        max-width: %100;
+        height:130px;
+        border-radius: 0.25rem; 
+        margin-bottom: 10px;
     }
 
-    /* Post Eylem Butonları */
+  
     .post-actions {
-        margin-top: 10px; /* Üst boşluk */
+        margin-top: 10px;
     }
 
     .post-summary {
-        max-width: 90ch; /* 90 karakter genişliğinde */
-        overflow: hidden; /* Taşan içeriği gizler */
-        text-overflow: ellipsis; /* Taşan içerikte '...' gösterir */
-        white-space: nowrap; /* Tek satırda tutar */
+        max-width: 90ch;
+        overflow: hidden; 
+        text-overflow: ellipsis;
+        white-space: nowrap; 
     }
 
 .post-item {
@@ -57,19 +57,19 @@ h2 {
     margin-bottom: 20px;
     padding: 15px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    align-items: center; /* Dikey ortalama */
+    align-items: center; 
 }
 
-    /* Post İçerik */
+   
     .post-content {
-        flex: 2; /* İçerik kısmına esneklik ver */
-        margin-right: 15px; /* Resim ile içerik arasında boşluk */
+        flex: 2;
+        margin-right: 15px; 
     }
 
 .post-image {
-    flex: 1; /* Resim kısmına esneklik ver */
-    max-width: 400px; /* Maksimum genişlik */
-    max-height: 400px; /* Maksimum yükseklik */
+    flex: 1;
+    max-width: 400px; 
+    max-height: 400px; 
     overflow: hidden;
     border-radius: 0.25rem;
     margin-bottom: 10px;
@@ -77,79 +77,72 @@ h2 {
 
 .post-img {
     width: 100%;
-    height: 100%; /* Resmi tam yükseklikte göster */
-    object-fit: cover; /* Resmin oranını koru ve içeriği kırp */
+    height: 100%; 
+    object-fit: cover; 
     border-radius: 5px;
 }
 
 
-    /*#endregion */
-        /*#region Buton
-    */
 
 
         .btn {
-        padding: 10px 15px; /* Buton iç boşluk */
-        border-radius: 0.25rem; /* Köşe yuvarlama */
-        margin-right: 5px; /* Sağ boşluk */
+        padding: 10px 15px; 
+        border-radius: 0.25rem; 
+        margin-right: 5px; 
     }
 
-    /* Buton Renkleri */
     .btn-primary {
-        background-color: #007bff; /* Ana buton rengi */
-        border: none; /* Kenar kaldırma */
+        background-color: #007bff; 
+        border: none; 
     }
 
         .btn-primary:hover {
-            background-color: #0056b3; /* Hover efekti */
+            background-color: #0056b3;
         }
 
     .btn-secondary {
-        background-color: #6c757d; /* İkincil buton rengi */
-        border: none; /* Kenar kaldırma */
+        background-color: #6c757d; 
+        border: none; 
     }
 
         .btn-secondary:hover {
-            background-color: #5a6268; /* Hover efekti */
+            background-color: #5a6268; 
         }
 
     .btn-danger {
-        background-color: #dc3545; /* Sil buton rengi */
-        border: none; /* Kenar kaldırma */
+        background-color: #dc3545; 
+        border: none;
     }
 
         .btn-danger:hover {
-            background-color: #c82333; /* Hover efekti */
+            background-color: #c82333; 
         }
 
-    /*#endregion */
-    /*#region Category
-    */
-
+   
 
     .category-list {
-        list-style-type: none; /* Madde işaretlerini kaldırır */
-        padding: 0; /* İç boşlukları sıfırlar */
-        margin: 0; /* Dış boşlukları sıfırlar */
+        list-style-type: none; 
+        padding: 0;
+        margin: 0;
     }
 
     .category-item {
-        margin: 10px 0; /* Kategoriler arasında boşluk */
+        margin: 10px 0; 
     }
 
         .category-item a {
-            text-decoration: none; /* Alt çizgiyi kaldırır */
-            color: #007bff; /* Mavi renk */
-            font-weight: bold; /* Kalın yazı */
-            padding: 5px 10px; /* İç boşluk */
-            border-radius: 5px; /* Kenar yuvarlama */
-            transition: background-color 0.3s; /* Geçiş efekti */
+            text-decoration: none; 
+            color: #007bff; 
+            font-weight: bold; 
+            padding: 5px 10px; 
+            border-radius: 5px;
+            transition: background-color 0.3s; 
         }
 
             .category-item a:hover {
-                background-color: #f0f0f0; /* Fareyle üzerlerine gelindiğinde arka plan rengi değişir */
+                background-color: #f0f0f0; 
             }
 
 
 
-    /*#endregion */
+   

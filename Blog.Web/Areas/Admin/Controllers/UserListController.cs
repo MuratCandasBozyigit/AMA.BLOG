@@ -17,8 +17,7 @@ namespace Blog.Web.Areas.Admin.Controllers
         private readonly RoleManager<ApplicationRole> _roleManager;
         private readonly IRoleService _roleService;
         private readonly IUserService _userService;
-        private readonly UserManager<AppUser> _userManager; // Use your AppUser if you are using it
-
+        private readonly UserManager<AppUser> _userManager; 
         public UserListController(IRoleService roleService, UserManager<AppUser> userManager, RoleManager<ApplicationRole> roleManager, IUserService userService)
         {
             _roleService = roleService;
@@ -31,7 +30,7 @@ namespace Blog.Web.Areas.Admin.Controllers
             var users = await _userManager.Users.ToListAsync();
             var roles = await _roleManager.Roles.ToListAsync();
 
-            // Kullanıcıların rollerini alıp birleştiriyoruz
+         
             foreach (var user in users)
             {
                 var userRoles = await _userManager.GetRolesAsync(user);
@@ -58,24 +57,22 @@ namespace Blog.Web.Areas.Admin.Controllers
                 return BadRequest("Kullanıcı veya rol bulunamadı.");
             }
 
-            // Kullanıcının mevcut rollerini al
             var currentRoles = await _userManager.GetRolesAsync(user);
 
-            // Eğer kullanıcıda zaten bu rol varsa, işlem yapmaya gerek yok
+         
             if (currentRoles.Contains(role.Name))
             {
                 return BadRequest("Kullanıcı zaten bu role sahip.");
             }
 
-            // Mevcut rollerden eski rolü kaldır
-            // Burada örneğin yalnızca bir rol olacağını varsayıyoruz
+          
             if (currentRoles.Any())
             {
                 var oldRole = currentRoles.First();
                 await _userManager.RemoveFromRoleAsync(user, oldRole);
             }
 
-            // Yeni rolü ata
+        
             var result = await _userManager.AddToRoleAsync(user, role.Name);
             if (result.Succeeded)
             {
@@ -122,7 +119,7 @@ namespace Blog.Web.Areas.Admin.Controllers
 
             try
             {
-                // ID ile rolü bul
+              
                 var existingRole = await _roleService.GetRoleByIdAsync(roleId);
 
                 if (existingRole == null)
@@ -130,14 +127,14 @@ namespace Blog.Web.Areas.Admin.Controllers
                     return NotFound("Role not found.");
                 }
 
-                // Rol bilgilerini güncelle
+               
               
                 existingRole.RoleName = model.RoleName;
                 existingRole.Description = model.Description;
-                existingRole.Name = model.RoleName; // Name property is optional
+                existingRole.Name = model.RoleName; 
                 existingRole.NormalizedName = model.RoleName.ToUpper();
 
-                // Güncelleme işlemi için servis çağır
+              
                 var result = await _roleService.UpdateRoleAsync(existingRole);
 
                 if (result.Succeeded)
@@ -168,10 +165,10 @@ namespace Blog.Web.Areas.Admin.Controllers
             {
                 var role = new ApplicationRole
                 {
-                    RoleName = model.RoleName,   // Custom role name
+                    RoleName = model.RoleName,   
                     Description = model.Description,
-                    Name = model.RoleName,       // Setting Name from RoleName
-                    NormalizedName = model.RoleName.ToUpper() // NormalizedName in uppercase
+                    Name = model.RoleName,       
+                    NormalizedName = model.RoleName.ToUpper()
                 };
 
                 var result = await _roleService.CreateRoleAsync(role);

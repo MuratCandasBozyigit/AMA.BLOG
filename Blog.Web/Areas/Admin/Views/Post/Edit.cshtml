@@ -78,19 +78,19 @@
                 var formData = new FormData($('#postEditForm')[0]);
                 let isValid = true;
 
-                // Başlık kontrolü
+            
                 if (!$('#title').val()) {
                     Swal.fire('Hata', 'Başlık boş olamaz!', 'error');
                     isValid = false;
                 }
 
-                // İçerik kontrolü
+           
                 if (!$('#content').val()) {
                     Swal.fire('Hata', 'İçerik boş olamaz!', 'error');
                     isValid = false;
                 }
 
-                // Summary kontrolü
+          
                 if (!$('#summary').val()) {
                     Swal.fire('Hata', 'Kısa İçerik boş olamaz!', 'error');
                     isValid = false;
@@ -100,7 +100,7 @@
                     return;
                 }
 
-                // Form gönderimi
+            
                 $.ajax({
                     type: 'POST',
                     url: '/Admin/Post/Edit/' + $('#postId').val(),
@@ -110,7 +110,7 @@
                     success: function (response) {
                         if (response.success) {
                             Swal.fire('Başarı', response.message, 'success').then(function () {
-                                window.location.href = "/Admin/Post/Index"; // Başarılı yönlendirme
+                                window.location.href = "/Admin/Post/Index";
                             });
                         } else {
                             Swal.fire('Hata', response.message, 'error');

@@ -58,7 +58,7 @@ namespace Blog.Business.Shared.Concrete
             return _repository.GetFirstOrDefault(expression);
         }
 
-        // Update işlemi
+      
         public virtual T Update(T entity)
         {
             return _repository.Update(entity);

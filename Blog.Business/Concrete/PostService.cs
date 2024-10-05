@@ -12,8 +12,8 @@ namespace Blog.Business.Concrete
     public class PostService : Service<Post>, IPostService
     {
         private readonly IRepository<Post> _postRepo;
-        private readonly IRepository<Category> _categoryRepo; // Kategori repository'si
-        private readonly IRepository<Comment> _commentRepo; // Yorum repository'si
+        private readonly IRepository<Category> _categoryRepo; 
+        private readonly IRepository<Comment> _commentRepo; 
 
         public PostService(IRepository<Post> postRepo, IRepository<Category> categoryRepo, IRepository<Comment> commentRepo) : base(postRepo)
         {
@@ -24,12 +24,12 @@ namespace Blog.Business.Concrete
 
         public ICollection<Post> GetAllPostsByCategoryId(int categoryId)
         {
-            return _postRepo.GetAll(x => x.CategoryId == categoryId).ToList(); // Kategoriye göre postları al
+            return _postRepo.GetAll(x => x.CategoryId == categoryId).ToList();
         }
 
         public ICollection<Post> GetAllPosts()
         {
-            return _postRepo.GetAll().ToList(); // Parametresiz versiyon
+            return _postRepo.GetAll().ToList(); 
         }
 
         public async Task<Post> GetByIdAsync(int id)
@@ -45,12 +45,11 @@ namespace Blog.Business.Concrete
                 return null;
             }
 
-            // Kategoriyi yükle
+          
             post.Category = await _categoryRepo.GetByIdAsync(post.CategoryId);
 
-            // Yorumları yükle
-            post.Comments = (await _commentRepo.GetCommentsByPostIdAsync(postId)).ToList(); // Yorumları listeye çevir
-
+         
+            post.Comments = (await _commentRepo.GetCommentsByPostIdAsync(postId)).ToList(); 
             return post;
         }
 

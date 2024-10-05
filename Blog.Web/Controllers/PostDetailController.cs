@@ -7,20 +7,20 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Blog.Web.Controllers
 {
-    // [Authorize] 
+   
     public class PostDetailController : Controller
     {
         private readonly IPostService _postService;
         private readonly ICategoryService _categoryService;
-        private readonly ICommentService _commentService; // Yorum servisi
-        private readonly UserManager<AppUser> _userManager; // Kullanıcı yöneticisi
+        private readonly ICommentService _commentService; 
+        private readonly UserManager<AppUser> _userManager;
 
         public PostDetailController(IPostService postService, ICategoryService categoryService, ICommentService commentService, UserManager<AppUser> userManager)
         {
             _postService = postService;
             _categoryService = categoryService;
             _commentService = commentService;
-            _userManager = userManager; // Kullanıcı yöneticisini kullanıma al
+            _userManager = userManager; 
         }
 
         [HttpGet]
@@ -28,25 +28,25 @@ namespace Blog.Web.Controllers
         {
             try
             {
-                // Post detaylarını al
+               
                 var post = await _postService.GetPostDetails(postId);
 
                 if (post == null)
                 {
-                    return NotFound(); // Post bulunamazsa 404 döndür
+                    return NotFound(); 
                 }
 
-                // Kategoriyi al
+               
                 var category = await _categoryService.GetByIdAsync(post.CategoryId);
                 if (category == null)
                 {
-                    return NotFound("Kategori bulunamadı."); // Kategori bulunamazsa 404 döndür
+                    return NotFound("Kategori bulunamadı.");
                 }
 
-                // Yorumları al
+              
                 var comments = await _commentService.GetCommentsByPostIdAsync(postId);
 
-                // Görünümde kullanmak için modeli hazırlayın
+              
                 var viewModel = new PostDetailsViewModel
                 {
                     Post = post,
@@ -54,7 +54,7 @@ namespace Blog.Web.Controllers
                     CategoryName = category.Name
                 };
 
-                return View(viewModel); // Tekil postu ve yorumları görünüm ile paylaş
+                return View(viewModel);
             }
             catch (Exception ex)
             {

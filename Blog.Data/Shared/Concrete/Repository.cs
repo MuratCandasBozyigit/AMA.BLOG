@@ -38,7 +38,7 @@ namespace Blog.Data.Shared.Concrete
         }
         public async Task<T> GetByIdAsync(int id)
         {
-            return await _context.Set<T>().FindAsync(id); // Entity Framework kullanıyorsanız
+            return await _context.Set<T>().FindAsync(id);
         }
         public T Add(T entity)
         {
@@ -106,7 +106,7 @@ namespace Blog.Data.Shared.Concrete
         public T Update(T entity)
         {
             _dbSet.Update(entity);
-            Save(); // Değişiklikleri kaydet
+            Save();
             return entity;
         }
 

@@ -14,7 +14,7 @@ namespace Blog.Core.Models
 
         public bool IsAdmin { get; set; } = false;
 
-        // Kullanıcıya atanmış roller
+      
         public virtual ICollection<ApplicationUserRole> UserRoles { get; set; } = new List<ApplicationUserRole>();
     }
 }

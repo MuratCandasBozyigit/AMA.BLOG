@@ -9,13 +9,12 @@ using Blog.Core.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Register repository implementations
+
 builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 
-// Add HttpContextAccessor
+
 builder.Services.AddHttpContextAccessor();
 
-// Add services to the container.
 builder.Services.AddControllersWithViews();
 
 builder.Services.ConfigureApplicationCookie(options =>
@@ -24,7 +23,6 @@ builder.Services.ConfigureApplicationCookie(options =>
     options.LoginPath = "/account/login";   
 });
 
-// Configure DbContext
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
@@ -43,17 +41,16 @@ builder.Services.AddIdentity<AppUser, ApplicationRole>(options =>
 .AddDefaultTokenProviders();
 
 
-// Register RoleManager and RoleService
+
 builder.Services.AddScoped<RoleManager<ApplicationRole>>();
 builder.Services.AddScoped<IRoleService, RoleService>();
 
-// DI methods for Business and Repository layers
 builder.Services.BusinessDI();
 builder.Services.RepositoryDI();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
+
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");

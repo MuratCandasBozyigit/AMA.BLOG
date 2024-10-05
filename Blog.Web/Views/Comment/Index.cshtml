@@ -17,7 +17,7 @@
         {
             <tr>
                 <td>@comment.Content</td>
-                <td>@comment.Author?.UserName ?? "Bilinmiyor"</td> <!-- Yorumcunun ismini ekleyin -->
+                <td>@comment.Author?.UserName ?? "Bilinmiyor"</td> 
                 <td>@comment.DateCommented.ToShortDateString()</td>
                 <td>
                     <form asp-action="Delete" asp-route-id="@comment.Id" asp-route-postId="@comment.PostId" method="post" style="display:inline;">

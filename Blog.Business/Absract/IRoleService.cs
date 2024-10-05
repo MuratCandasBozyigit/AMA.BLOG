@@ -7,10 +7,10 @@ namespace Blog.Core.Services
 {
     public interface IRoleService
     {
-       List<ApplicationRole> GetAllRoles(); // Tüm rolleri döndür
-        Task<IdentityResult> CreateRoleAsync(ApplicationRole role); // Rol oluştur
-        Task<IdentityResult> DeleteRoleAsync(string roleId); // Rol sil
-        Task<ApplicationRole> GetRoleByIdAsync(string roleId); // Rolü ID ile bul
+       List<ApplicationRole> GetAllRoles(); 
+        Task<IdentityResult> CreateRoleAsync(ApplicationRole role);
+        Task<IdentityResult> DeleteRoleAsync(string roleId); 
+        Task<ApplicationRole> GetRoleByIdAsync(string roleId); 
         Task<IdentityResult> UpdateRoleAsync(ApplicationRole role);
 
     }

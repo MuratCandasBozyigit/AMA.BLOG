@@ -81,10 +81,10 @@
 @section Scripts {
     <script>
         $(document).ready(function () {
-            // DataTable initialization for roles
+          
             var table = $('#tblAspNetRoles').DataTable({
                 ajax: {
-                    url: '/Admin/UserList/GetAllRolesAsync', // Doğru URL
+                    url: '/Admin/UserList/GetAllRolesAsync', 
                     dataSrc: '',
                     error: function (xhr, error, thrown) {
                         console.error('Ajax Error', error, thrown);
@@ -92,7 +92,7 @@
                     }
                 },
                 columns: [
-                    { data: 'roleName', title: 'Rol Adı' }, // Kolon isimleri Türkçeye çevrildi
+                    { data: 'roleName', title: 'Rol Adı' },
                     { data: 'description', title: 'Rol Açıklaması' },
                     {
                         data: null,
@@ -107,7 +107,7 @@
                 ]
             });
 
-            // Yeni Rol Ekleme Butonuna Tıklama
+        
             $('#btnAdd').on('click', function () {
                 $('#modalTitle').text("Yeni Rol Ekle");
                 $('#roleId').val("");
@@ -116,13 +116,13 @@
                 $('#modal').modal('show');
             });
 
-            // Kaydet Butonu Tıklama - Hem Ekleme hem Güncelleme için kullanılır
+            
             $(document).on('click', '#btnSave', function () {
                 var roleId = $('#roleId').val();
                 var roleName = $('#roleName').val();
                 var description = $('#description').val();
 
-                // Validation
+              
                 if (roleName.trim() === "") {
                     $('#roleName-error').show();
                     return;
@@ -143,7 +143,7 @@
                     description: description
                 });
 
-                // AJAX ile rol kaydetme (Ekleme veya Güncelleme)
+            
                 $.ajax({
                     type: "POST",
                     url: ajaxUrl,
@@ -151,7 +151,7 @@
                      data: requestData,
                     success: function (response) {
                         $('#modal').modal('hide');
-                        $('#tblAspNetRoles').DataTable().ajax.reload(); // Güncellenmiş tablo ID'si
+                        $('#tblAspNetRoles').DataTable().ajax.reload(); 
                         Swal.fire('Başarılı', roleId === "" ? 'Rol başarıyla eklendi' : 'Rol başarıyla güncellendi', 'success');
                     },
                     error: function () {
@@ -160,14 +160,14 @@
                 });
             });
 
-            // Düzenleme Butonuna Tıklama
+        
             $(document).on('click', '.editRole', function () {
                 var roleId = $(this).data('id');
               
-                // Rolü Getir ve Formu Doldur
+              
                 $.ajax({
                     type: "GET",
-                    url: "/Admin/UserList/GetRoleById?roleId="+roleId, // Doğru URL
+                    url: "/Admin/UserList/GetRoleById?roleId="+roleId,
                    
                     success: function (role) {
                         $('#modalTitle').text("Düzenle Rol");
@@ -182,7 +182,7 @@
                 });
             });
           
-            // Silme Butonuna Tıklama
+            
             $(document).on('click', '.deleteRole', function () {
                 var roleId = $(this).data('id');
                

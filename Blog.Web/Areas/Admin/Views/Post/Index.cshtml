@@ -10,16 +10,16 @@
         {
             <div class="post-item">
                 <div class="post-content">
-                    <h3>@(post.Title ?? "Başlık Yok")</h3> <!-- Null kontrolü -->
-                    <p class="post-summary limited-text" id="summary"><strong>Özet:</strong> @(post.Summary ?? "Özet Yok")</p> <!-- Null kontrolü -->
-                    <p><strong>Kategori:</strong> @(post.Category?.Name ?? "Kategori Yok")</p> <!-- Null kontrolü -->
+                    <h3>@(post.Title ?? "Başlık Yok")</h3> 
+                    <p class="post-summary limited-text" id="summary"><strong>Özet:</strong> @(post.Summary ?? "Özet Yok")</p> 
+                    <p><strong>Kategori:</strong> @(post.Category?.Name ?? "Kategori Yok")</p> 
                     <div class="post-actions">
                         <a href="Edit/@post.Id" class="btn btn-secondary">Düzenle</a>
                         <a href="#" class="btn btn-danger deletePost" data-id="@post.Id">Sil</a>
                     </div>
                 </div>
                 <div class="post-image">
-                    <img src="@(!string.IsNullOrEmpty(post.ImagePath) ? post.ImagePath : "/path/to/default/image.jpg")" alt="@post.Title" class="post-img" /> <!-- Null kontrolü -->
+                    <img src="@(!string.IsNullOrEmpty(post.ImagePath) ? post.ImagePath : "/path/to/default/image.jpg")" alt="@post.Title" class="post-img" /> 
                 </div>
             </div>
         }

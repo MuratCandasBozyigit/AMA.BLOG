@@ -13,11 +13,11 @@ namespace Blog.Core.Models
         public string Name {  get; set; }
         public int? PostId { get; set; }
         public string TagDescription { get; set; }
-        //Slug(URL dostu etiket adı)
+      
 
 
 
-      //  Etiketleri category de birden fazla secebilmek icin
+
       //  public virtual ICollection<Category> Category { get; set; }
 
         //public int? AppUserId { get; set; }

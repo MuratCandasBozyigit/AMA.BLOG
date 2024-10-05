@@ -12,6 +12,6 @@ namespace Blog.Business.Absract
     {
         ICollection<Category> GetAllCategories(Category category);
         IEnumerable<Category> GetAllCategories();
-        Task<Category> GetByIdAsync(int id); // Burayı 'GetCategoryByIdAsync' olarak değiştirdim
+        Task<Category> GetByIdAsync(int id);
     }   
 }

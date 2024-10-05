@@ -13,7 +13,7 @@ namespace BotanikBambu.Web.Areas.Admin.Controllers
         private readonly IHttpContextAccessor _httpContextAccessor;
         public string UserId { get; private set; }
 
-        // Constructor'da hata varsa class içinde değil, method veya özellik tanımlamalarında olabilir
+      
         public AdminBaseController(IHttpContextAccessor httpContextAccessor)
         {
             _httpContextAccessor = httpContextAccessor;
@@ -29,8 +29,8 @@ namespace BotanikBambu.Web.Areas.Admin.Controllers
             }
             else
             {
-                // Kullanıcı kimliği yoksa veya HttpContext null ise bir varsayılan değer atayın
-                UserId = "";  // Örneğin, UserId'yi sıfır olarak ayarlayabilirsiniz
+              
+                UserId = ""; 
             }
         }
     }

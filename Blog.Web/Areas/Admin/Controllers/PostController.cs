@@ -25,21 +25,21 @@ namespace Blog.Web.Areas.Admin.Controllers
         }
 
         #endregion
-        // GET: Post/Index
+     
         [HttpGet("Index")]
         public IActionResult Index()
         {
             var posts = _postService.GetAll();
             var categories = _categoryService.GetAll();
 
-            // Modeli oluştur
+          
             var viewModel = new HomeViewModel
             {
                 Posts = posts,
                 Categories = categories
             };
 
-            // View'e modeli gönder
+          
             return View(viewModel);
         }
 
@@ -61,7 +61,7 @@ namespace Blog.Web.Areas.Admin.Controllers
         [HttpGet("Create")]
         public IActionResult Create()
         {
-            var categories = _categoryService.GetAll(); // Kategorileri al
+            var categories = _categoryService.GetAll(); 
             var viewModel = new HomeViewModel
             {
                 Categories = categories
@@ -97,7 +97,7 @@ namespace Blog.Web.Areas.Admin.Controllers
         [HttpDelete("Delete/{id}")]
         public IActionResult Delete(int id)
         {
-            if (id == 0) // null kontrolü yerine 0 ile kontrol
+            if (id == 0) 
             {
                 return BadRequest("Invalid Id Format");
             }
@@ -129,8 +129,6 @@ namespace Blog.Web.Areas.Admin.Controllers
                 return BadRequest(ex.Message + "sea sorun getbyıd");
             }
         }
-
-        #endregion
 
 
         [HttpGet("Edit/{id}")]
@@ -181,6 +179,9 @@ namespace Blog.Web.Areas.Admin.Controllers
             _postService.Update(postToUpdate);
             return Json(new { success = true, message = "Post başarıyla güncellendi." });
         }
+
+        #endregion
+
     }
 }
 

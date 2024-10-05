@@ -18,18 +18,18 @@ namespace Blog.Core.Services
 
         public  List<ApplicationRole> GetAllRoles()
         {
-            return _roleManager.Roles.ToList(); // Tüm rolleri döndür
+            return _roleManager.Roles.ToList(); 
         }
 
         public async Task<IdentityResult> CreateRoleAsync(ApplicationRole role)
         {
-            return await _roleManager.CreateAsync(role); // Rol oluştur
+            return await _roleManager.CreateAsync(role); 
         }
 
         public async Task<IdentityResult> DeleteRoleAsync(string roleId)
         {
-            var role = await _roleManager.FindByIdAsync(roleId); // Rolü bul
-            return await _roleManager.DeleteAsync(role); // Rolü sil
+            var role = await _roleManager.FindByIdAsync(roleId); 
+            return await _roleManager.DeleteAsync(role); 
         }
         public async Task<IdentityResult> UpdateRoleAsync(ApplicationRole role)
         {
@@ -39,7 +39,7 @@ namespace Blog.Core.Services
             {
                 existingRole.Name = role.Name;
                 existingRole.NormalizedName = role.NormalizedName;
-                existingRole.Description = role.Description; // ApplicationRole modeline göre
+                existingRole.Description = role.Description;
 
                 return await _roleManager.UpdateAsync(existingRole);
             }
@@ -48,7 +48,7 @@ namespace Blog.Core.Services
 
         public async Task<ApplicationRole> GetRoleByIdAsync(string roleId)
         {
-            return await _roleManager.FindByIdAsync(roleId); // Rolü ID ile bul
+            return await _roleManager.FindByIdAsync(roleId); 
         }
     }
 }

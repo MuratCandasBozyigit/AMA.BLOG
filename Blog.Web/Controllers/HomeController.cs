@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 
 using Microsoft.Extensions.Logging;
 using System;
-using System.Collections.Generic; // IEnumerable için gerekli
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Threading.Tasks;
 using Blog.Core.Models;
@@ -30,8 +30,8 @@ namespace Blog.Web.Controllers
         {
             try
             {
-                var posts = _postService.GetAllPosts(); // Senkron şekilde postları al
-                var categories = _categoryService.GetAllCategories(); // Senkron şekilde kategorileri al
+                var posts = _postService.GetAllPosts();
+                var categories = _categoryService.GetAllCategories();
 
                 var model = new HomeViewModel
                 {
@@ -39,12 +39,12 @@ namespace Blog.Web.Controllers
                     Categories = categories
                 };
 
-                return View(model); // View'a model ile birlikte gönder
+                return View(model); 
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Ana sayfa yüklenirken hata oluştu.");
-                return View("Error"); // Hata sayfasını döndür
+                return View("Error");
             }
         }
 

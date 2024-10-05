@@ -3,7 +3,7 @@
 
 @{
     ViewData["Title"] = "Kullanıcı Listesi";
-    var allRoles = ViewBag.AllRoles as List<ApplicationRole>; // Rolleri ViewBag üzerinden taşıyoruz
+    var allRoles = ViewBag.AllRoles as List<ApplicationRole>; 
 }
 
 <h2>Kullanıcı Listesi</h2>
@@ -26,13 +26,13 @@
                 <td>@user.UserName</td>
                 <td>@user.Email</td>
                 <td>@user.PhoneNumber</td>
-                <td>@string.Join(", ", user.UserRoles.Select(ur => ur.Role?.RoleName))</td> <!-- Kullanıcının mevcut rolleri -->
+                <td>@string.Join(", ", user.UserRoles.Select(ur => ur.Role?.RoleName))</td> 
                 <td>
                     <select class="form-control" id="roleSelect_@user.Id" onchange="assignRole('@user.Id', this.value)">
                         <option value="">Rol Seç</option>
                         @foreach (var role in allRoles)
                         {
-                            <option value="@role.Id">@role.RoleName</option> <!-- Rol Name özelliğini gösteriyoruz -->
+                            <option value="@role.Id">@role.RoleName</option>
                         }
                     </select>
                 </td>
@@ -78,12 +78,12 @@
                     roleId: roleId
                 },
                 success: function (response) {
-                    // Kullanıcının mevcut rolleri
+                
                     const currentRoles = @Html.Raw(Json.Serialize(Model.Select(u => u.UserRoles.Select(ur => ur.Role.Name).ToList()).ToList()));
 
-                    // Yeni rol atanırken alınan mesajı kontrol et
+                 
                     if (response === "Rol başarıyla atandı.") {
-                        // Eğer kullanıcı zaten admin ise uyarı göster
+                      
                         if (currentRoles.includes('Admin')) {
                             Swal.fire({
                                 icon: 'warning',
@@ -91,7 +91,7 @@
                                 text: 'Kullanıcı zaten admin rolüne sahip!',
                             });
                         } else {
-                            // Rol başarıyla atandı mesajı
+                          
                             Swal.fire({
                                 icon: 'success',
                                 title: 'Başarılı',
@@ -99,7 +99,7 @@
                             });
                         }
                     } else {
-                        // Sunucudan dönen hata mesajını göster
+                       
                         Swal.fire({
                             icon: 'error',
                             title: 'Hata',

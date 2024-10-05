@@ -19,14 +19,14 @@ namespace Blog.Web.Areas.Admin.Controllers
         }
 
         #region Tamamlandı 
-        // GET: Admin/Category
+      
         [HttpGet]
         public IActionResult Index()
         {
             return View();
         }
 
-        // GET: Admin/Category/GetAllCategories
+      
         [HttpGet("GetAllCategories")]
         public IActionResult GetAll()
         {
@@ -101,7 +101,6 @@ namespace Blog.Web.Areas.Admin.Controllers
             }
         }
 
-        #endregion
 
 
         [HttpPost("Add")]
@@ -123,6 +122,7 @@ namespace Blog.Web.Areas.Admin.Controllers
 
 
 
+        #endregion
 
     }
 }

@@ -14,7 +14,7 @@ namespace Blog.Web.Controllers
             _postService = postService;
         }
 
-        // Belirli bir posta ait yorumları getirir
+      
         public async Task<IActionResult> Index(int postId)
         {
             var post = await _postService.GetByIdAsync(postId);
@@ -27,7 +27,7 @@ namespace Blog.Web.Controllers
             return View(comments);
         }
 
-        // Yorum eklemek için formu getirir
+       
         [HttpGet]
         public IActionResult AddComment(int postId)
         {
@@ -35,20 +35,20 @@ namespace Blog.Web.Controllers
             return View(model);
         }
 
-        // Yorum ekleme işlemi
+      
         [HttpPost]
         public async Task<IActionResult> AddComment(Comment comment)
         {
             if (ModelState.IsValid)
             {
-                comment.DateCommented = DateTime.Now; // Yorumun eklendiği tarihi belirt
+                comment.DateCommented = DateTime.Now; 
                 await _commentService.AddAsync(comment);
                 return RedirectToAction("Index", new { postId = comment.PostId });
             }
             return View(comment);
         }
 
-        // Yorum silme işlemi
+       
         [HttpPost]
         public async Task<IActionResult> Delete(int id, int postId)
         {

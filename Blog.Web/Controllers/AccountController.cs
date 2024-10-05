@@ -50,9 +50,9 @@ namespace Blog.Web.Controllers
             {
                 AppUser user = new AppUser
                 {
-                    FullName = model.Name, // Name alanını doğru şekilde kullanın
+                    FullName = model.Name,
                     Email = model.Email,
-                    UserName = model.Email,  // Email'i kullanıcı adı olarak kullanabilirsiniz.
+                    UserName = model.Email,  
                 };
 
                 var result = await _userManager.CreateAsync(user, model.Password);
@@ -89,7 +89,7 @@ namespace Blog.Web.Controllers
                 }
                 else
                 {
-                    // Burada yönlendirme yapıyorsunuz
+                  
                     return RedirectToAction("ChangePassword", "Account", new { username = user.UserName });
                 }
            
@@ -148,6 +148,6 @@ namespace Blog.Web.Controllers
             return RedirectToAction("Index","Home");
         }
 
-        //Buradan sonra gerekli yapılacak işlemlere authorize ekleyeceksin sadece yani gidip yorumi le ilgili olan ındexse controllerda diyeceksinli bole bole authorize olman lazım gardaş.
+       
     }
 }

@@ -22,9 +22,9 @@ namespace Blog.Business.Concrete
             if (user != null)
             {
                 await _userManager.DeleteAsync(user);
-                return user; // Silinen kullanıcıyı döndür
+                return user; 
             }
-            return null; // Kullanıcı bulunamazsa null döndür
+            return null;
         }
 
         public async Task<List<AppUser>> GetAllUsersAsync()
@@ -42,9 +42,9 @@ namespace Blog.Business.Concrete
                 existingUser.PhoneNumber = user.PhoneNumber;
 
                 await _userManager.UpdateAsync(existingUser);
-                return existingUser; // Güncellenen kullanıcıyı döndür
+                return existingUser; 
             }
-            return null; // Kullanıcı bulunamazsa null döndür
+            return null; 
         }
     }
 }

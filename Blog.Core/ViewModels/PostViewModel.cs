@@ -1,4 +1,4 @@
-﻿using Blog.Core.Models; // Post ve Comment sınıflarını kullanmak için gerekli
+﻿using Blog.Core.Models; 
 using System.Collections.Generic;
 
 namespace Blog.Core.ViewModels
@@ -11,14 +11,14 @@ namespace Blog.Core.ViewModels
 
 
         public Category Category => Post.Category;
-        // Post nesnesinden doğrudan erişim için
-        public string Title => Post.Title; // Başlık
-        public string Content => Post.Content; // İçerik
-        public string? AuthorId => Post.AuthorId; // Nullable AuthorId
-        public string? ImagePath => Post.ImagePath; // Nullable ImagePath
-        public int? Likes => Post.Likes; // Nullable Likes
-        public DateTime DatePublished => Post.DatePublished; // Yayın Tarihi
-        public bool IsPublished => Post.IsPublished; // Durum
-        public string Summary => Post.Summary; // Özet
+    
+        public string Title => Post.Title;
+        public string Content => Post.Content; 
+        public string? AuthorId => Post.AuthorId;
+        public string? ImagePath => Post.ImagePath;
+        public int? Likes => Post.Likes; 
+        public DateTime DatePublished => Post.DatePublished; 
+        public bool IsPublished => Post.IsPublished; 
+        public string Summary => Post.Summary; 
     }
 }

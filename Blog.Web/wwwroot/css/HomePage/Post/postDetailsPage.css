@@ -77,43 +77,43 @@
     }
 
 .comment-form-container {
-    background-color: #ffffff; /* Yorum formu arka plan rengi */
-    border-radius: 10px; /* Kenar yuvarlama */
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Hafif gölge */
-    padding: 20px; /* İç boşluk */
-    margin-top: 20px; /* Üstten boşluk */
+    background-color: #ffffff; 
+    border-radius: 10px; 
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); 
+    padding: 20px; 
+    margin-top: 20px; 
 }
 
 .form-group {
-    margin-bottom: 15px; /* Form elemanları arasındaki boşluk */
+    margin-bottom: 15px;
 }
 
 label {
-    display: block; /* Etiketi blok olarak göster */
-    margin-bottom: 5px; /* Etiket ile textarea arasında boşluk */
-    font-weight: bold; /* Kalın etiket yazısı */
+    display: block; 
+    margin-bottom: 5px; 
+    font-weight: bold; 
 }
 
 textarea {
-    width: 100%; /* Tam genişlik */
-    height: 100px; /* Yükseklik ayarı */
-    padding: 10px; /* İç boşluk */
-    border: 1px solid #ccc; /* Kenarlık rengi */
-    border-radius: 5px; /* Kenar yuvarlama */
-    resize: vertical; /* Sadece dikey olarak yeniden boyutlandırılabilir */
+    width: 100%;
+    height: 100px; 
+    padding: 10px; 
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    resize: vertical; 
 }
 
 .submit-button {
-    background-color: #297f81; /* Gönder butonu arka plan rengi */
-    color: #ffffff; /* Yazı rengi */
-    border: none; /* Kenarlık yok */
-    padding: 10px 15px; /* İç boşluk */
-    border-radius: 5px; /* Kenar yuvarlama */
-    cursor: pointer; /* İşaretçi */
-    font-size: 1em; /* Yazı boyutu */
-    transition: background-color 0.3s; /* Geçiş efekti */
+    background-color: #297f81;
+    color: #ffffff; 
+    border: none; 
+    padding: 10px 15px;
+    border-radius: 5px; 
+    cursor: pointer; 
+    font-size: 1em;
+    transition: background-color 0.3s; 
 }
 
     .submit-button:hover {
-        background-color: #3a9c94; /* Hover durumu */
+        background-color: #3a9c94; 
     }

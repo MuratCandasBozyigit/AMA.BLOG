@@ -15,7 +15,7 @@ namespace Blog.Business.Concrete
 
         public CategoryService(IRepository<Category> categoryRepo) : base(categoryRepo)
         {
-            _repo = categoryRepo; // Burayı düzelt
+            _repo = categoryRepo;
         }
 
         public ICollection<Category> GetAllCategories(Category category)
