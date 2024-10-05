@@ -5,8 +5,7 @@
     ViewData["Title"] = "Ana Sayfa";
 }
 <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" />
-<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" />
-<link rel="icon" href="path-to-your-heart-icon/favicon.ico" type="image/x-icon" /> 
+<link rel="icon" href="path-to-your-heart-icon/favicon.ico" type="image/x-icon" />
 
 <div id="main-content" class="blog-page">
     <div class="container">
@@ -27,14 +26,13 @@
                                 }
                             </div>
                             <h3 class="post-title">
-                                <a href="@Url.Action("Index", "PostDetail",  new {postcat=post.Category,postSlug=post.Category.Slug, postId = post.Id })">@post.Title</a>
+                                <a href="@Url.Action("Index", "PostDetail", new { postcat = post.Category, postSlug = post.Category.Slug, postId = post.Id })">@post.Title</a>
                             </h3>
                             <p class="post-summary">
                                 @if (post.Summary.Length > 50)
                                 {
                                     @post.Summary.Substring(0, 50)
-                                   
-                                            }
+                                }
                                 else
                                 {
                                     @post.Summary
@@ -43,12 +41,9 @@
                         </div>
                         <div class="footer">
                             <div class="actions">
-                               @*  <a id="okuDetay" href="@Url.Action("Index", "PostDetail", new { category = post.Category.Name, slug = post.Category.Slug, postId = post.Id })" class="btn btn-outline-secondary">Oku</a> *@
                                 <a id="okuDetay" href="/postDetail/@post.Category.Name/@post.Category.Slug/@post.Id" class="btn btn-outline-secondary">Oku</a>
-
                             </div>
                             <ul class="stats" style="margin-left:15px;padding-right:0px;margin-right:0px;">
-
                                 <li><a href="javascript:void(0);" class="fa fa-heart">@post.Likes</a></li>
                                 <li><a href="javascript:void(0);" class="fa fa-comment">@post.Comments</a></li>
                             </ul>
@@ -57,11 +52,24 @@
                 }
 
                 <ul class="pagination pagination-primary">
-                    <li class="page-item"><a class="page-link" href="javascript:void(0);">Previous</a></li>
-                    <li class="page-item active"><a class="page-link" href="javascript:void(0);">1</a></li>
-                    <li class="page-item"><a class="page-link" href="javascript:void(0);">2</a></li>
-                    <li class="page-item"><a class="page-link" href="javascript:void(0);">3</a></li>
-                    <li class="page-item"><a class="page-link" href="javascript:void(0);">Next</a></li>
+                    @if (Model.CurrentPage > 1)
+                    {
+                        <li class="page-item">
+                            <a class="page-link" href="@Url.Action("Index", new { page = Model.CurrentPage - 1 })">Previous</a>
+                        </li>
+                    }
+                    @for (int i = 1; i <= Model.TotalPages; i++)
+                    {
+                        <li class="page-item @(Model.CurrentPage == i ? "active" : "")">
+                            <a class="page-link" href="@Url.Action("Index", new { page = i })">@i</a>
+                        </li>
+                    }
+                    @if (Model.CurrentPage < Model.TotalPages)
+                    {
+                        <li class="page-item">
+                            <a class="page-link" href="@Url.Action("Index", new { page = Model.CurrentPage + 1 })">Next</a>
+                        </li>
+                    }
                 </ul>
             </div>
             <div class="col-lg-4 col-md-12 right-box">
@@ -97,14 +105,8 @@
     <link rel="stylesheet" href="~/css/HomePage/Post/postIndexHomePage.css" asp-append-version="true" />
 }
 
-
-
-
-
-
 @section Scripts {
     <script>
-    
-
+        // JavaScript kodlarınız burada
     </script>
 }
