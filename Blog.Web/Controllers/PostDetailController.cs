@@ -10,6 +10,7 @@ namespace Blog.Web.Controllers
 
     public class PostDetailController : Controller
     {
+
         private readonly IPostService _postService;
         private readonly ICategoryService _categoryService;
         private readonly ICommentService _commentService;
@@ -23,8 +24,8 @@ namespace Blog.Web.Controllers
             _userManager = userManager;
         }
 
-        [HttpGet("[controller]/{category}/{slug}/{postId}")]
-        public async Task<IActionResult> Index([FromRoute] string category, [FromRoute] string slug, [FromRoute] int postId)
+        [HttpGet("[controller]/{category}/{tag}/{postId}")]
+        public async Task<IActionResult> Index([FromRoute] string category, [FromRoute] string tag , [FromRoute] int postId)
         {
             try
             {
