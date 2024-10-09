@@ -23,8 +23,8 @@ namespace Blog.Web.Controllers
             _userManager = userManager;
         }
 
-        [HttpGet("[controller]/{category}/{slug}/{postId}")]
-        public async Task<IActionResult> Index([FromRoute] string category, [FromRoute] string slug, [FromRoute] int postId)
+        [HttpGet("[controller]/{category}/{tagId}/{postId}")]
+        public async Task<IActionResult> Index([FromRoute] string category, [FromRoute] int tagId, [FromRoute] int postId)
         {
             try
             {

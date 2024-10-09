@@ -73,7 +73,7 @@ app.UseAuthorization();
 //);
 app.MapControllerRoute(
     name: "PostDetail",
-    pattern: "postdetail/{category}/{slug}/{id}",
+    pattern: "postdetail/{category}/{tagId}/{id}",
     defaults: new { controller = "PostDetail", action = "Index" }
 );
 
