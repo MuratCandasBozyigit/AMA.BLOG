@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Blog.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241009151901_olduramadım")]
+    partial class olduramadım
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -248,10 +251,6 @@ namespace Blog.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("TagName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -301,10 +300,6 @@ namespace Blog.Data.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("PostId")
-                        .IsUnique()
-                        .HasFilter("[PostId] IS NOT NULL");
 
                     b.ToTable("Tags");
                 });
@@ -504,13 +499,6 @@ namespace Blog.Data.Migrations
                     b.Navigation("Category");
                 });
 
-            modelBuilder.Entity("Blog.Core.Models.Tag", b =>
-                {
-                    b.HasOne("Blog.Core.Models.Post", null)
-                        .WithOne("Tag")
-                        .HasForeignKey("Blog.Core.Models.Tag", "PostId");
-                });
-
             modelBuilder.Entity("Comment", b =>
                 {
                     b.HasOne("Blog.Core.Models.AppUser", "Author")
@@ -594,9 +582,6 @@ namespace Blog.Data.Migrations
             modelBuilder.Entity("Blog.Core.Models.Post", b =>
                 {
                     b.Navigation("Comments");
-
-                    b.Navigation("Tag")
-                        .IsRequired();
                 });
 
             modelBuilder.Entity("Blog.Core.Models.Tag", b =>

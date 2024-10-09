@@ -40,11 +40,11 @@
                 </div>
 
              
-                <div class="mb-3">
+            @*     <div class="mb-3">
                     <label for="slug" class="form-label">Slug:</label>
                     <input type="text" id="slug" placeholder="Lütfen Slug giriniz" class="form-control" required />
                     <span id="slug-error" class="text-danger" style="display:none;">Alan boş bırakılamaz.</span>
-                </div>
+                </div> *@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Kapat</button>
@@ -66,7 +66,7 @@
                 <tr>
                     <th>Kategori Adı</th>
                     <th>Açıklama</th>
-                    <th>Slug</th>
+@*                    // <th>Slug</th> *@
                     <th>Etiket</th>
                     <th>İşlemler</th>
                 </tr>
@@ -85,7 +85,7 @@
           
             function resetForm() {
                 $("#categoryId").val("");
-                $("#name, #description, #slug").val("");
+                $("#name, #description, #tagSave").val("");
                 $(".text-danger").hide();
             }
 
@@ -102,7 +102,7 @@
                 columns: [
                     { data: 'name', title: 'Kategori Adı' },
                     { data: 'description', title: 'Açıklama' },
-                    { data: 'slug', title: 'Slug' },
+                    // { data: 'slug', title: 'Slug' },
                      { data: 'tagId', title: 'Etiket' },
                     {
                         data: null,
@@ -131,7 +131,7 @@
                     success: function (res) {
                         $('#name').val(res.name);
                         $('#description').val(res.description);
-                        $('#slug').val(res.slug);
+                        // $('#slug').val(res.slug);
                         $('#categoryId').val(res.id);
                         $('#tagSave').val(res.tagSave);
                     },
@@ -178,7 +178,7 @@
                     id: $('#categoryId').val() === '' ? 0 : $('#categoryId').val(),
                     name: $('#name').val(),
                     description: $('#description').val(),
-                    slug: $('#slug').val(),
+                    // slug: $('#slug').val(),
                     tagId: $("#tagSave option:selected").val()
                     // tagSave: $('#tagSave').val()
                 };
@@ -207,12 +207,12 @@
                     $('#description-error').hide();
                 }
 
-                if (!category.slug) {
-                    $('#slug-error').show();
-                    isValid = false;
-                } else {
-                    $('#slug-error').hide();
-                }
+                // if (!category.slug) {
+                //     $('#slug-error').show();
+                //     isValid = false;
+                // } else {
+                //     $('#slug-error').hide();
+                // }
 
                 if (!isValid) {
                     return;
