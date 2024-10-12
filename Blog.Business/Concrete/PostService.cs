@@ -29,8 +29,11 @@ namespace Blog.Business.Concrete
 
         public ICollection<Post> GetAllPosts()
         {
-            return _postRepo.GetAll().Include(p=>p.Category).ThenInclude(t=>t.Tag)
-                .ToList(); 
+            return _postRepo.GetAll()
+                .Include(p=>p.Category)
+                .ThenInclude(t=>t.Tag)
+                .Include(p=>p.Comments)
+                .ToList();
         }
 
         public async Task<Post> GetByIdAsync(int id)
