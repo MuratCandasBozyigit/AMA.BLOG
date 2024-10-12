@@ -10,28 +10,27 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Scoped olarak Repository'leri ekliyorsun
 builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 
-// HttpContext erişimi sağlıyorsun
 builder.Services.AddHttpContextAccessor();
 
-// MVC Controller'larını kullanıyorsun
 builder.Services.AddControllersWithViews();
 
-// Cookie Authentication yapılandırması
 builder.Services.ConfigureApplicationCookie(options =>
 {
     options.AccessDeniedPath = "/account/login";
     options.LoginPath = "/account/login";
 });
 
-// Veritabanı bağlantısı için MariaDB kullanıyorsun
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseMySql(builder.Configuration.GetConnectionString("DefaultConnection"),
-        new MySqlServerVersion(new Version(10, 5, 25))));  // MariaDB sürümünü burada belirttin
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-// Identity yapılandırması
+
+//// Veritabanı bağlantısı için MariaDB kullanıyorsun
+//builder.Services.AddDbContext<ApplicationDbContext>(options =>
+//    options.UseMySql(builder.Configuration.GetConnectionString("DefaultConnection"),
+//        new MySqlServerVersion(new Version(10, 5, 25))));  // MariaDB sürümünü burada belirttin
+
 builder.Services.AddIdentity<AppUser, ApplicationRole>(options =>
 {
     options.Password.RequireNonAlphanumeric = false;
@@ -46,20 +45,16 @@ builder.Services.AddIdentity<AppUser, ApplicationRole>(options =>
 .AddEntityFrameworkStores<ApplicationDbContext>()
 .AddDefaultTokenProviders();
 
-// Role ve servis bağımlılıklarını ekliyorsun
 builder.Services.AddScoped<RoleManager<ApplicationRole>>();
 builder.Services.AddScoped<IRoleService, RoleService>();
 
-// Business ve Repository DI yapılandırmaları
 builder.Services.BusinessDI();
 builder.Services.RepositoryDI();
 
-// Uygulama içi telemetri (Application Insights) ekliyorsun
 builder.Services.AddApplicationInsightsTelemetry();
 
 var app = builder.Build();
 
-// Hata sayfası ve HSTS ayarları (Production'da)
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
@@ -74,7 +69,6 @@ app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
 
-// Routing ayarları
 app.MapControllerRoute(
     name: "PostDetail",
     pattern: "postdetail/{category}/{tag}/{id}",

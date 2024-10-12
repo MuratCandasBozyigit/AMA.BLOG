@@ -11,15 +11,15 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Blog.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20241009150614_linkdüzenlemedeneme")]
-    partial class linkdüzenlemedeneme
+    [Migration("20241012134004_Deneme")]
+    partial class Deneme
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "8.0.8")
+                .HasAnnotation("ProductVersion", "8.0.10")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -189,11 +189,12 @@ namespace Blog.Data.Migrations
                     b.Property<int?>("ParentCategoryId")
                         .HasColumnType("int");
 
-                    b.Property<string>("Slug")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("TagId")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("TagId");
 
                     b.ToTable("Categories");
                 });
@@ -250,6 +251,10 @@ namespace Blog.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("TagName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -299,6 +304,10 @@ namespace Blog.Data.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("PostId")
+                        .IsUnique()
+                        .HasFilter("[PostId] IS NOT NULL");
 
                     b.ToTable("Tags");
                 });
@@ -476,6 +485,17 @@ namespace Blog.Data.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("Blog.Core.Models.Category", b =>
+                {
+                    b.HasOne("Blog.Core.Models.Tag", "Tag")
+                        .WithMany("Categories")
+                        .HasForeignKey("TagId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Tag");
+                });
+
             modelBuilder.Entity("Blog.Core.Models.Post", b =>
                 {
                     b.HasOne("Blog.Core.Models.Category", "Category")
@@ -485,6 +505,13 @@ namespace Blog.Data.Migrations
                         .IsRequired();
 
                     b.Navigation("Category");
+                });
+
+            modelBuilder.Entity("Blog.Core.Models.Tag", b =>
+                {
+                    b.HasOne("Blog.Core.Models.Post", null)
+                        .WithOne("Tag")
+                        .HasForeignKey("Blog.Core.Models.Tag", "PostId");
                 });
 
             modelBuilder.Entity("Comment", b =>
@@ -570,6 +597,14 @@ namespace Blog.Data.Migrations
             modelBuilder.Entity("Blog.Core.Models.Post", b =>
                 {
                     b.Navigation("Comments");
+
+                    b.Navigation("Tag")
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Blog.Core.Models.Tag", b =>
+                {
+                    b.Navigation("Categories");
                 });
 #pragma warning restore 612, 618
         }
