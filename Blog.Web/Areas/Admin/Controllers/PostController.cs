@@ -73,6 +73,8 @@ namespace Blog.Web.Areas.Admin.Controllers
         [HttpPost("Create")]
         public IActionResult Create([FromForm] Post post, IFormFile image)
         {
+            //var category = _categoryService.GetCategoriesById(post.CategoryId);
+            //post.TagName = category.Tag.Name;
 
             if (image != null && image.Length > 0)
             {

@@ -10,5 +10,6 @@ namespace Blog.Business.Absract
 {
     public interface ITagService:IService<Tag>
     {
+        Tag GeyById(int id);
     }
 }
