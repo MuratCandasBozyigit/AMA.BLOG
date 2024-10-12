@@ -26,15 +26,12 @@
                                 }
                             </div>
                             <h3 class="post-title">
-                               
-                                 <a href="@Url.Action("Index", "PostDetail", new { postcat = post.Category, postTag = post.Category.Tag, postId = post.Id })">@post.Title</a> 
+                                <a href="@Url.Action("Index", "PostDetail", new { postcat = post.Category, postTag = post.Category.Tag.Name, postId = post.Id })">@post.Title</a>
                             </h3>
-                         
 
                             <p class="post-summary">
                                 @if (post.Summary.Length > 50)
                                 {
-
                                     @post.Summary.Substring(0, 50)
                                 }
                                 else
@@ -45,7 +42,7 @@
                         </div>
                         <div class="footer">
                             <div class="actions">
-                                <a id="okuDetay" href="/postDetail/@post.Category.Name/@post.TagName/@post.Id" class="btn btn-outline-secondary">Oku</a>
+                                <a id="okuDetay" href="/postDetail/@post.Category.Name/@post.Category.Tag.Name/@post.Id" class="btn btn-outline-secondary">Oku</a>
                             </div>
                             <ul class="stats" style="margin-left:15px;padding-right:0px;margin-right:0px;">
                                 <li><a href="javascript:void(0);" class="fa fa-heart">@post.Likes</a></li>
@@ -98,5 +95,6 @@
 
 @section Scripts {
     <script>
-     </script>
+        // JavaScript kodları buraya gelecek
+    </script>
 }

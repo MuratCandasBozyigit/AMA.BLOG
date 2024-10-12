@@ -16,7 +16,7 @@ namespace Blog.Web.Controllers
         private readonly ILogger<HomeController> _logger;
         private readonly IPostService _postService;
         private readonly ICategoryService _categoryService;
-
+        
         public HomeController(ILogger<HomeController> logger, IPostService postService, ICategoryService categoryService)
         {
             _logger = logger;
