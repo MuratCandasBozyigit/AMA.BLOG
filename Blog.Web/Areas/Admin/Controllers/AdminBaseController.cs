@@ -6,8 +6,9 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace BotanikBambu.Web.Areas.Admin.Controllers
 {
+    [Area("Admin")]
     [Route("Admin/[controller]")]
-    //[Authorize(Roles = "Admin")]
+  [Authorize(Roles = "Admin")]
     public class AdminBaseController : Controller
     {
         private readonly IHttpContextAccessor _httpContextAccessor;

@@ -10,26 +10,29 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// Repositories için hizmet kaydı
 builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 
+// HTTP context erişimi için
 builder.Services.AddHttpContextAccessor();
 
+// Controller ve View'lar için gerekli hizmetlerin kaydı
 builder.Services.AddControllersWithViews();
 
+// Cookie ayarları
 builder.Services.ConfigureApplicationCookie(options =>
 {
     options.AccessDeniedPath = "/account/login";
     options.LoginPath = "/account/login";
 });
 
+// Veritabanı bağlantısı için SQL Server kullanımı
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-
-//// Veritabanı bağlantısı için MariaDB kullanıyorsun
-//builder.Services.AddDbContext<ApplicationDbContext>(options =>
-//    options.UseMySql(builder.Configuration.GetConnectionString("DefaultConnection"),
-//        new MySqlServerVersion(new Version(10, 5, 25))));  // MariaDB sürümünü burada belirttin
+// Eğer MariaDB kullanıyorsan aşağıdaki satırı kullanabilirsin:
+// builder.Services.AddDbContext<ApplicationDbContext>(options =>
+//     options.UseMySql(builder.Configuration.GetConnectionString("DefaultConnection"), new MySqlServerVersion(new Version(10, 5, 25))));
 
 builder.Services.AddIdentity<AppUser, ApplicationRole>(options =>
 {
@@ -45,20 +48,28 @@ builder.Services.AddIdentity<AppUser, ApplicationRole>(options =>
 .AddEntityFrameworkStores<ApplicationDbContext>()
 .AddDefaultTokenProviders();
 
+// RoleManager ve RoleService için hizmet kaydı
 builder.Services.AddScoped<RoleManager<ApplicationRole>>();
 builder.Services.AddScoped<IRoleService, RoleService>();
 
+// Business ve Repository DI işlemleri
 builder.Services.BusinessDI();
 builder.Services.RepositoryDI();
 
+// Application Insights
 builder.Services.AddApplicationInsightsTelemetry();
 
 var app = builder.Build();
 
-if (!app.Environment.IsDevelopment())
+// Hata ayıklama için geliştirici modunda olduğundan emin ol
+if (app.Environment.IsDevelopment())
 {
-    app.UseExceptionHandler("/Home/Error");
-    app.UseHsts();
+    app.UseDeveloperExceptionPage(); // Geliştirici hata sayfasını etkinleştir
+}
+else
+{
+    app.UseExceptionHandler("/Home/Error"); // Hata sayfası için yönlendirme
+    app.UseHsts(); // HSTS etkinleştir
 }
 
 app.UseHttpsRedirection();
@@ -69,6 +80,7 @@ app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
 
+// Yönlendirme ayarları
 app.MapControllerRoute(
     name: "PostDetail",
     pattern: "postdetail/{category}/{tag}/{id}",
@@ -77,10 +89,13 @@ app.MapControllerRoute(
 
 app.MapControllerRoute(
     name: "areas",
-    pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}");
+    pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}"
+);
 
+// Varsayılan yönlendirme
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
+    pattern: "{controller=Home}/{action=Index}/{id?}"
+);
 
 app.Run();
